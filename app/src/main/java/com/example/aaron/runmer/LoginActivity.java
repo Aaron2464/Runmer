@@ -3,7 +3,9 @@ package com.example.aaron.runmer;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.example.aaron.runmer.util.Constants;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -32,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         // App code
+                        Log.i(Constants.TAG,"LOGIN SUCCESS");
                     }
 
                     @Override
@@ -45,9 +48,9 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
 
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        boolean isLoggedIn = accessToken == null;
-        boolean isExpired = accessToken.isExpired();
+//        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+//        boolean isLoggedIn = accessToken == null;
+//        boolean isExpired = accessToken.isExpired();
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
     }
     @Override

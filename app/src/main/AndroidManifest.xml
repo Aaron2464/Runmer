@@ -37,7 +37,7 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".UserDataActivity"></activity>
+        <activity android:name=".UserData.UserDataPage"></activity>
         <activity android:name=".Map.MapPage"></activity>
     </application>
 

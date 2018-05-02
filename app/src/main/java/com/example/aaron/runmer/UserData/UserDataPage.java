@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -39,14 +38,16 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
     private FirebaseAuth mAuth;
     private UserDataContract.Presenter mPresenter;
 
-    private int mYear,mMonth,mDay;
+    private int mYear, mMonth, mDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         init();
-
+        mPresenter.setUserNameAndEmail();
+        mPresenter.setUserPhoto();
+        mPresenter.setUserBirth();
         mBtnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,9 +65,6 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
         findView();
         mPresenter = new UserDataPresenter(this);
         mPresenter.start();
-        mPresenter.setUserNameAndEmail();
-        mPresenter.setUserPhoto();
-        mPresenter.setUserBirth();
     }
 
     private void findView() {
@@ -85,9 +83,9 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
     }
 
     @Override
-    public void showUserNameAndEmail() {
-        mEditTxtUserName.setText(mAuth.getCurrentUser().getDisplayName());
-        mEditTxtUserEmail.setText(mAuth.getCurrentUser().getEmail());
+    public void showUserNameAndEmail(String userName, String userEmail) {
+        mEditTxtUserName.setText(userName);
+        mEditTxtUserEmail.setText(userEmail);
     }
 
     @Override
@@ -104,20 +102,19 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(mContext
                         , AlertDialog.THEME_HOLO_LIGHT
                         , new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                mEditTxtUserBirth.setText( year+ "." + dayOfMonth + "." + (monthOfYear + 1));
-                            }
-                        }, 1985, mMonth, mDay);
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        mEditTxtUserBirth.setText(year + "." + dayOfMonth + "." + (monthOfYear + 1));
+                    }
+                }, 1985, mMonth, mDay);
                 datePickerDialog.show();
             }
         });
     }
 
     @Override
-    public void showUserPhoto() {
-        String userimage = mAuth.getCurrentUser().getPhotoUrl() + "?type=large";
-        Log.d(Constants.TAG,"UserImage :" + String.valueOf(userimage));
+    public void showUserPhoto(String userimage) {
+        Log.d(Constants.TAG, "UserImage :" + userimage);
         Picasso.get().load(userimage).placeholder(R.drawable.userholderimage).transform(new CircleTransform(mContext)).into(mImageUser);
     }
 

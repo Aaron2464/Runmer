@@ -13,18 +13,20 @@ public class UserDataPresenter implements UserDataContract.Presenter {
     private String UserName;
     private String UserEmail;
     private String UserBirth;
-    private Uri UserPhoto;
+    private String UserPhoto;
 
     public UserDataPresenter(UserDataContract.View userDataView) {
         mUserDataView = checkNotNull(userDataView);
         mUserDataView.setPresenter(this);
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
     public void setUserNameAndEmail() {
-        mUserDataView.showUserNameAndEmail();
+        UserName = mAuth.getCurrentUser().getDisplayName();
+        UserEmail = mAuth.getCurrentUser().getEmail();
+        mUserDataView.showUserNameAndEmail(UserName, UserEmail);
     }
-
 
     @Override
     public void setUserBirth() {
@@ -33,12 +35,12 @@ public class UserDataPresenter implements UserDataContract.Presenter {
 
     @Override
     public void setUserPhoto() {
-        mUserDataView.showUserPhoto();
+        UserPhoto = mAuth.getCurrentUser().getPhotoUrl() + "?type=large";
+        mUserDataView.showUserPhoto(UserPhoto);
     }
 
     @Override
     public void start() {
 
     }
-
 }

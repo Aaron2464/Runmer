@@ -7,11 +7,11 @@ public interface UserDataContract {
 
     interface View extends BaseView<UserDataContract.Presenter> {
 
-        void showUserNameAndEmail();
+        void showUserNameAndEmail(String userName, String userEmail);
 
         void showUserBirth();
 
-        void showUserPhoto();
+        void showUserPhoto(String userimage);
     }
 
     interface Presenter extends BasePresenter {

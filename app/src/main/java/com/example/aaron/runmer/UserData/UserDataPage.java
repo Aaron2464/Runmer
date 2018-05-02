@@ -1,11 +1,15 @@
 package com.example.aaron.runmer.UserData;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -20,7 +24,7 @@ import com.example.aaron.runmer.util.Constants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
-import java.net.URL;
+import java.util.Calendar;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -34,6 +38,8 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
     private Button mBtnOk;
     private FirebaseAuth mAuth;
     private UserDataContract.Presenter mPresenter;
+
+    private int mYear,mMonth,mDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +66,7 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
         mPresenter.start();
         mPresenter.setUserNameAndEmail();
         mPresenter.setUserPhoto();
+        mPresenter.setUserBirth();
     }
 
     private void findView() {
@@ -67,6 +74,7 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
         mEditTxtUserName = findViewById(R.id.edittxt_name);
         mEditTxtUserEmail = findViewById(R.id.edittxt_email);
         mEditTxtUserBirth = findViewById(R.id.edittxt_birth);
+        mEditTxtUserBirth.setInputType(InputType.TYPE_NULL);
         mEditTxtUserHeight = findViewById(R.id.edittxt_height);
         mEditTxtUserWeight = findViewById(R.id.edittxt_weight);
         mImageUser = findViewById(R.id.image_user);
@@ -84,7 +92,26 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
 
     @Override
     public void showUserBirth() {
+        mEditTxtUserBirth.setInputType(InputType.TYPE_NULL);        //回頭修改時軟鍵盤無法收合(第一次)
+        mEditTxtUserBirth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();       // Get Current Date
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
 
+                DatePickerDialog datePickerDialog = new DatePickerDialog(mContext
+                        , AlertDialog.THEME_HOLO_LIGHT
+                        , new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                mEditTxtUserBirth.setText( year+ "." + dayOfMonth + "." + (monthOfYear + 1));
+                            }
+                        }, 1985, mMonth, mDay);
+                datePickerDialog.show();
+            }
+        });
     }
 
     @Override

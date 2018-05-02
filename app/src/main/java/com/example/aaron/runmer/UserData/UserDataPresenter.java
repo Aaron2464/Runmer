@@ -2,12 +2,11 @@ package com.example.aaron.runmer.UserData;
 
 import android.net.Uri;
 
-import com.example.aaron.runmer.UserProfile.UserProfileContract;
 import com.google.firebase.auth.FirebaseAuth;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class UserDataPresenter implements UserDataContract.Presenter{
+public class UserDataPresenter implements UserDataContract.Presenter {
 
     private final UserDataContract.View mUserDataView;
     private FirebaseAuth mAuth;
@@ -29,7 +28,7 @@ public class UserDataPresenter implements UserDataContract.Presenter{
 
     @Override
     public void setUserBirth() {
-
+        mUserDataView.showUserBirth();
     }
 
     @Override

@@ -94,6 +94,8 @@
         android:ems="10"
         android:inputType="datetime"
         android:hint="Birth"
+        android:clickable="true"
+        android:windowSoftInputMode="stateAlwaysHidden"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txt_birth"
         app:layout_constraintTop_toTopOf="@+id/txt_birth" />

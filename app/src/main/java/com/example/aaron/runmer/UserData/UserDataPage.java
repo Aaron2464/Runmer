@@ -14,16 +14,21 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.example.aaron.runmer.Base.BaseActivity;
 import com.example.aaron.runmer.Map.MapPage;
+import com.example.aaron.runmer.Objects.UserData;
 import com.example.aaron.runmer.R;
 import com.example.aaron.runmer.util.CircleTransform;
 import com.example.aaron.runmer.util.Constants;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -34,9 +39,12 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
     private ImageButton mImageBtnUserGarllery;
     private RadioButton mRdoBtnMale, mRdoBtnFemale;
     private RadioGroup mRadioGroup;
+    private String mUserName, mUserEmail, mUserBirth, mUserHeight, mUserWeight, mUserPhoto, mUserGender;
     private Button mBtnOk;
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabaseReference;
     private UserDataContract.Presenter mPresenter;
+    private Map<String, String> UserDataMap = new HashMap<String, String>();
 
     private int mYear, mMonth, mDay;
 
@@ -44,27 +52,71 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mAuth = FirebaseAuth.getInstance();
         init();
-        mPresenter.setUserNameAndEmail();
-        mPresenter.setUserPhoto();
-        mPresenter.setUserBirth();
+        getUserDataAndIntentToMapPage();
+    }
+
+    private void getUserDataAndIntentToMapPage() {
         mBtnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(UserDataPage.this, MapPage.class);
-                startActivity(intent);
-                UserDataPage.this.finish();
+                mUserName = mEditTxtUserName.getText().toString().trim();
+                mUserPhoto = mAuth.getCurrentUser().getPhotoUrl() + "?type=large";
+                mUserEmail = mEditTxtUserEmail.getText().toString().trim();
+                mUserBirth = mEditTxtUserBirth.getText().toString().trim();
+                mUserHeight = mEditTxtUserHeight.getText().toString().trim();
+                mUserWeight = mEditTxtUserWeight.getText().toString().trim();
+
+                if (!mUserName.equals("")
+                        && !mUserPhoto.equals("") && !mUserEmail.equals("")
+                        && !mUserBirth.equals("") && !mUserHeight.equals("")
+                        && !mUserWeight.equals("") && !mUserGender.equals("")) {
+                    UserDataMap.put("UserName",mUserName);
+                    UserDataMap.put("UserEmail",mUserEmail);
+                    UserDataMap.put("UserPhoto",mUserPhoto);
+                    UserDataMap.put("UserBirth",mUserBirth);
+                    UserDataMap.put("UserHeight",mUserHeight);
+                    UserDataMap.put("UserWeight",mUserWeight);
+                    UserDataMap.put("UserGender",mUserGender);
+                    mPresenter.setUserDataToFirebase(UserDataMap);
+
+                    Intent intent = new Intent();
+                    intent.setClass(UserDataPage.this, MapPage.class);
+                    startActivity(intent);
+                    UserDataPage.this.finish();
+                } else {
+                    Toast.makeText(mContext, "Please do not leave any blank field !", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
     private void init() {
         setContentView(R.layout.activity_user_data);
-        mAuth = FirebaseAuth.getInstance();
         findView();
         mPresenter = new UserDataPresenter(this);
         mPresenter.start();
+        mPresenter.setUserNameAndEmail();
+        mPresenter.setUserPhoto();
+        mPresenter.setUserBirth();
+
+        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int checkGenderBtn = mRadioGroup.getCheckedRadioButtonId();
+                switch (checkGenderBtn) {
+                    case R.id.rdobtn_male:
+                        mUserGender = getString(R.string.male);
+                        Log.d(Constants.TAG,"Gender : " + mUserGender);
+                        break;
+                    case R.id.rdobtn_female:
+                        mUserGender = getString(R.string.female);
+                        Log.d(Constants.TAG,"Gender : " + mUserGender);
+                        break;
+                }
+            }
+        });
     }
 
     private void findView() {

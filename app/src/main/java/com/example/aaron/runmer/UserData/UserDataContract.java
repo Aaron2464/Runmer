@@ -3,6 +3,8 @@ package com.example.aaron.runmer.UserData;
 import com.example.aaron.runmer.Base.BasePresenter;
 import com.example.aaron.runmer.Base.BaseView;
 
+import java.util.Map;
+
 public interface UserDataContract {
 
     interface View extends BaseView<UserDataContract.Presenter> {
@@ -22,6 +24,6 @@ public interface UserDataContract {
 
         void setUserPhoto();
 
-//        void getUserData();
+        void setUserDataToFirebase(Map UserDataMap);
     }
 }

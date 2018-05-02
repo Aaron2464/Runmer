@@ -1,8 +1,10 @@
 package com.example.aaron.runmer.UserData;
 
-import android.net.Uri;
-
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -10,6 +12,7 @@ public class UserDataPresenter implements UserDataContract.Presenter {
 
     private final UserDataContract.View mUserDataView;
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabaseReference;
     private String UserName;
     private String UserEmail;
     private String UserBirth;
@@ -37,6 +40,14 @@ public class UserDataPresenter implements UserDataContract.Presenter {
     public void setUserPhoto() {
         UserPhoto = mAuth.getCurrentUser().getPhotoUrl() + "?type=large";
         mUserDataView.showUserPhoto(UserPhoto);
+    }
+
+    @Override
+    public void setUserDataToFirebase(Map UserDataMap){
+
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mDatabaseReference.child("Users").child(mAuth.getCurrentUser().getUid()).setValue(UserDataMap);
+
     }
 
     @Override

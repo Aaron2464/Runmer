@@ -34,7 +34,7 @@ public class UserDataPresenter implements UserDataContract.Presenter{
 
     @Override
     public void setUserPhoto() {
-
+        mUserDataView.showUserPhoto();
     }
 
     @Override

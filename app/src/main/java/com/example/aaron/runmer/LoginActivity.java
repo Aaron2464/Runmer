@@ -1,12 +1,14 @@
 package com.example.aaron.runmer;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.aaron.runmer.Map.MapPage;
 import com.example.aaron.runmer.util.Constants;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -29,6 +31,8 @@ import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
+    boolean isLoggedIn = AccessToken.getCurrentAccessToken() == null;
+    //    boolean isExpired = AccessToken.getCurrentAccessToken().isExpired();              //I don't know what it can do?
     CallbackManager mCallbackManager;
 
     @Override
@@ -38,39 +42,42 @@ public class LoginActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());     //記錄應用程式事件
         AppEventsLogger.activateApp(this);
 
-        mAuth = FirebaseAuth.getInstance();
+        if (isLoggedIn = AccessToken.getCurrentAccessToken() == null) {
+            mAuth = FirebaseAuth.getInstance();
+            // Initialize Facebook Login button
+            mCallbackManager = CallbackManager.Factory.create();
+            LoginButton loginButton = findViewById(R.id.login_button);
 
-        // Initialize Facebook Login button
-        mCallbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email", "public_profile");
-        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Log.d(Constants.TAG, "facebook:onSuccess:" + loginResult);
-                handleFacebookAccessToken(loginResult.getAccessToken());
-            }
+            loginButton.setReadPermissions("email");
+            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email"));
+            loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(LoginResult loginResult) {
+                    Log.d(Constants.TAG, "facebook:onSuccess:" + loginResult);
+                    handleFacebookAccessToken(loginResult.getAccessToken());
+                }
 
-            @Override
-            public void onCancel() {
-                Log.d(Constants.TAG, "facebook:onCancel");
-            }
+                @Override
+                public void onCancel() {
+                    Log.d(Constants.TAG, "facebook:onCancel");
+                }
 
-            @Override
-            public void onError(FacebookException error) {
-                Log.d(Constants.TAG, "facebook:onError", error);
-            }
-        });
-//        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-//        boolean isLoggedIn = accessToken == null;
-//        boolean isExpired = accessToken.isExpired();
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+                @Override
+                public void onError(FacebookException error) {
+                    Log.d(Constants.TAG, "facebook:onError", error);
+                }
+            });
+        } else {
+            Intent intent = new Intent();
+            intent.setClass(LoginActivity.this, UserDataActivity.class);     //TODO MapPage  & UserDataActivity
+            startActivity(intent);
+            LoginActivity.this.finish();
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         // Pass the activity result back to the Facebook SDK
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
         //每個與 FacebookSDK 登入或分享整合的活動和片段，都應該將 onActivityResult 轉送至 callbackManager
@@ -87,14 +94,12 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(Constants.TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-//                            updateUI(user);
+                            Intent intent = new Intent(LoginActivity.this, UserDataActivity.class);
+                            startActivity(intent);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(Constants.TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-//                            updateUI(null);
+                            Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

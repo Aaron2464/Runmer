@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.DisplayMetrics;
@@ -14,7 +13,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Gallery;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -76,13 +74,13 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
 
                 if (!mUserName.equals("") && !mUserPhoto.equals("") && !mUserEmail.equals("")
                         && !mUserBirth.equals("") && !mUserHeight.equals("") && !mUserWeight.equals("") && !mUserGender.equals("")) {
-                    UserDataMap.put("UserName",mUserName);
-                    UserDataMap.put("UserEmail",mUserEmail);
-                    UserDataMap.put("UserPhoto",mUserPhoto);
-                    UserDataMap.put("UserBirth",mUserBirth);
-                    UserDataMap.put("UserHeight",mUserHeight);
-                    UserDataMap.put("UserWeight",mUserWeight);
-                    UserDataMap.put("UserGender",mUserGender);
+                    UserDataMap.put("UserName", mUserName);
+                    UserDataMap.put("UserEmail", mUserEmail);
+                    UserDataMap.put("UserPhoto", mUserPhoto);
+                    UserDataMap.put("UserBirth", mUserBirth);
+                    UserDataMap.put("UserHeight", mUserHeight);
+                    UserDataMap.put("UserWeight", mUserWeight);
+                    UserDataMap.put("UserGender", mUserGender);
                     mPresenter.setUserDataToFirebase(UserDataMap);
 
                     Intent intent = new Intent();
@@ -120,7 +118,7 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
                 pictureDialog.setView(dialog_gallery);
                 String[] pictureDialogItems = {
                         "Select photo from gallery",
-                        "Capture photo from camera" };
+                        "Capture photo from camera"};
                 pictureDialog.setItems(pictureDialogItems,
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -150,11 +148,11 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
                 switch (checkGenderBtn) {
                     case R.id.rdobtn_male:
                         mUserGender = getString(R.string.male);
-                        Log.d(Constants.TAG,"Gender : " + mUserGender);
+                        Log.d(Constants.TAG, "Gender : " + mUserGender);
                         break;
                     case R.id.rdobtn_female:
                         mUserGender = getString(R.string.female);
-                        Log.d(Constants.TAG,"Gender : " + mUserGender);
+                        Log.d(Constants.TAG, "Gender : " + mUserGender);
                         break;
                 }
             }
@@ -169,7 +167,7 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
         mEditTxtUserBirth.setInputType(InputType.TYPE_NULL);
         mEditTxtUserHeight = findViewById(R.id.edittxt_height);
         mEditTxtUserWeight = findViewById(R.id.edittxt_weight);
-        mImageUser = findViewById(R.id.image_user);
+        mImageUser = findViewById(R.id.imageUser_dataVIew);
         mImageBtnUserGarllery = findViewById(R.id.imagebtn_user_gallery);
         mRadioGroup = findViewById(R.id.rdogroup);
         mRdoBtnMale = findViewById(R.id.rdobtn_male);
@@ -198,7 +196,7 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
                         , new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        mEditTxtUserBirth.setText(year + "." +  (monthOfYear + 1) + "." + dayOfMonth);
+                        mEditTxtUserBirth.setText(year + "." + (monthOfYear + 1) + "." + dayOfMonth);
                     }
                 }, 1985, mMonth, mDay);
                 datePickerDialog.show();

@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Runmer</string>
+
+    <!--faceblogin_backgroundogin-->
+    <string name="facebook_app_id">1675630062556764</string>
+    <string name="fb_login_protocol_scheme">fb1675630062556764</string>
+    <string name="runmer">RUNMER</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+
 </resources>

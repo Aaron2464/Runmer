@@ -25,5 +25,7 @@ public interface UserDataContract {
         void setUserPhoto();
 
         void setUserDataToFirebase(Map UserDataMap);
+
+        void changeUserImage();
     }
 }

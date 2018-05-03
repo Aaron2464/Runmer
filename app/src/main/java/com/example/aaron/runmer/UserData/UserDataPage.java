@@ -2,14 +2,19 @@ package com.example.aaron.runmer.UserData;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Gallery;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -18,7 +23,6 @@ import android.widget.Toast;
 
 import com.example.aaron.runmer.Base.BaseActivity;
 import com.example.aaron.runmer.Map.MapPage;
-import com.example.aaron.runmer.Objects.UserData;
 import com.example.aaron.runmer.R;
 import com.example.aaron.runmer.util.CircleTransform;
 import com.example.aaron.runmer.util.Constants;
@@ -30,6 +34,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.media.MediaRecorder.VideoSource.CAMERA;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class UserDataPage extends BaseActivity implements UserDataContract.View {
@@ -45,6 +50,7 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
     private DatabaseReference mDatabaseReference;
     private UserDataContract.Presenter mPresenter;
     private Map<String, String> UserDataMap = new HashMap<String, String>();
+    private DisplayMetrics mPhoto;
 
     private int mYear, mMonth, mDay;
 
@@ -68,10 +74,8 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
                 mUserHeight = mEditTxtUserHeight.getText().toString().trim();
                 mUserWeight = mEditTxtUserWeight.getText().toString().trim();
 
-                if (!mUserName.equals("")
-                        && !mUserPhoto.equals("") && !mUserEmail.equals("")
-                        && !mUserBirth.equals("") && !mUserHeight.equals("")
-                        && !mUserWeight.equals("") && !mUserGender.equals("")) {
+                if (!mUserName.equals("") && !mUserPhoto.equals("") && !mUserEmail.equals("")
+                        && !mUserBirth.equals("") && !mUserHeight.equals("") && !mUserWeight.equals("") && !mUserGender.equals("")) {
                     UserDataMap.put("UserName",mUserName);
                     UserDataMap.put("UserEmail",mUserEmail);
                     UserDataMap.put("UserPhoto",mUserPhoto);
@@ -101,6 +105,44 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
         mPresenter.setUserPhoto();
         mPresenter.setUserBirth();
 
+        rdobtnclick();
+        imagebtnclick();
+    }
+
+    private void imagebtnclick() {
+        mImageBtnUserGarllery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder pictureDialog = new AlertDialog.Builder(mContext);
+                LayoutInflater inflater = LayoutInflater.from(mContext);
+                View dialog_gallery = inflater.inflate(R.layout.dialog_gallery, null);
+                pictureDialog.setTitle("Select Action").setIcon(R.mipmap.ic_camera);
+                pictureDialog.setView(dialog_gallery);
+                String[] pictureDialogItems = {
+                        "Select photo from gallery",
+                        "Capture photo from camera" };
+                pictureDialog.setItems(pictureDialogItems,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which) {
+                                    case 0:
+                                        Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                        startActivityForResult(galleryIntent, 0);
+                                        break;
+                                    case 1:
+                                        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                                        startActivityForResult(intent, CAMERA);
+                                        break;
+                                }
+                            }
+                        });
+                pictureDialog.show();
+            }
+        });
+    }
+
+    private void rdobtnclick() {
         mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -156,7 +198,7 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
                         , new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        mEditTxtUserBirth.setText(year + "." + dayOfMonth + "." + (monthOfYear + 1));
+                        mEditTxtUserBirth.setText(year + "." +  (monthOfYear + 1) + "." + dayOfMonth);
                     }
                 }, 1985, mMonth, mDay);
                 datePickerDialog.show();
@@ -167,7 +209,7 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
     @Override
     public void showUserPhoto(String userimage) {
         Log.d(Constants.TAG, "UserImage :" + userimage);
-        Picasso.get().load(userimage).placeholder(R.drawable.userholderimage).transform(new CircleTransform(mContext)).into(mImageUser);
+        Picasso.get().load(userimage).placeholder(R.drawable.user_image).transform(new CircleTransform(mContext)).into(mImageUser);
     }
 
     @Override

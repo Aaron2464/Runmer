@@ -43,15 +43,18 @@ public class UserDataPresenter implements UserDataContract.Presenter {
     }
 
     @Override
-    public void setUserDataToFirebase(Map UserDataMap){
-
+    public void setUserDataToFirebase(Map UserDataMap) {
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mDatabaseReference.child("Users").child(mAuth.getCurrentUser().getUid()).setValue(UserDataMap);
-
     }
 
     @Override
-    public void start() {
+    public void changeUserImage() {
 
+    }
+
+
+    @Override
+    public void start() {
     }
 }

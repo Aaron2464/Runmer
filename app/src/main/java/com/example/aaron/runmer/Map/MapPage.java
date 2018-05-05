@@ -1,18 +1,23 @@
 package com.example.aaron.runmer.Map;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.Constraints;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.aaron.runmer.Base.BaseActivity;
 import com.example.aaron.runmer.R;
+import com.example.aaron.runmer.util.Constants;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -24,6 +29,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -34,6 +40,7 @@ import static com.example.aaron.runmer.util.Constants.UPDATE_INTERVAL;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class MapPage extends BaseActivity implements MapContract.View
+        , GoogleMap.OnMyLocationButtonClickListener
         , OnMapReadyCallback, LocationListener
         , GoogleApiClient.ConnectionCallbacks
         , GoogleApiClient.OnConnectionFailedListener {
@@ -118,21 +125,30 @@ public class MapPage extends BaseActivity implements MapContract.View
         mPresenter.openGoogleMaps(mLocation);
     }
 
+    @SuppressLint("MissingPermission")
     public void showGoogleMapUi(double lat, double lng) {
         LatLng userlocation = new LatLng(lat, lng);
+        Log.d(Constants.TAG,"CurrentLocation: " + userlocation);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userlocation, 18));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userlocation, 13));
-        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.setOnMyLocationButtonClickListener(this);
+//        mMap.setMyLocationEnabled(true);        //show my location blue dot
         mMap.addMarker(new MarkerOptions()
-                .position(userlocation)   //new LatLng(location.latitude,location.longitude)
-                .flat(true)
-                .icon(BitmapDescriptorFactory.defaultMarker()));
+                .position(userlocation)
+                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_flight)));
+        mMap.addCircle(new CircleOptions()
+                .center(userlocation)
+                .radius(30)
+                .strokeColor(Color.BLACK)
+                .strokeWidth(10.0f));
+
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userlocation, 13));
+//        mMap.getUiSettings().setZoomControlsEnabled(true);
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        mGoogleApiClient.connect();
     }
 
     @Override
@@ -172,6 +188,27 @@ public class MapPage extends BaseActivity implements MapContract.View
 
     @Override
     public void onLocationChanged(Location location) {
+        displayLocation();
+        mMap.clear();
+    }
 
+    @Override
+    public boolean onMyLocationButtonClick() {
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_LOCATION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (checkPlayServices()) {
+                        createLocationRequest();
+                        displayLocation();
+                        buildGoogleApiClient();
+                    }
+                }
+                break;
+        }
     }
 }

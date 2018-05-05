@@ -38,7 +38,7 @@ public class MapPresenter implements MapContract.Presenter {
             GeoFire geoFire = new GeoFire(mFriendRef);
             userref.child("lat").setValue(latitude);
             userref.child("lng").setValue(longitude);
-            geoFire.setLocation(userId, new GeoLocation(latitude, longitude),        //TODO 抓資料的key (friend)
+            geoFire.setLocation(userId, new GeoLocation(latitude, longitude),
                     new GeoFire.CompletionListener() {
                         @Override
                         public void onComplete(String key, DatabaseError error) {

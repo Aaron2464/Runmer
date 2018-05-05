@@ -4,9 +4,15 @@
     <!--facebooklogin-->
     <string name="facebook_app_id">1675630062556764</string>
     <string name="fb_login_protocol_scheme">fb1675630062556764</string>
+
     <string name="runmer">RUNMER</string>
+
     <string name="male">Male</string>
     <string name="female">Female</string>
+
     <string name="leave_a_message">leave a message</string>
+
+    <string name="all_nonnplace">Did not have this place!</string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>

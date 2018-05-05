@@ -3,13 +3,13 @@
     package="com.example.aaron.runmer">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!--turn on the internet permissiom-->
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <!--turn on the camera premission-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <!--turn on the write into external storage permission-->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <!--turn on the read external storage permission-->
+    <!-- turn on the internet permissiom -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- turn on the camera premission -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- turn on the write into external storage permission -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- turn on the read external storage permission -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
@@ -51,9 +51,15 @@
         <activity
             android:name=".UserData.UserDataPage"
             android:windowSoftInputMode="adjustPan">
-            <!--To avoid the keyboard covered the EditTextView-->
+
+            <!-- To avoid the keyboard covered the EditTextView -->
         </activity>
-        <activity android:name=".Map.MapPage"></activity>
+        <activity android:name=".Map.MapPage" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
     </application>
 
 </manifest>

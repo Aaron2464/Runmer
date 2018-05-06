@@ -9,10 +9,11 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.Constraints;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.aaron.runmer.Base.BaseActivity;
@@ -31,6 +32,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import static com.example.aaron.runmer.util.Constants.DISPLACEMENT;
@@ -51,7 +53,8 @@ public class MapPage extends BaseActivity implements MapContract.View
     private LocationRequest mLocationRequest;
     private GoogleApiClient mGoogleApiClient;
     private Location mLocation;
-    private String mBestProv;
+    private Marker mMarker;
+    private Switch mSwitch;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,8 +67,27 @@ public class MapPage extends BaseActivity implements MapContract.View
         mPresenter = new MapPresenter(this);
         setupMyLocation();
 
+        selectUserStatus();
     }
 
+    private void selectUserStatus() {
+        mSwitch = findViewById(R.id.switch_status);
+        mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    startLocationUpdate();
+                    mPresenter.setUserStatus(isChecked);
+                    Log.d(Constants.TAG, "User Statua: " + isChecked);
+//                    Toast.makeText(mContext,"x8 x8 x8 x8 ",Toast.LENGTH_LONG).show();
+                } else {
+                    stopLocationUpdate();
+                    mPresenter.setUserStatus(isChecked);
+                    Log.d(Constants.TAG, "User Statua: " + isChecked);
+                }
+            }
+        });
+    }
 
     private void setupMyLocation() {
 
@@ -128,13 +150,14 @@ public class MapPage extends BaseActivity implements MapContract.View
     @SuppressLint("MissingPermission")
     public void showGoogleMapUi(double lat, double lng) {
         LatLng userlocation = new LatLng(lat, lng);
-        Log.d(Constants.TAG,"CurrentLocation: " + userlocation);
+        Log.d(Constants.TAG, "CurrentLocation: " + userlocation);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userlocation, 18));
         mMap.setOnMyLocationButtonClickListener(this);
 //        mMap.setMyLocationEnabled(true);        //show my location blue dot
-        mMap.addMarker(new MarkerOptions()
+        mMarker = mMap.addMarker(new MarkerOptions()
                 .position(userlocation)
                 .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_flight)));
+        mMarker.getRotation();
         mMap.addCircle(new CircleOptions()
                 .center(userlocation)
                 .radius(30)
@@ -174,6 +197,14 @@ public class MapPage extends BaseActivity implements MapContract.View
             return;
         }
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+    }
+
+    private void stopLocationUpdate() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
     }
 
     @Override

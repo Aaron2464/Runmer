@@ -15,6 +15,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class MapPresenter implements MapContract.Presenter {
     private final MapContract.View mMapsView;
+    String mUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    DatabaseReference mFriendRef = FirebaseDatabase.getInstance().getReference("Users").child(mUserUid).child("Friends");
+    DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference("Users").child(mUserUid);
 
     public MapPresenter(MapContract.View mapsView) {
         mMapsView = checkNotNull(mapsView, "mapsView connot be null!");
@@ -32,13 +35,10 @@ public class MapPresenter implements MapContract.Presenter {
             final double latitude = mLocation.getLatitude();
             final double longitude = mLocation.getLongitude();
 
-            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            DatabaseReference mFriendRef = FirebaseDatabase.getInstance().getReference("Users").child(userId).child("Friends");
-            DatabaseReference userref = FirebaseDatabase.getInstance().getReference("Users").child(userId);
             GeoFire geoFire = new GeoFire(mFriendRef);
-            userref.child("lat").setValue(latitude);
-            userref.child("lng").setValue(longitude);
-            geoFire.setLocation(userId, new GeoLocation(latitude, longitude),
+            mUserRef.child("lat").setValue(latitude);
+            mUserRef.child("lng").setValue(longitude);
+            geoFire.setLocation(mUserUid, new GeoLocation(latitude, longitude),
                     new GeoFire.CompletionListener() {
                         @Override
                         public void onComplete(String key, DatabaseError error) {
@@ -51,6 +51,11 @@ public class MapPresenter implements MapContract.Presenter {
         } else {
             Log.d(Constants.TAG, "Can not get your location");
         }
+    }
+
+    @Override
+    public void setUserStatus(boolean isChecked) {
+        mUserRef.child("UserStatus").setValue(isChecked);
     }
 
     @Override

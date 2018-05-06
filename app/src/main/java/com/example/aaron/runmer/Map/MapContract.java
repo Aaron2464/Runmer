@@ -4,7 +4,6 @@ import android.location.Location;
 
 import com.example.aaron.runmer.Base.BasePresenter;
 import com.example.aaron.runmer.Base.BaseView;
-import com.google.android.gms.location.LocationRequest;
 
 public interface MapContract {
 
@@ -20,5 +19,6 @@ public interface MapContract {
 
         void openGoogleMaps(Location mLocation);
 
+        void setUserStatus(boolean isChecked);
     }
 }

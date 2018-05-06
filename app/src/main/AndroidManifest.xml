@@ -38,8 +38,8 @@
             android:label="@string/app_name" />
         <activity
             android:name="com.facebook.CustomTabActivity"
-            android:screenOrientation="portrait"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -55,8 +55,9 @@
             android:windowSoftInputMode="adjustPan">
             <!-- To avoid the keyboard covered the EditTextView -->
         </activity>
-        <activity android:name=".Map.MapPage"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Map.MapPage"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

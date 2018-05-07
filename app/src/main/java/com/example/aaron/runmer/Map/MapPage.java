@@ -13,11 +13,13 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.aaron.runmer.Base.BaseActivity;
 import com.example.aaron.runmer.R;
+import com.example.aaron.runmer.util.CircleTransform;
 import com.example.aaron.runmer.util.Constants;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -34,6 +36,7 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.picasso.Picasso;
 
 import static com.example.aaron.runmer.util.Constants.DISPLACEMENT;
 import static com.example.aaron.runmer.util.Constants.FATEST_INTERVAL;
@@ -55,6 +58,7 @@ public class MapPage extends BaseActivity implements MapContract.View
     private Location mLocation;
     private Marker mMarker;
     private Switch mSwitch;
+    private ImageView mImageUser;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,8 +69,8 @@ public class MapPage extends BaseActivity implements MapContract.View
                 .findFragmentById(R.id.fragment_map);
         mapFragment.getMapAsync(this);
         mPresenter = new MapPresenter(this);
+        mPresenter.setUserPhoto();
         setupMyLocation();
-
         selectUserStatus();
     }
 
@@ -165,8 +169,14 @@ public class MapPage extends BaseActivity implements MapContract.View
                 .strokeWidth(10.0f));
 
 //        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userlocation, 13));
-//        mMap.getUiSettings().setZoomControlsEnabled(true);
+//        mMap.getUiSettings().setZoomControlsEnabled(true);\
+    }
 
+    @Override
+    public void showUserPhoto(String userimage) {
+        mImageUser = findViewById(R.id.imageUser_mapView);
+        Log.d(Constants.TAG, "MapPageUserImage :" + userimage);
+        Picasso.get().load(userimage).placeholder(R.drawable.user_image).transform(new CircleTransform(mContext)).into(mImageUser);
     }
 
     @Override

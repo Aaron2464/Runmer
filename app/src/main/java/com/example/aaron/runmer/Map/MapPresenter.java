@@ -7,9 +7,11 @@ import com.example.aaron.runmer.util.Constants;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -56,6 +58,21 @@ public class MapPresenter implements MapContract.Presenter {
     @Override
     public void setUserStatus(boolean isChecked) {
         mUserRef.child("UserStatus").setValue(isChecked);
+    }
+
+    @Override
+    public void setUserPhoto() {
+        mUserRef.child("UserPhoto").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mMapsView.showUserPhoto((String) dataSnapshot.getValue());
+                Log.d(Constants.TAG, "UserPhotoo: " + (String) dataSnapshot.getValue());
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override

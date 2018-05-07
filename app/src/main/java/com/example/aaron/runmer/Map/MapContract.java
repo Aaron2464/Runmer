@@ -11,6 +11,7 @@ public interface MapContract {
 
         void showGoogleMapUi(double lat, double lng);
 
+        void showUserPhoto(String userimage);
     }
 
     interface Presenter extends BasePresenter {
@@ -20,5 +21,7 @@ public interface MapContract {
         void openGoogleMaps(Location mLocation);
 
         void setUserStatus(boolean isChecked);
+
+        void setUserPhoto();
     }
 }

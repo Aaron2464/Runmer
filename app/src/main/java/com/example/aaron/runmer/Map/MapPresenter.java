@@ -68,6 +68,7 @@ public class MapPresenter implements MapContract.Presenter {
                 mMapsView.showUserPhoto((String) dataSnapshot.getValue());
                 Log.d(Constants.TAG, "UserPhotoo: " + (String) dataSnapshot.getValue());
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 

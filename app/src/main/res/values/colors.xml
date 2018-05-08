@@ -9,5 +9,9 @@
     <color name="commentsoption_background">#80000000</color>
     <color name="transparent">#00000000</color>
     <color name="user_status_bar">#5599ff99</color>
+    <color name="tab_bar_background">#0000FF</color>
+    <color name="white">#ffffff</color>
+    <color name="gray">#DDDDDD</color>
+    <color name="tab_underline">#FFFF77</color>
 
 </resources>

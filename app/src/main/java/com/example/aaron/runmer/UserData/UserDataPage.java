@@ -167,7 +167,7 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
         mEditTxtUserBirth.setInputType(InputType.TYPE_NULL);
         mEditTxtUserHeight = findViewById(R.id.edittxt_height);
         mEditTxtUserWeight = findViewById(R.id.edittxt_weight);
-        mImageUser = findViewById(R.id.imageUser_dataVIew);
+        mImageUser = findViewById(R.id.imageUser_dataView);
         mImageBtnUserGarllery = findViewById(R.id.imagebtn_user_gallery);
         mRadioGroup = findViewById(R.id.rdogroup);
         mRdoBtnMale = findViewById(R.id.rdobtn_male);

@@ -2,6 +2,7 @@ package com.example.aaron.runmer.Map;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -11,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.aaron.runmer.Base.BaseActivity;
 import com.example.aaron.runmer.R;
+import com.example.aaron.runmer.ViewPagerMain.ViewPagerActivity;
 import com.example.aaron.runmer.util.CircleTransform;
 import com.example.aaron.runmer.util.Constants;
 import com.google.android.gms.common.ConnectionResult;
@@ -177,6 +180,19 @@ public class MapPage extends BaseActivity implements MapContract.View
         mImageUser = findViewById(R.id.imageUser_mapView);
         Log.d(Constants.TAG, "MapPageUserImage :" + userimage);
         Picasso.get().load(userimage).placeholder(R.drawable.user_image).transform(new CircleTransform(mContext)).into(mImageUser);
+        clickUserImage();
+    }
+
+    private void clickUserImage() {
+        mImageUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MapPage.this, ViewPagerActivity.class);
+                startActivity(intent);
+//                MapPage.this.finish();
+            }
+        });
     }
 
     @Override

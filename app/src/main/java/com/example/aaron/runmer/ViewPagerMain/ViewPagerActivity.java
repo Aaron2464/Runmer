@@ -5,6 +5,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.example.aaron.runmer.Base.BaseActivity;
@@ -12,6 +13,7 @@ import com.example.aaron.runmer.FriendsList.FriendsListPage;
 import com.example.aaron.runmer.R;
 import com.example.aaron.runmer.RunningEvent.RunningEventPage;
 import com.example.aaron.runmer.UserProfile.UserProfilePage;
+import com.example.aaron.runmer.util.Constants;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -22,9 +24,9 @@ public class ViewPagerActivity extends BaseActivity implements ViewPagerMainCont
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
 
-    private UserProfilePage mUserProfilePage = new UserProfilePage();
-    private FriendsListPage mFriendsListPage = new FriendsListPage();
-    private RunningEventPage mRunningEventPage = new RunningEventPage();
+    private UserProfilePage mUserProfilePage;
+    private FriendsListPage mFriendsListPage;
+    private RunningEventPage mRunningEventPage;
 
     private ViewPagerMainContract.Presenter mPresenter;
 
@@ -37,24 +39,29 @@ public class ViewPagerActivity extends BaseActivity implements ViewPagerMainCont
         mViewPager = findViewById(R.id.viewpager_main);
         mTabLayout = findViewById(R.id.tablayout_main);
 
-        mViewPager.addOnPageChangeListener(this);
-        mTabLayout.addOnTabSelectedListener(this);
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+        mTabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
         mViewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+
             @Override
             public Fragment getItem(int position) {
                 switch (position) {
-                    case 0: {
+                    case 0:
+                        mUserProfilePage = new UserProfilePage();
+                        Log.d(Constants.TAG,"mUserProfilePage ViewPager : " + position);
                         return mUserProfilePage;
-                    }
-                    case 1: {
+                    case 1:
+                        mRunningEventPage = new RunningEventPage();
+                        Log.d(Constants.TAG,"mRunningEventPage ViewPager : " + position);
                         return mRunningEventPage;
-                    }
-                    case 2: {
+                    case 2:
+                        mFriendsListPage = new FriendsListPage();
+                        Log.d(Constants.TAG,"mFriendsListPage ViewPager : " + position);
                         return mFriendsListPage;
-                    }
+                    default:
+                        return null;
                 }
-                return null;
             }
 
             @Override

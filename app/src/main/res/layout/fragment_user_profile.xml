@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout"
+        android:id="@+id/constraintLayout_userprofile_userstatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -14,160 +13,161 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageUser_UserProfile"
+            android:id="@+id/imageview_userprofile_userimage"
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="?android:attr/fingerprintAuthDrawable" />
 
         <ImageButton
-            android:id="@+id/imagebtn_user_profile"
+            android:id="@+id/imagebtn_userprofile_changeimage"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginStart="55dp"
             android:layout_marginTop="55dp"
             android:background="@android:color/transparent"
-            app:layout_constraintStart_toStartOf="@+id/imageUser_UserProfile"
-            app:layout_constraintTop_toTopOf="@+id/imageUser_UserProfile"
+            app:layout_constraintStart_toStartOf="@+id/imageview_userprofile_userimage"
+            app:layout_constraintTop_toTopOf="@+id/imageview_userprofile_userimage"
             app:srcCompat="@android:drawable/ic_menu_camera" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/txt_userprofile_userlevel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
             android:text="LV.10"
             android:textSize="25dp"
-            app:layout_constraintStart_toEndOf="@+id/imageUser_UserProfile"
+            app:layout_constraintStart_toEndOf="@+id/imageview_userprofile_userimage"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/txt_userprofile_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:text="Aaron Huang"
             android:textSize="25dp"
-            app:layout_constraintStart_toEndOf="@+id/textView2"
-            app:layout_constraintTop_toTopOf="@+id/textView2" />
+            app:layout_constraintStart_toEndOf="@+id/txt_userprofile_userlevel"
+            app:layout_constraintTop_toTopOf="@+id/txt_userprofile_userlevel" />
 
         <ProgressBar
-            android:id="@+id/progressBar2"
+            android:id="@+id/progbar_userprofile_exp"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/textView2"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintStart_toStartOf="@+id/txt_userprofile_userlevel"
+            app:layout_constraintTop_toBottomOf="@+id/txt_userprofile_userlevel" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/txt_userprofile_currentexp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="13205514"
-            app:layout_constraintEnd_toStartOf="@+id/textView4"
-            app:layout_constraintStart_toStartOf="@+id/progressBar2"
-            app:layout_constraintTop_toBottomOf="@+id/progressBar2" />
+            app:layout_constraintEnd_toStartOf="@+id/txt_userprofile_slash"
+            app:layout_constraintStart_toStartOf="@+id/progbar_userprofile_exp"
+            app:layout_constraintTop_toBottomOf="@+id/progbar_userprofile_exp" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/txt_userprofile_slash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="/"
-            app:layout_constraintEnd_toStartOf="@+id/textView5"
-            app:layout_constraintStart_toEndOf="@+id/textView3"
-            app:layout_constraintTop_toTopOf="@+id/textView3" />
+            app:layout_constraintEnd_toStartOf="@+id/txt_userprofile_totalexp"
+            app:layout_constraintStart_toEndOf="@+id/txt_userprofile_currentexp"
+            app:layout_constraintTop_toTopOf="@+id/txt_userprofile_currentexp" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/txt_userprofile_totalexp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="20000000"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView4"
-            app:layout_constraintTop_toTopOf="@+id/textView3" />
+            app:layout_constraintStart_toEndOf="@+id/txt_userprofile_slash"
+            app:layout_constraintTop_toTopOf="@+id/txt_userprofile_currentexp" />
 
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout2"
+        android:id="@+id/constraintLayout_userprofile_badge"
         android:layout_width="match_parent"
         android:layout_height="131dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_userprofile_userstatus">
 
         <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
-            app:layout_constraintEnd_toStartOf="@+id/imageView2"
-            app:layout_constraintStart_toEndOf="@+id/imageView3"
-            app:layout_constraintTop_toTopOf="@+id/imageView3"
-            app:srcCompat="@drawable/trophy" />
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="55dp"
-            android:layout_marginStart="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView1"
-            app:layout_constraintTop_toTopOf="@+id/imageView1"
-            app:srcCompat="@drawable/trophy" />
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
-            app:layout_constraintEnd_toStartOf="@+id/imageView1"
-            app:layout_constraintStart_toEndOf="@+id/imageView6"
-            app:layout_constraintTop_toTopOf="@+id/imageView6"
-            app:srcCompat="@drawable/trophy" />
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView5"
-            app:srcCompat="@drawable/trophy" />
-
-        <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/image_userprofile_distance"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="10dp"
             android:layout_marginStart="55dp"
             android:layout_marginTop="15dp"
-            app:layout_constraintEnd_toStartOf="@+id/imageView6"
+            app:layout_constraintEnd_toStartOf="@+id/image_userprofile_bigevent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/trophy" />
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/image_userprofile_bigevent"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
-            app:layout_constraintEnd_toStartOf="@+id/imageView3"
-            app:layout_constraintStart_toEndOf="@+id/imageView5"
-            app:layout_constraintTop_toTopOf="@+id/imageView5"
+            app:layout_constraintEnd_toStartOf="@+id/image_userprofile_dailycheck"
+            app:layout_constraintStart_toEndOf="@+id/image_userprofile_distance"
+            app:layout_constraintTop_toTopOf="@+id/image_userprofile_distance"
             app:srcCompat="@drawable/trophy" />
+
+        <ImageView
+            android:id="@+id/image_userprofile_dailycheck"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintEnd_toStartOf="@+id/image_userprofile_runningtrophy"
+            app:layout_constraintStart_toEndOf="@+id/image_userprofile_bigevent"
+            app:layout_constraintTop_toTopOf="@+id/image_userprofile_bigevent"
+            app:srcCompat="@drawable/trophy" />
+
+        <ImageView
+            android:id="@+id/image_userprofile_runningtrophy"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintEnd_toStartOf="@+id/image_userprofile_milestrophy"
+            app:layout_constraintStart_toEndOf="@+id/image_userprofile_dailycheck"
+            app:layout_constraintTop_toTopOf="@+id/image_userprofile_dailycheck"
+            app:srcCompat="@drawable/trophy" />
+
+        <ImageView
+            android:id="@+id/image_userprofile_milestrophy"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="55dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/image_userprofile_runningtrophy"
+            app:layout_constraintTop_toTopOf="@+id/image_userprofile_runningtrophy"
+            app:srcCompat="@drawable/trophy" />
+
+        <ImageView
+            android:id="@+id/image_userprofile_event"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_userprofile_distance"
+            app:srcCompat="@drawable/trophy" />
+
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
@@ -176,10 +176,10 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_userprofile_badge">
 
         <ImageView
-            android:id="@+id/imageView7"
+            android:id="@+id/image_userprofile_milesdashboard"
             android:layout_width="0dp"
             android:layout_height="100dp"
             app:layout_constraintBottom_toBottomOf="parent"

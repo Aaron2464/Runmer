@@ -1,12 +1,18 @@
 package com.example.aaron.runmer.FriendsList;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.example.aaron.runmer.R;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class FriendsListPage extends Fragment implements FriendsListContract.View{
+public class FriendsListPage extends Fragment implements FriendsListContract.View {
 
     private FriendsListContract.Presenter mPresenter;
 
@@ -15,6 +21,13 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
         super.onCreate(savedInstanceState);
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_friend_list, container, false);
+        return view;
+    }
 
     @Override
     public void setPresenter(FriendsListContract.Presenter presenter) {

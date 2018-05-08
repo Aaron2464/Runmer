@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/image_userprofile_milestrophy"
         android:layout_width="10dp"
         android:layout_height="10dp"
         app:layout_constraintBottom_toBottomOf="parent"

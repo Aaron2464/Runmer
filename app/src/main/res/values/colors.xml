@@ -13,5 +13,6 @@
     <color name="white">#ffffff</color>
     <color name="gray">#DDDDDD</color>
     <color name="tab_underline">#FFFF77</color>
+    <color name="invite_friend_dialog">#EE7700</color>
 
 </resources>

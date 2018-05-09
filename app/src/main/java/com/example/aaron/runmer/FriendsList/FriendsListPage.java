@@ -93,6 +93,7 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
 
         final EditText mEditTxtFriendEmail = view.findViewById(R.id.edittxt_friend_invite_email);
         Button mBtnSearchFriend = view.findViewById(R.id.btn_search_friend);
+        final TextView mTxtInviteFriendEmail = view.findViewById(R.id.txt_invite_friendlevel);
         ConstraintLayout mLayout = view.findViewById(R.id.add_friend_detail);
 
         mLayout.setVisibility(View.GONE);
@@ -115,7 +116,8 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
                 .setCancelable(false)
                 .setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
+                        if(mTxtInviteFriendEmail.getText().toString().equals(null)){}
+                        else {mPresenter.sendFriendInvitation(mTxtInviteFriendEmail.getText().toString());}
                     }
                 })
                 .setNegativeButton("Cancel",

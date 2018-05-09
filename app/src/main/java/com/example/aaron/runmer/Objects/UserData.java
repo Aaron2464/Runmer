@@ -4,7 +4,7 @@ public class UserData {
     private String UserName;
     private String UserEmail;
     private String UserPhoto;
-    private String UserId;
+    private String UserUid;
     private String UserBirth;
     private String UserHeight;
     private String UserWeight;
@@ -38,12 +38,12 @@ public class UserData {
         UserPhoto = userPhoto;
     }
 
-    public String getUserId() {
-        return UserId;
+    public String getUserUid() {
+        return UserUid;
     }
 
-    public void setUserId(String userId) {
-        UserId = userId;
+    public void setUserUid(String userUid) {
+        UserUid = userUid;
     }
 
     public String getUserBirth() {

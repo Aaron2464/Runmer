@@ -46,6 +46,7 @@ public class UserDataPresenter implements UserDataContract.Presenter {
     public void setUserDataToFirebase(Map UserDataMap) {
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mDatabaseReference.child("Users").child(mAuth.getCurrentUser().getUid()).setValue(UserDataMap);
+        mDatabaseReference.child("Users").child(mAuth.getCurrentUser().getUid()).child("UserUid").setValue(mAuth.getCurrentUser().getUid());
     }
 
     @Override

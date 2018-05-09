@@ -27,6 +27,8 @@ public interface FriendsListContract {
 
         void denyFriend();
 
+        void sendFriendInvitation(String inviteFriendEmail);
+
 //        void openGoogleMap();
     }
 }

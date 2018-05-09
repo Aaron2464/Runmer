@@ -2,6 +2,7 @@ package com.example.aaron.runmer.FriendsList;
 
 import android.util.Log;
 
+import com.example.aaron.runmer.Api.Callback.InvitehFireBaseUserDataCallback;
 import com.example.aaron.runmer.Api.Callback.SearchFireBaseUserDataCallback;
 import com.example.aaron.runmer.Api.RunmerParser;
 import com.example.aaron.runmer.Objects.UserData;
@@ -55,6 +56,21 @@ public class FriendsListPresenter implements FriendsListContract.Presenter {
     @Override
     public void denyFriend() {
 
+    }
+
+    @Override
+    public void sendFriendInvitation(String inviteFriendEmail) {
+        Log.d(Constants.TAG,"inviteFriendEmail : " +inviteFriendEmail);
+        RunmerParser.parseFireBaseInviteFriend(inviteFriendEmail, new InvitehFireBaseUserDataCallback() {
+            @Override
+            public void onCompleted(UserData inviteUser) {
+                String inviteFriendUid = inviteUser.getUserUid();
+            }
+            @Override
+            public void onError(String errorMessage) {
+                Log.d(Constants.TAG,errorMessage);
+            }
+        });
     }
 
     @Override

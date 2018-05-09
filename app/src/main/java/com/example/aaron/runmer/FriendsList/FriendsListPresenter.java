@@ -1,5 +1,12 @@
 package com.example.aaron.runmer.FriendsList;
 
+import android.util.Log;
+
+import com.example.aaron.runmer.Api.Callback.SearchFireBaseUserDataCallback;
+import com.example.aaron.runmer.Api.RunmerParser;
+import com.example.aaron.runmer.Objects.UserData;
+import com.example.aaron.runmer.util.Constants;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class FriendsListPresenter implements FriendsListContract.Presenter {
@@ -22,7 +29,22 @@ public class FriendsListPresenter implements FriendsListContract.Presenter {
 
     @Override
     public void searchFriend(String friendEmail) {
-        
+        // keep checking users on fireBase and report it if there's one that is matched
+        RunmerParser.parseFireBaseUserData(friendEmail, new SearchFireBaseUserDataCallback() {
+            @Override
+            public void onCompleted(Boolean searchResult,UserData foundUser) {
+                if(searchResult == true){
+                    mFriendsListView.showFriendInformation(foundUser);
+                }else {
+                    mFriendsListView.showNonFriend();
+                    //TODO 沒有東西的時候會報錯
+                }
+            }
+            @Override
+            public void onError(String errorMessage) {
+                Log.d(Constants.TAG,errorMessage);
+            }
+        });
     }
 
     @Override

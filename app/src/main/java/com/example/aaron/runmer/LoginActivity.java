@@ -1,14 +1,14 @@
 package com.example.aaron.runmer;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.aaron.runmer.Base.BaseActivity;
 import com.example.aaron.runmer.Map.MapPage;
+import com.example.aaron.runmer.UserData.UserDataPage;
 import com.example.aaron.runmer.util.Constants;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -25,11 +25,10 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
     private FirebaseAuth mAuth;
     boolean isLoggedIn = AccessToken.getCurrentAccessToken() == null;
     //    boolean isExpired = AccessToken.getCurrentAccessToken().isExpired();              //I don't know what it can do?
@@ -69,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
             });
         } else {
             Intent intent = new Intent();
-            intent.setClass(LoginActivity.this, UserDataActivity.class);     //TODO MapPage  & UserDataActivity
+            intent.setClass(LoginActivity.this, MapPage.class);
             startActivity(intent);
             LoginActivity.this.finish();
         }
@@ -94,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(Constants.TAG, "signInWithCredential:success");
-                            Intent intent = new Intent(LoginActivity.this, UserDataActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, UserDataPage.class);
                             startActivity(intent);
                         } else {
                             // If sign in fails, display a message to the user.

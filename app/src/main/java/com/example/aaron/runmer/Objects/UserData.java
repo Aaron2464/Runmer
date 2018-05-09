@@ -1,80 +1,80 @@
 package com.example.aaron.runmer.Objects;
 
 public class UserData {
-    private String mName;
-    private String mEmail;
-    private String mImage;
-    private String mId;
-    private String mBirth;
-    private String mHeight;
-    private String mWeight;
-    private String mGender;
+    private String UserName;
+    private String UserEmail;
+    private String UserPhoto;
+    private String UserUid;
+    private String UserBirth;
+    private String UserHeight;
+    private String UserWeight;
+    private String UserGender;
 
     public UserData() {
 
     }
 
-    public String getName() {
-        return mName;
+    public String getUserName() {
+        return UserName;
     }
 
-    public void setName(String name) {
-        mName = name;
+    public void setUserName(String userName) {
+        UserName = userName;
     }
 
-    public String getEmail() {
-        return mEmail;
+    public String getUserEmail() {
+        return UserEmail;
     }
 
-    public void setEmail(String email) {
-        mEmail = email;
+    public void setUserEmail(String userEmail) {
+        UserEmail = userEmail;
     }
 
-    public String getImage() {
-        return mImage;
+    public String getUserPhoto() {
+        return UserPhoto;
     }
 
-    public void setImage(String image) {
-        mImage = image;
+    public void setUserPhoto(String userPhoto) {
+        UserPhoto = userPhoto;
     }
 
-    public String getId() {
-        return mId;
+    public String getUserUid() {
+        return UserUid;
     }
 
-    public void setId(String id) {
-        mId = id;
+    public void setUserUid(String userUid) {
+        UserUid = userUid;
     }
 
-    public String getBirth() {
-        return mBirth;
+    public String getUserBirth() {
+        return UserBirth;
     }
 
-    public void setBirth(String birth) {
-        mBirth = birth;
+    public void setUserBirth(String userBirth) {
+        UserBirth = userBirth;
     }
 
-    public String getHeight() {
-        return mHeight;
+    public String getUserHeight() {
+        return UserHeight;
     }
 
-    public void setHeight(String height) {
-        mHeight = height;
+    public void setUserHeight(String userHeight) {
+        UserHeight = userHeight;
     }
 
-    public String getWeight() {
-        return mWeight;
+    public String getUserWeight() {
+        return UserWeight;
     }
 
-    public void setWeight(String weight) {
-        mWeight = weight;
+    public void setUserWeight(String userWeight) {
+        UserWeight = userWeight;
     }
 
-    public String getGender() {
-        return mGender;
+    public String getUserGender() {
+        return UserGender;
     }
 
-    public void setGender(String gender) {
-        mGender = gender;
+    public void setUserGender(String userGender) {
+        UserGender = userGender;
     }
 }

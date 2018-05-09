@@ -3,13 +3,15 @@
     package="com.example.aaron.runmer">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!--turn on the internet permissiom-->
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <!--turn on the camera premission-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <!--turn on the write into external storage permission-->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <!--turn on the read external storage permission-->
+    <!-- turn on the internet permissiom -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- turn on the camera premission -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- turn on the write into external storage permission -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- turn on the read external storage permission -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -36,7 +38,8 @@
             android:label="@string/app_name" />
         <activity
             android:name="com.facebook.CustomTabActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -48,10 +51,22 @@
         </activity>
         <activity
             android:name=".UserData.UserDataPage"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
-            <!--To avoid the keyboard covered the EditTextView-->
+            <!-- To avoid the keyboard covered the EditTextView -->
         </activity>
-        <activity android:name=".Map.MapPage"></activity>
+        <activity
+            android:name=".Map.MapPage"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ViewPagerMain.ViewPagerActivity"
+            android:screenOrientation="portrait" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
     </application>
 
 </manifest>

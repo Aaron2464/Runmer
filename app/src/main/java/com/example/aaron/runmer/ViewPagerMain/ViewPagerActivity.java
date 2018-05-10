@@ -42,6 +42,7 @@ public class ViewPagerActivity extends BaseActivity implements ViewPagerMainCont
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
         mTabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
+        mViewPager.setOffscreenPageLimit(2);            //懶載入
         mViewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
 
             @Override

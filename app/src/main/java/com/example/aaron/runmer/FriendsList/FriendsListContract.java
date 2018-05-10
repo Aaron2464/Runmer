@@ -21,7 +21,7 @@ public interface FriendsListContract {
 
         void clickFABbtn();
 
-        void loadFriendData();
+        void queryAllFriendData();
 
         void searchFriend(String friendEmail);
 

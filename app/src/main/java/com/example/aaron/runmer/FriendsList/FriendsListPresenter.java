@@ -8,6 +8,12 @@ import com.example.aaron.runmer.Api.Callback.SearchFireBaseUserDataCallback;
 import com.example.aaron.runmer.Api.RunmerParser;
 import com.example.aaron.runmer.Objects.UserData;
 import com.example.aaron.runmer.util.Constants;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -27,7 +33,40 @@ public class FriendsListPresenter implements FriendsListContract.Presenter {
     }
 
     @Override
-    public void loadFriendData() {
+    public void queryAllFriendData() {
+        final FirebaseAuth mCurrentUserUid = FirebaseAuth.getInstance();
+        final String currentUserUid = mCurrentUserUid.getCurrentUser().getUid();
+        final DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
+        dataBaseRef.child(Constants.USER_FIREBASE)
+                .child(currentUserUid)
+                .child(Constants.USER_FIREBASE_FRIENDS)
+                .addChildEventListener(new ChildEventListener() {
+
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        mFriendsListView.showFriendList(dataSnapshot.getValue(UserData.class));
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
     }
 

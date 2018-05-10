@@ -25,6 +25,7 @@ import com.example.aaron.runmer.Objects.UserData;
 import com.example.aaron.runmer.R;
 import com.example.aaron.runmer.util.CircleTransform;
 import com.example.aaron.runmer.util.Constants;
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -89,7 +90,7 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-//        mPresenter.searchFriendList();
+        mPresenter.queryAllFriendData();
         mRecyclerView.setAdapter(mAdapter);
         return view;
     }

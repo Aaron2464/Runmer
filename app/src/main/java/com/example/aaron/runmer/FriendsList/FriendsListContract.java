@@ -10,6 +10,8 @@ public interface FriendsListContract {
 
         void showFriendInformation(UserData foundUser);
 
+        void showFriendList(UserData inviteUser);
+
         void showFABDialog();
 
         void showNonFriend();
@@ -23,7 +25,7 @@ public interface FriendsListContract {
 
         void searchFriend(String friendEmail);
 
-        void addFriend();
+        void addFriend(String s);
 
         void denyFriend();
 

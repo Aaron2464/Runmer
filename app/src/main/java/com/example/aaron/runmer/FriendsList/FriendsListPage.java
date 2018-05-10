@@ -27,6 +27,8 @@ import com.example.aaron.runmer.util.CircleTransform;
 import com.example.aaron.runmer.util.Constants;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class FriendsListPage extends Fragment implements FriendsListContract.View {
@@ -35,12 +37,14 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
     FriendsListAdapter mAdapter;
     FloatingActionButton mFAB;
     View view;
+    ArrayList<UserData> ArrayUserData = new ArrayList<>();
+
     private FriendsListContract.Presenter mPresenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAdapter = new FriendsListAdapter(mPresenter);
+        mAdapter = new FriendsListAdapter(getContext(), new ArrayList<UserData>(), mPresenter);
         mPresenter = new FriendsListPresenter(this);
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         view = layoutInflater.inflate(R.layout.dialog_friend_invite, null);
@@ -64,21 +68,36 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
 
     }
 
+    public void showFriendList(UserData friendList) {
+        ArrayUserData.add(friendList);
+        mAdapter = new FriendsListAdapter(getContext(), ArrayUserData, mPresenter);
+        Log.d(Constants.TAG,"AarayUserData : " + ArrayUserData.get(0).getUserName());
+        Log.d(Constants.TAG,"AarayUserData : " + ArrayUserData.get(0).getUserEmail());
+        Log.d(Constants.TAG,"AarayUserData : " + ArrayUserData.get(0).getUserPhoto());
+        Log.d(Constants.TAG,"AarayUserData : " + ArrayUserData.size());
+        mAdapter.notifyDataSetChanged();
+        mRecyclerView.setAdapter(mAdapter);
+        //TODO 很多很多BUG要處理，還有error handle Ex:重覆加好友,add deny btn handle
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_friend_list, container, false);
+        mRecyclerView = view.findViewById(R.id.recyclerView_friendlist);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+//        mPresenter.searchFriendList();
+        mRecyclerView.setAdapter(mAdapter);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mRecyclerView = view.findViewById(R.id.recyclerView_friendlist);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        mRecyclerView.setAdapter(mAdapter);
+
 
         mFAB = view.findViewById(R.id.fab_friendlist);
         mFAB.setOnClickListener(new View.OnClickListener() {
@@ -116,8 +135,10 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
                 .setCancelable(false)
                 .setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if(mTxtInviteFriendEmail.getText().toString().equals(null)){}
-                        else {mPresenter.sendFriendInvitation(mTxtInviteFriendEmail.getText().toString());}
+                        if (mTxtInviteFriendEmail.getText().toString().equals(null)) {
+                        } else {
+                            mPresenter.sendFriendInvitation(mTxtInviteFriendEmail.getText().toString());
+                        }
                     }
                 })
                 .setNegativeButton("Cancel",
@@ -133,7 +154,7 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
 
     @Override
     public void showNonFriend() {
-        Toast.makeText(getContext(),"There is no user !", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "There is no user !", Toast.LENGTH_SHORT).show();
     }
 
     @Override

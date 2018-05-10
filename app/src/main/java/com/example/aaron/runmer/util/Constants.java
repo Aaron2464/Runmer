@@ -13,5 +13,7 @@ public class Constants {
     public static final String USER_FIREBASE_NAME = "UserName";
     public static final String USER_FIREBASE_EMAIL = "UserEmail";
     public static final String USER_FIREBASE_IMAGE = "UserPhoto";
+    public static final String USER_FIREBASE_UID = "UserUid";
+    public static final String USER_FIREBASE_STATUS = "UserStatus";
 
 }

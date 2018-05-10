@@ -45,7 +45,7 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
 
     @Override
     public int getItemCount() {
-        Log.d(Constants.TAG,"mUserData" + mUserData);
+        Log.d(Constants.TAG, "mUserData" + mUserData);
         return mUserData.size();
     }
 

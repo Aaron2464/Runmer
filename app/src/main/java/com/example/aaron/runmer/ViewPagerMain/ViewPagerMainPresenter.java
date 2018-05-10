@@ -4,9 +4,10 @@ import com.example.aaron.runmer.Base.BasePresenter;
 
 public class ViewPagerMainPresenter implements BasePresenter {
 
-    public void transToUserProfile(){
+    public void transToUserProfile() {
 
-    };
+    }
+
     @Override
     public void start() {
 

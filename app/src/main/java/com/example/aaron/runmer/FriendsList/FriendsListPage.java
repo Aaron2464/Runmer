@@ -71,10 +71,10 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
     public void showFriendList(UserData friendList) {
         ArrayUserData.add(friendList);
         mAdapter = new FriendsListAdapter(getContext(), ArrayUserData, mPresenter);
-        Log.d(Constants.TAG,"AarayUserData : " + ArrayUserData.get(0).getUserName());
-        Log.d(Constants.TAG,"AarayUserData : " + ArrayUserData.get(0).getUserEmail());
-        Log.d(Constants.TAG,"AarayUserData : " + ArrayUserData.get(0).getUserPhoto());
-        Log.d(Constants.TAG,"AarayUserData : " + ArrayUserData.size());
+        Log.d(Constants.TAG, "AarayUserData : " + ArrayUserData.get(0).getUserName());
+        Log.d(Constants.TAG, "AarayUserData : " + ArrayUserData.get(0).getUserEmail());
+        Log.d(Constants.TAG, "AarayUserData : " + ArrayUserData.get(0).getUserPhoto());
+        Log.d(Constants.TAG, "AarayUserData : " + ArrayUserData.size());
         mAdapter.notifyDataSetChanged();
         mRecyclerView.setAdapter(mAdapter);
         //TODO 很多很多BUG要處理，還有error handle Ex:重覆加好友,add deny btn handle

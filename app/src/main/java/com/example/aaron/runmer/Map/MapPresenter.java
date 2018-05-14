@@ -69,16 +69,16 @@ public class MapPresenter implements MapContract.Presenter {
 
             geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
                 @Override
-                public void onKeyEntered(String key, final GeoLocation location) {
+                public void onKeyEntered(final String key, final GeoLocation location) {
 //                    FirebaseDatabase.getInstance().getReference("Users")        //TODO 抓資料的key (之後抓friend location)
                     Log.d(Constants.TAG, "Key: " + key);
                     mFriendRef.addListenerForSingleValueEvent(new ValueEventListener() { //addValueEventListener
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             for (DataSnapshot postsnot : dataSnapshot.getChildren()) {
-                                String Uid = postsnot.getValue().toString();
+                                String Uid = postsnot.getKey().toString();
                                 Log.d(Constants.TAG, "QueryFriendUid: " + postsnot.getKey());
-                                if (!Uid.equals(mAuth.getCurrentUser().getUid().toString())) {
+                                if (!key.equals(mAuth.getCurrentUser().getUid().toString()) && key.equals(Uid)) {           //判斷是不是自己還有拿key才要先geofire setlocation確定有enter，*重點!!
                                     LatLng userlocation = new LatLng(Double.parseDouble(postsnot.child("lat").getValue().toString())
                                             , Double.parseDouble(postsnot.child("lng").getValue().toString()));
                                     Log.d(Constants.TAG,"FriendLocation: " + userlocation);

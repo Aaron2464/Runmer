@@ -6,6 +6,9 @@ import android.util.Log;
 import com.example.aaron.runmer.util.Constants;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQuery;
+import com.firebase.geofire.GeoQueryEventListener;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,6 +23,9 @@ public class MapPresenter implements MapContract.Presenter {
     String mUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
     DatabaseReference mFriendRef = FirebaseDatabase.getInstance().getReference("Users").child(mUserUid).child("Friends");
     DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference("Users").child(mUserUid);
+    DatabaseReference mUserLocation = FirebaseDatabase.getInstance().getReference("Location");
+    GeoFire mGeoFire = new GeoFire(mUserLocation);
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     public MapPresenter(MapContract.View mapsView) {
         mMapsView = checkNotNull(mapsView, "mapsView connot be null!");
@@ -32,26 +38,85 @@ public class MapPresenter implements MapContract.Presenter {
     }
 
     @Override
-    public void openGoogleMaps(Location mLocation) {
+    public void openGoogleMaps(final Location mLocation) {
         if (mLocation != null) {
             final double latitude = mLocation.getLatitude();
             final double longitude = mLocation.getLongitude();
 
-            GeoFire geoFire = new GeoFire(mFriendRef);
             mUserRef.child("lat").setValue(latitude);
             mUserRef.child("lng").setValue(longitude);
-            geoFire.setLocation(mUserUid, new GeoLocation(latitude, longitude),
+            mGeoFire.setLocation(mUserUid, new GeoLocation(latitude, longitude),
                     new GeoFire.CompletionListener() {
                         @Override
                         public void onComplete(String key, DatabaseError error) {
-
                             mMapsView.showGoogleMapUi(latitude, longitude);
-
                         }
                     });
             Log.d(Constants.TAG, "Your Location was changed: " + latitude + longitude);
         } else {
             Log.d(Constants.TAG, "Can not get your location");
+        }
+    }
+
+    @Override
+    public void queryfriendlocation(Location mLocation) {
+        if (mLocation != null) {
+            double latitude = mLocation.getLatitude();
+            double longitude = mLocation.getLongitude();
+
+            GeoQuery geoQuery = mGeoFire.queryAtLocation(new GeoLocation(latitude, longitude), 0.5);
+            geoQuery.removeAllListeners();
+
+            geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+                @Override
+                public void onKeyEntered(String key, final GeoLocation location) {
+//                    FirebaseDatabase.getInstance().getReference("Users")        //TODO 抓資料的key (之後抓friend location)
+                    Log.d(Constants.TAG, "Key: " + key);
+                    mFriendRef.addListenerForSingleValueEvent(new ValueEventListener() { //addValueEventListener
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot postsnot : dataSnapshot.getChildren()) {
+                                String Uid = postsnot.getValue().toString();
+                                Log.d(Constants.TAG, "QueryFriendUid: " + postsnot.getKey());
+                                if (!Uid.equals(mAuth.getCurrentUser().getUid().toString())) {
+                                    LatLng userlocation = new LatLng(Double.parseDouble(postsnot.child("lat").getValue().toString())
+                                            , Double.parseDouble(postsnot.child("lng").getValue().toString()));
+                                    Log.d(Constants.TAG,"FriendLocation: " + userlocation);
+                                    mMapsView.showGeoFriends(userlocation);
+
+                                } else {
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                }
+
+                @Override
+                public void onKeyExited(String key) {
+
+                }
+
+                @Override
+                public void onKeyMoved(String key, GeoLocation location) {
+
+                }
+
+                @Override
+                public void onGeoQueryReady() {
+
+                }
+
+                @Override
+                public void onGeoQueryError(DatabaseError error) {
+
+                }
+            });
         }
     }
 

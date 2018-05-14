@@ -174,6 +174,14 @@ public class MapPage extends BaseActivity implements MapContract.View
 //        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userlocation, 13));
 //        mMap.getUiSettings().setZoomControlsEnabled(true);\
     }
+    @Override
+    public void showGeoFriends(LatLng mlocation) {
+
+        mMap.addMarker(new MarkerOptions()
+                .position(mlocation)   //new LatLng(location.latitude,location.longitude)
+                .flat(true)
+                .icon(BitmapDescriptorFactory.defaultMarker()));
+    }
 
     @Override
     public void showUserPhoto(String userimage) {
@@ -245,8 +253,9 @@ public class MapPage extends BaseActivity implements MapContract.View
 
     @Override
     public void onLocationChanged(Location location) {
-        displayLocation();
         mMap.clear();
+        displayLocation();
+        mPresenter.queryfriendlocation(location);
     }
 
     @Override

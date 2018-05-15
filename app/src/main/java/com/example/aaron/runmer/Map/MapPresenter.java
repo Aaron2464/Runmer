@@ -9,9 +9,7 @@ import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,7 +31,7 @@ public class MapPresenter implements MapContract.Presenter {
     GeoFire mGeoFire = new GeoFire(mUserLocation);
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private GoogleMap map;
-    private Map<String,Marker> markers;
+    private Map<String, Marker> markers;
 
 
     public MapPresenter(MapContract.View mapsView) {
@@ -80,8 +78,26 @@ public class MapPresenter implements MapContract.Presenter {
             geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
                 @Override
                 public void onKeyEntered(final String key, final GeoLocation location) {
+
                     if (!key.equals(mAuth.getCurrentUser().getUid())) {
-                        mMapsView.showGeoFriends(key, location);
+                        mFriendRef.child(key).child("userPhoto").addListenerForSingleValueEvent(
+                                new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.getValue() != null) {
+                                            String friendAvatar = dataSnapshot.getValue().toString();
+                                            Log.d(Constants.TAG, "PKEY: " + key);
+                                            Log.d(Constants.TAG, "PUri: " + friendAvatar.toString());
+                                            mMapsView.showGeoFriends(key, location, friendAvatar);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+
                     }
 //------------------------------------以下註解是白癡行為...竟然花了我快半年研究，特別在此留下----------------------------------------------//
 ////                    FirebaseDatabase.getInstance().getReference("Users")

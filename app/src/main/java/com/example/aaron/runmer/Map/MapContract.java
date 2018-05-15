@@ -15,9 +15,7 @@ public interface MapContract {
 
         void showUserPhoto(String userimage);
 
-        void showGeoFriends(LatLng mlocation);
-
-        void showGeoFriends(String key, GeoLocation location);
+        void showGeoFriends(String key, GeoLocation location, String friendAvatar);
 
         void moveGeoFriends(String key, GeoLocation location);
 

@@ -29,7 +29,6 @@ import com.example.aaron.runmer.ViewPagerMain.ViewPagerActivity;
 import com.example.aaron.runmer.util.CircleTransform;
 import com.example.aaron.runmer.util.Constants;
 import com.firebase.geofire.GeoLocation;
-import com.firebase.geofire.GeoQueryEventListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -187,19 +186,11 @@ public class MapPage extends BaseActivity implements MapContract.View
     }
 
     @Override
-    public void showGeoFriends(LatLng mlocation) {
-
-        mMap.addMarker(new MarkerOptions()
-                .position(mlocation)   //new LatLng(location.latitude,location.longitude)
-                .flat(true)
-                .icon(BitmapDescriptorFactory.defaultMarker()));
-    }
-
-    @Override
-    public void showGeoFriends(String key, GeoLocation mlocation) {
+    public void showGeoFriends(String key, GeoLocation mlocation, String friendAvatar) {
 
         Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(mlocation.latitude, mlocation.longitude)));
         this.markers.put(key, marker);
+        mMap.setInfoWindowAdapter(new UserinfoWindow(this,friendAvatar));
     }
 
     @Override

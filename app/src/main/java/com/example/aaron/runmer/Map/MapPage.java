@@ -8,12 +8,16 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -24,6 +28,8 @@ import com.example.aaron.runmer.R;
 import com.example.aaron.runmer.ViewPagerMain.ViewPagerActivity;
 import com.example.aaron.runmer.util.CircleTransform;
 import com.example.aaron.runmer.util.Constants;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQueryEventListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -40,6 +46,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.example.aaron.runmer.util.Constants.DISPLACEMENT;
 import static com.example.aaron.runmer.util.Constants.FATEST_INTERVAL;
@@ -62,6 +71,7 @@ public class MapPage extends BaseActivity implements MapContract.View
     private Marker mMarker;
     private Switch mSwitch;
     private ImageView mImageUser;
+    private Map<String, Marker> markers;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,6 +81,7 @@ public class MapPage extends BaseActivity implements MapContract.View
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_map);
         mapFragment.getMapAsync(this);
+        this.markers = new HashMap<String, Marker>();
         mPresenter = new MapPresenter(this);
         mPresenter.setUserPhoto();
         setupMyLocation();
@@ -174,6 +185,7 @@ public class MapPage extends BaseActivity implements MapContract.View
 //        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userlocation, 13));
 //        mMap.getUiSettings().setZoomControlsEnabled(true);\
     }
+
     @Override
     public void showGeoFriends(LatLng mlocation) {
 
@@ -181,6 +193,53 @@ public class MapPage extends BaseActivity implements MapContract.View
                 .position(mlocation)   //new LatLng(location.latitude,location.longitude)
                 .flat(true)
                 .icon(BitmapDescriptorFactory.defaultMarker()));
+    }
+
+    @Override
+    public void showGeoFriends(String key, GeoLocation mlocation) {
+
+        Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(mlocation.latitude, mlocation.longitude)));
+        this.markers.put(key, marker);
+    }
+
+    @Override
+    public void removeGeoFriends(String key) {
+        Marker marker = this.markers.get(key);
+        if (marker != null) {
+            marker.remove();
+            this.markers.remove(key);
+        }
+    }
+
+    @Override
+    public void moveGeoFriends(String key, GeoLocation location){
+        final double lat = location.latitude;
+        final double lng = location.longitude;
+        final Marker marker = this.markers.get(key);
+        if (marker != null) {               //            this.animateMarkerTo(marker, location.latitude, location.longitude)↓
+            final Handler handler = new Handler();
+            final long start = SystemClock.uptimeMillis();
+            final long DURATION_MS = 3000;
+            final Interpolator interpolator = new AccelerateDecelerateInterpolator();
+            final LatLng startPosition = marker.getPosition();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    float elapsed = SystemClock.uptimeMillis() - start;
+                    float t = elapsed/DURATION_MS;
+                    float v = interpolator.getInterpolation(t);
+
+                    double currentLat = (lat - startPosition.latitude) * v + startPosition.latitude;
+                    double currentLng = (lng - startPosition.longitude) * v + startPosition.longitude;
+                    marker.setPosition(new LatLng(currentLat, currentLng));
+
+                    // if animation is not finished yet, repeat
+                    if (t < 1) {
+                        handler.postDelayed(this, 16);
+                    }
+                }
+            });
+        }
     }
 
     @Override

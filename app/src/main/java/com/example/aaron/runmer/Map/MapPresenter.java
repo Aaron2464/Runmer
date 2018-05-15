@@ -8,13 +8,19 @@ import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -26,6 +32,9 @@ public class MapPresenter implements MapContract.Presenter {
     DatabaseReference mUserLocation = FirebaseDatabase.getInstance().getReference("Location");
     GeoFire mGeoFire = new GeoFire(mUserLocation);
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private GoogleMap map;
+    private Map<String,Marker> markers;
+
 
     public MapPresenter(MapContract.View mapsView) {
         mMapsView = checkNotNull(mapsView, "mapsView connot be null!");
@@ -60,6 +69,7 @@ public class MapPresenter implements MapContract.Presenter {
 
     @Override
     public void queryfriendlocation(Location mLocation) {
+        this.markers = new HashMap<String, Marker>();
         if (mLocation != null) {
             double latitude = mLocation.getLatitude();
             double longitude = mLocation.getLongitude();
@@ -70,41 +80,46 @@ public class MapPresenter implements MapContract.Presenter {
             geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
                 @Override
                 public void onKeyEntered(final String key, final GeoLocation location) {
-//                    FirebaseDatabase.getInstance().getReference("Users")        //TODO 抓資料的key (之後抓friend location)
-                    Log.d(Constants.TAG, "Key: " + key);
-                    mFriendRef.addListenerForSingleValueEvent(new ValueEventListener() { //addValueEventListener
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DataSnapshot postsnot : dataSnapshot.getChildren()) {
-                                String Uid = postsnot.getKey().toString();
-                                Log.d(Constants.TAG, "QueryFriendUid: " + postsnot.getKey());
-                                if (!key.equals(mAuth.getCurrentUser().getUid()) && key.equals(Uid)) {           //判斷是不是自己還有拿key才要先geofire setlocation確定有enter，*重點!!
-                                    LatLng userlocation = new LatLng(Double.parseDouble(postsnot.child("lat").getValue().toString())
-                                            , Double.parseDouble(postsnot.child("lng").getValue().toString()));
-                                    Log.d(Constants.TAG,"FriendLocation: " + userlocation);
-                                    mMapsView.showGeoFriends(userlocation);
-
-                                } else {
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
+                    if (!key.equals(mAuth.getCurrentUser().getUid())) {
+                        mMapsView.showGeoFriends(key, location);
+                    }
+//------------------------------------以下註解是白癡行為...竟然花了我快半年研究，特別在此留下----------------------------------------------//
+////                    FirebaseDatabase.getInstance().getReference("Users")
+//                    Log.d(Constants.TAG, "Key: " + key);
+//                    mFriendRef.addListenerForSingleValueEvent(new ValueEventListener() { //addValueEventListener
+//                        @Override
+//                        public void onDataChange(DataSnapshot dataSnapshot) {
+//                            for (DataSnapshot postsnot : dataSnapshot.getChildren()) {
+//                                String Uid = postsnot.getKey().toString();
+//                                Log.d(Constants.TAG, "QueryFriendUid: " + postsnot.getKey());
+//                                if (!key.equals(mAuth.getCurrentUser().getUid()) && key.equals(Uid)) {           //判斷是不是自己還有拿key才要先geofire setlocation確定有enter，*重點!!
+//                                    LatLng userlocation = new LatLng(Double.parseDouble(postsnot.child("lat").getValue().toString())
+//                                            , Double.parseDouble(postsnot.child("lng").getValue().toString()));
+//                                    Log.d(Constants.TAG,"FriendLocation: " + userlocation);
+//                                    mMapsView.showGeoFriends(userlocation);
+//
+//                                } else {
+//                                }
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError databaseError) {
+//
+//                        }
+//                    });
+//------------------------------------https://ppt.cc/fVwvWx-------關鍵網頁---------------------------------------------------------------------------------//
+//------------------------------------以上註解是白癡行為...竟然花了我快半年研究，特別在此留下----------------------------------------------//
                 }
 
                 @Override
                 public void onKeyExited(String key) {
-
+                    mMapsView.removeGeoFriends(key);
                 }
 
                 @Override
                 public void onKeyMoved(String key, GeoLocation location) {
-
+                    mMapsView.moveGeoFriends(key, location);
                 }
 
                 @Override

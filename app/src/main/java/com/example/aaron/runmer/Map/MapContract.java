@@ -4,6 +4,7 @@ import android.location.Location;
 
 import com.example.aaron.runmer.Base.BasePresenter;
 import com.example.aaron.runmer.Base.BaseView;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.maps.model.LatLng;
 
 public interface MapContract {
@@ -15,6 +16,12 @@ public interface MapContract {
         void showUserPhoto(String userimage);
 
         void showGeoFriends(LatLng mlocation);
+
+        void showGeoFriends(String key, GeoLocation location);
+
+        void moveGeoFriends(String key, GeoLocation location);
+
+        void removeGeoFriends(String key);
     }
 
     interface Presenter extends BasePresenter {

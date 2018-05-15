@@ -64,7 +64,7 @@ public class MapPresenter implements MapContract.Presenter {
             double latitude = mLocation.getLatitude();
             double longitude = mLocation.getLongitude();
 
-            GeoQuery geoQuery = mGeoFire.queryAtLocation(new GeoLocation(latitude, longitude), 0.5);
+            GeoQuery geoQuery = mGeoFire.queryAtLocation(new GeoLocation(latitude, longitude), 0.03);
             geoQuery.removeAllListeners();
 
             geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
@@ -78,7 +78,7 @@ public class MapPresenter implements MapContract.Presenter {
                             for (DataSnapshot postsnot : dataSnapshot.getChildren()) {
                                 String Uid = postsnot.getKey().toString();
                                 Log.d(Constants.TAG, "QueryFriendUid: " + postsnot.getKey());
-                                if (!key.equals(mAuth.getCurrentUser().getUid().toString()) && key.equals(Uid)) {           //判斷是不是自己還有拿key才要先geofire setlocation確定有enter，*重點!!
+                                if (!key.equals(mAuth.getCurrentUser().getUid()) && key.equals(Uid)) {           //判斷是不是自己還有拿key才要先geofire setlocation確定有enter，*重點!!
                                     LatLng userlocation = new LatLng(Double.parseDouble(postsnot.child("lat").getValue().toString())
                                             , Double.parseDouble(postsnot.child("lng").getValue().toString()));
                                     Log.d(Constants.TAG,"FriendLocation: " + userlocation);

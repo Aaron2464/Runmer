@@ -70,7 +70,8 @@ public class MapPage extends BaseActivity implements MapContract.View
     private Marker mMarker;
     private Switch mSwitch;
     private ImageView mImageUser;
-    private Map<String, Marker> markers;
+    private Map<String, Marker> mMarkerMap;
+    private Map<String, String> mUriMap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,7 +81,8 @@ public class MapPage extends BaseActivity implements MapContract.View
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_map);
         mapFragment.getMapAsync(this);
-        this.markers = new HashMap<String, Marker>();
+        this.mMarkerMap = new HashMap<String, Marker>();
+        this.mUriMap = new HashMap<String, String>();
         mPresenter = new MapPresenter(this);
         mPresenter.setUserPhoto();
         setupMyLocation();
@@ -189,16 +191,19 @@ public class MapPage extends BaseActivity implements MapContract.View
     public void showGeoFriends(String key, GeoLocation mlocation, String friendAvatar) {
 
         Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(mlocation.latitude, mlocation.longitude)));
-        this.markers.put(key, marker);
-        mMap.setInfoWindowAdapter(new UserinfoWindow(this,friendAvatar));
+        this.mMarkerMap.put(key, marker);
+        Log.d(Constants.TAG, "MKEY: " + key);
+        Log.d(Constants.TAG, "MUri: " + friendAvatar.toString());
+        this.mUriMap.put(marker.getId(),friendAvatar);
+        mMap.setInfoWindowAdapter(new UserinfoWindow(this,mUriMap));
     }
 
     @Override
     public void removeGeoFriends(String key) {
-        Marker marker = this.markers.get(key);
+        Marker marker = this.mMarkerMap.get(key);
         if (marker != null) {
             marker.remove();
-            this.markers.remove(key);
+            this.mMarkerMap.remove(key);
         }
     }
 
@@ -206,7 +211,7 @@ public class MapPage extends BaseActivity implements MapContract.View
     public void moveGeoFriends(String key, GeoLocation location){
         final double lat = location.latitude;
         final double lng = location.longitude;
-        final Marker marker = this.markers.get(key);
+        final Marker marker = this.mMarkerMap.get(key);
         if (marker != null) {               //            this.animateMarkerTo(marker, location.latitude, location.longitude)↓
             final Handler handler = new Handler();
             final long start = SystemClock.uptimeMillis();

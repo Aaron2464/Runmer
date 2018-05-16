@@ -8,17 +8,12 @@ import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.Marker;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -30,9 +25,6 @@ public class MapPresenter implements MapContract.Presenter {
     DatabaseReference mUserLocation = FirebaseDatabase.getInstance().getReference("Location");
     GeoFire mGeoFire = new GeoFire(mUserLocation);
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private GoogleMap map;
-    private Map<String, Marker> markers;
-
 
     public MapPresenter(MapContract.View mapsView) {
         mMapsView = checkNotNull(mapsView, "mapsView connot be null!");
@@ -67,7 +59,6 @@ public class MapPresenter implements MapContract.Presenter {
 
     @Override
     public void queryfriendlocation(Location mLocation) {
-        this.markers = new HashMap<String, Marker>();
         if (mLocation != null) {
             double latitude = mLocation.getLatitude();
             double longitude = mLocation.getLongitude();
@@ -97,7 +88,6 @@ public class MapPresenter implements MapContract.Presenter {
 
                                     }
                                 });
-
                     }
 //------------------------------------以下註解是白癡行為...竟然花了我快半年研究，特別在此留下----------------------------------------------//
 ////                    FirebaseDatabase.getInstance().getReference("Users")

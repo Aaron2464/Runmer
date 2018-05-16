@@ -13,24 +13,30 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class UserinfoWindow implements GoogleMap.InfoWindowAdapter {
     View myView;
     Context mContext;
-    String mfriendAvatar;
+    private HashMap<String, String> mUriMap;
 
-    public UserinfoWindow(Context context, String friendAvatar) {
-        mfriendAvatar = friendAvatar;
+//    String mfriendAvatar;
+
+    public UserinfoWindow(Context context, Map<String, String> mUriMap) {
+//        mfriendAvatar = friendAvatar;
+        this.mUriMap = (HashMap<String, String>) mUriMap;
         mContext = context;
-        myView = LayoutInflater.from(context)
-                .inflate(R.layout.mappage_friend_image, null);
+        myView = LayoutInflater.from(context).inflate(R.layout.mappage_friend_image, null);
     }
 
     @Override
     public View getInfoWindow(Marker marker) {
 //                TextView txtPickupTitle = (TextView)myView.findViewById(R.id.txtInfo);
         ImageView imageFriendAvatar = myView.findViewById(R.id.image_geofriend_avatar);
-        Log.d(Constants.TAG, "UUri: " + mfriendAvatar.toString());
-        Picasso.get().load(mfriendAvatar).transform(new CircleTransform(mContext)).placeholder(R.drawable.user_image).into(imageFriendAvatar);
+        Log.d(Constants.TAG, "UMarkerId: " + marker.getId());
+        Log.d(Constants.TAG, "UUri: " + mUriMap.get(marker.getId()).toString());
+        Picasso.get().load(mUriMap.get(marker.getId())).transform(new CircleTransform(mContext)).placeholder(R.drawable.user_image).into(imageFriendAvatar);
         return myView;
     }
 

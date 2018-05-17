@@ -108,7 +108,7 @@
             android:layout_height="40dp"
             android:layout_marginEnd="10dp"
             android:layout_marginStart="55dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="40dp"
             app:layout_constraintEnd_toStartOf="@+id/image_userprofile_bigevent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -156,16 +156,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/image_userprofile_runningtrophy"
             app:layout_constraintTop_toTopOf="@+id/image_userprofile_runningtrophy"
-            app:srcCompat="@drawable/trophy" />
-
-        <ImageView
-            android:id="@+id/image_userprofile_event"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image_userprofile_distance"
             app:srcCompat="@drawable/trophy" />
 
     </android.support.constraint.ConstraintLayout>

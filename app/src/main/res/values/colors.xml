@@ -12,6 +12,7 @@
     <color name="tab_bar_background">#0000FF</color>
     <color name="white">#ffffff</color>
     <color name="gray">#DDDDDD</color>
+    <color name="black">#000000</color>
     <color name="tab_underline">#FFFF77</color>
     <color name="invite_friend_dialog">#EE7700</color>
 

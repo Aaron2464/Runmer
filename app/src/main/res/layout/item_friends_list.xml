@@ -19,29 +19,27 @@
 
             <Button
                 android:id="@+id/btn_location"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginBottom="37dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginTop="37dp"
+                android:layout_marginTop="10dp"
                 android:background="@mipmap/ic_location"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/btn_add_friend"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@mipmap/ic_add_friend"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/addfriend1"
                 app:layout_constraintEnd_toStartOf="@+id/btn_location"
                 app:layout_constraintTop_toTopOf="@+id/btn_location" />
 
             <Button
                 android:id="@+id/btn_deny_friend"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@mipmap/ic_deny_friemd"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/denyfriend"
                 app:layout_constraintEnd_toStartOf="@+id/btn_add_friend"
                 app:layout_constraintTop_toTopOf="@+id/btn_add_friend" />
 

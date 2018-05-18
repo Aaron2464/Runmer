@@ -16,4 +16,13 @@
     <color name="tab_underline">#FFFF77</color>
     <color name="invite_friend_dialog">#EE7700</color>
 
+    <color name="color_red">#FF5722</color>
+    <color name="color_orange">#FF9800</color>
+    <color name="color_yellow">#FFC107</color>
+    <color name="color_green">#3FB830</color>
+    <color name="color_blue">#00BAED</color>
+    <color name="color_dark">#263238</color>
+    <color name="color_dark_light">#455A64</color>
+    <color name="color_light">#ECEFF1</color>
+
 </resources>

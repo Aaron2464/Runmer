@@ -3,6 +3,7 @@ package com.example.aaron.runmer.util;
 public class Constants {
     // Log
     public final static String TAG = "Runmer";
+    public final static String TAG_DASHBOARD = "DASHBOARD";
 
     public static final int REQUEST_LOCATION = 2;
     public static int UPDATE_INTERVAL = 5000;

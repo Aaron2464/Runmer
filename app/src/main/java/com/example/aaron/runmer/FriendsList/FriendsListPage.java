@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.aaron.runmer.Objects.FriendData;
 import com.example.aaron.runmer.Objects.UserData;
 import com.example.aaron.runmer.R;
 import com.example.aaron.runmer.util.CircleTransform;
@@ -38,14 +39,14 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
     FriendsListAdapter mAdapter;
     FloatingActionButton mFAB;
     View view;
-    ArrayList<UserData> ArrayUserData = new ArrayList<>();
+    ArrayList<FriendData> ArrayUserData = new ArrayList<>();
 
     private FriendsListContract.Presenter mPresenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAdapter = new FriendsListAdapter(getContext(), new ArrayList<UserData>(), mPresenter);
+        mAdapter = new FriendsListAdapter(getContext(), new ArrayList<FriendData>(), mPresenter);
         mPresenter = new FriendsListPresenter(this);
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         view = layoutInflater.inflate(R.layout.dialog_friend_invite, null);
@@ -69,7 +70,7 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
 
     }
 
-    public void showFriendList(UserData friendList) {
+    public void showFriendList(FriendData friendList) {
         ArrayUserData.add(friendList);
         mAdapter = new FriendsListAdapter(getContext(), ArrayUserData, mPresenter);
         Log.d(Constants.TAG, "AarayUserData : " + ArrayUserData.get(0).getUserName());
@@ -80,6 +81,11 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
         mRecyclerView.setAdapter(mAdapter);
         //TODO 很多很多BUG要處理，還有error handle Ex:重覆加好友,add deny btn handle
     }
+
+    public void showInviteSuccess() {
+        Toast.makeText(this.getContext(),"Send invitation successful !", Toast.LENGTH_LONG).show();
+    }
+
 
     @Nullable
     @Override

@@ -2,9 +2,8 @@ package com.example.aaron.runmer.Api;
 
 import android.util.Log;
 
-import com.example.aaron.runmer.Api.Callback.AddFriendFireBaseCallback;
 import com.example.aaron.runmer.Api.Callback.InvitehFireBaseUserDataCallback;
-import com.example.aaron.runmer.Api.Callback.SearchFireBaseUserDataCallback;
+import com.example.aaron.runmer.Api.Callback.SearchFireBaseFriendDataCallback;
 import com.example.aaron.runmer.Objects.UserData;
 import com.example.aaron.runmer.util.Constants;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 
 public class RunmerParser {
 
-    public static void parseFireBaseUserData(final String searchData, final SearchFireBaseUserDataCallback parseFireBaseUserNameCallback) {
+    public static void parseFireBaseFriendData(final String searchData, final SearchFireBaseFriendDataCallback parseFireBaseFriendCallback) {
 
         DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
         dataBaseRef.child(Constants.USER_FIREBASE).orderByChild(Constants.USER_FIREBASE_EMAIL).equalTo(searchData)
@@ -31,13 +30,13 @@ public class RunmerParser {
                             mUserData = childSnapshot.getValue(UserData.class);
                         }
                         if (mUserData.getUserEmail().equals(searchData)) {
-                            Log.d(Constants.TAG, mUserData.getUserEmail().toString());
+                            Log.d(Constants.TAG, mUserData.getUserEmail().toString()+123);
                             Log.d(Constants.TAG, mUserData.getUserName().toString());
                             Log.d(Constants.TAG, mUserData.getUserPhoto().toString());
-                            parseFireBaseUserNameCallback.onCompleted(searchResultBean, mUserData);
+                            parseFireBaseFriendCallback.onCompleted(searchResultBean, mUserData);
                         } else {
                             searchResultBean = false;           //TODO 沒有東西的時候會報錯
-                            parseFireBaseUserNameCallback.onCompleted(searchResultBean, new UserData());
+                            parseFireBaseFriendCallback.onCompleted(searchResultBean, new UserData());
                         }
                     }
 
@@ -64,10 +63,10 @@ public class RunmerParser {
                         Log.d(Constants.TAG, "inviteFriendUid : " + inviteFriendUid);
                         String currentUserUid = mCurrentUserUid.getCurrentUser().getUid();
                         Log.d(Constants.TAG, "currentUserUid : " + currentUserUid);
-                        dataBaseRef.child(Constants.USER_FIREBASE).child(inviteFriendUid).child("Friends").child(currentUserUid).child("status").setValue("invited");
-                        dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child("Friends").child(inviteFriendUid).child("status").setValue("waiting");
+                        dataBaseRef.child(Constants.USER_FIREBASE).child(inviteFriendUid).child("Friends").child(currentUserUid).child("FriendRequest").setValue("invited");
+                        dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child("Friends").child(inviteFriendUid).child("FriendRequest").setValue("waiting");
                         ArrayUserData.add(mUserData);
-                        parseFireBaseInviteFriendCallback.onCompleted(mUserData);
+                        parseFireBaseInviteFriendCallback.onCompleted();
                     }
 
                     @Override
@@ -76,7 +75,7 @@ public class RunmerParser {
                 });
     }
 
-    public static void parseFireBaseAddFriend(String friendEmail, AddFriendFireBaseCallback parseFireBaseAddFriend) {
+    public static void parseFireBaseAddFriend(String friendEmail) {
         final FirebaseAuth mCurrentUserUid = FirebaseAuth.getInstance();
         final String currentUserUid = mCurrentUserUid.getCurrentUser().getUid();
         final DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
@@ -93,6 +92,7 @@ public class RunmerParser {
                         Log.d(Constants.TAG, "inviteFriendUid : " + inviteFriendUid);
                         Log.d(Constants.TAG, "currentUserUid : " + currentUserUid);
                         dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child("Friends").child(inviteFriendUid).setValue(mUserData);
+                        dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child("Friends").child(inviteFriendUid).child("FriendRequest").setValue("true");
                         dataBaseRef.child(Constants.USER_FIREBASE).orderByChild(Constants.USER_FIREBASE_UID).equalTo(currentUserUid)
                                 .addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -102,6 +102,7 @@ public class RunmerParser {
                                             mUserData = childSnapshot.getValue(UserData.class);
                                         }
                                         dataBaseRef.child(Constants.USER_FIREBASE).child(inviteFriendUid).child("Friends").child(currentUserUid).setValue(mUserData);
+                                        dataBaseRef.child(Constants.USER_FIREBASE).child(inviteFriendUid).child("Friends").child(currentUserUid).child("FriendRequest").setValue("true");
                                     }
 
                                     @Override
@@ -114,7 +115,5 @@ public class RunmerParser {
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 });
-
-        parseFireBaseAddFriend.onCompleted();
     }
 }

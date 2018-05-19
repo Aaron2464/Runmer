@@ -2,6 +2,7 @@ package com.example.aaron.runmer.FriendsList;
 
 import com.example.aaron.runmer.Base.BasePresenter;
 import com.example.aaron.runmer.Base.BaseView;
+import com.example.aaron.runmer.Objects.FriendData;
 import com.example.aaron.runmer.Objects.UserData;
 
 public interface FriendsListContract {
@@ -10,11 +11,13 @@ public interface FriendsListContract {
 
         void showFriendInformation(UserData foundUser);
 
-        void showFriendList(UserData inviteUser);
+        void showFriendList(FriendData friendData);
 
         void showFABDialog();
 
         void showNonFriend();
+
+        void showInviteSuccess();
     }
 
     interface Presenter extends BasePresenter {

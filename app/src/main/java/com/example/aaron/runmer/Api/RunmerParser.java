@@ -30,7 +30,7 @@ public class RunmerParser {
                             mUserData = childSnapshot.getValue(UserData.class);
                         }
                         if (mUserData.getUserEmail().equals(searchData)) {
-                            Log.d(Constants.TAG, mUserData.getUserEmail().toString()+123);
+                            Log.d(Constants.TAG, mUserData.getUserEmail().toString());
                             Log.d(Constants.TAG, mUserData.getUserName().toString());
                             Log.d(Constants.TAG, mUserData.getUserPhoto().toString());
                             parseFireBaseFriendCallback.onCompleted(searchResultBean, mUserData);

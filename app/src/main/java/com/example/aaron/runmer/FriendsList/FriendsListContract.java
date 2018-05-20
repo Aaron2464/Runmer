@@ -34,6 +34,5 @@ public interface FriendsListContract {
 
         void sendFriendInvitation(String inviteFriendEmail);
 
-//        void openGoogleMap();
     }
 }

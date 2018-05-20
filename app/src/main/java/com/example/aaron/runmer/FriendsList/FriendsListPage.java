@@ -26,7 +26,6 @@ import com.example.aaron.runmer.Objects.UserData;
 import com.example.aaron.runmer.R;
 import com.example.aaron.runmer.util.CircleTransform;
 import com.example.aaron.runmer.util.Constants;
-import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -38,7 +37,13 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
     RecyclerView mRecyclerView;
     FriendsListAdapter mAdapter;
     FloatingActionButton mFAB;
-    View view;
+    EditText mEditTxtFriendEmail;
+    Button mBtnSearchFriend;
+    ImageView mImageInviteFriendAvatar;
+    TextView mTxtInviteFriendName;
+    TextView mTxtInviteFriendLevel;
+    TextView mTxtInviteFriendEmail;
+    ConstraintLayout mDialogLayout;
     ArrayList<FriendData> ArrayUserData = new ArrayList<>();
 
     private FriendsListContract.Presenter mPresenter;
@@ -48,18 +53,12 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
         super.onCreate(savedInstanceState);
         mAdapter = new FriendsListAdapter(getContext(), new ArrayList<FriendData>(), mPresenter);
         mPresenter = new FriendsListPresenter(this);
-        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-        view = layoutInflater.inflate(R.layout.dialog_friend_invite, null);
     }
 
     public void showFriendInformation(UserData foundUser) {
 //        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
 //        View view = layoutInflater.inflate(R.layout.dialog_friend_invite, null);          //記憶體位置不同
-        ConstraintLayout mLayout = view.findViewById(R.id.add_friend_detail);
-        ImageView mImageInviteFriendAvatar = view.findViewById(R.id.image_invite_friendavatar);
-        TextView mTxtInviteFriendName = view.findViewById(R.id.txt_invite_friendname);
-        TextView mTxtInviteFriendLevel = view.findViewById(R.id.txt_invite_friendlevel);
-        mLayout.setVisibility(View.VISIBLE);        //uperCamel & lowerCamel different?
+        mDialogLayout.setVisibility(View.VISIBLE);        //uperCamel & lowerCamel different?
 
         mTxtInviteFriendName.setText(foundUser.getUserName().toString());
         mTxtInviteFriendLevel.setText(foundUser.getUserEmail().toString());
@@ -67,7 +66,6 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
         Log.d(Constants.TAG, "mTxtInviteFriendName : " + foundUser.getUserName());
         Log.d(Constants.TAG, "mTxtInviteFriendLevel : " + foundUser.getUserEmail());
         Log.d(Constants.TAG, "mImageInviteFriendAvatar : " + foundUser.getUserPhoto());
-
     }
 
     public void showFriendList(FriendData friendList) {
@@ -83,7 +81,7 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
     }
 
     public void showInviteSuccess() {
-        Toast.makeText(this.getContext(),"Send invitation successful !", Toast.LENGTH_LONG).show();
+        Toast.makeText(this.getContext(), "Send invitation successful !", Toast.LENGTH_LONG).show();
     }
 
 
@@ -105,7 +103,6 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         mFAB = view.findViewById(R.id.fab_friendlist);
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,13 +113,16 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
     }
 
     public void showFABDialog() {
-
-        final EditText mEditTxtFriendEmail = view.findViewById(R.id.edittxt_friend_invite_email);
-        Button mBtnSearchFriend = view.findViewById(R.id.btn_search_friend);
-        final TextView mTxtInviteFriendEmail = view.findViewById(R.id.txt_invite_friendlevel);
-        ConstraintLayout mLayout = view.findViewById(R.id.add_friend_detail);
-
-        mLayout.setVisibility(View.GONE);
+        LayoutInflater dialogInflater = LayoutInflater.from(getContext());
+        View dialogview = dialogInflater.inflate(R.layout.dialog_friend_invite, null);
+        mEditTxtFriendEmail = dialogview.findViewById(R.id.edittxt_friend_invite_email);
+        mBtnSearchFriend = dialogview.findViewById(R.id.btn_search_friend);
+        mTxtInviteFriendEmail = dialogview.findViewById(R.id.txt_invite_friendlevel);
+        mDialogLayout = dialogview.findViewById(R.id.add_friend_detail);
+        mImageInviteFriendAvatar = dialogview.findViewById(R.id.image_invite_friendavatar);
+        mTxtInviteFriendName = dialogview.findViewById(R.id.txt_invite_friendname);
+        mTxtInviteFriendLevel = dialogview.findViewById(R.id.txt_invite_friendlevel);
+        mDialogLayout.setVisibility(View.GONE);
         mBtnSearchFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,21 +131,24 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
                     mEditTxtFriendEmail.setText("");
                     mPresenter.searchFriend(friendEmail);
                 } else {
-                    Toast.makeText(getContext(), "找朋友找朋友要輸入正確EMAIL喔", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "找朋友要輸入正確EMAIL喔", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-        alertDialogBuilder.setView(view);
+        alertDialogBuilder.setView(dialogview);
         alertDialogBuilder
-                .setCancelable(false)
+                .setCancelable(true)
                 .setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if (mTxtInviteFriendEmail.getText().toString().equals(null)) {
+                        Log.d(Constants.TAG, "mTxtInviteFriendEmail :" + mTxtInviteFriendEmail.getText().toString());
+                        if (mTxtInviteFriendEmail.getText().toString().equals("")) {        //TODO TextView.getTtext 沒辦法空值? getTtext 就算為空，值也會被定為""?
+                            showNonFriend();
                         } else {
                             mPresenter.sendFriendInvitation(mTxtInviteFriendEmail.getText().toString());
                         }
+                        dialog.cancel();
                     }
                 })
                 .setNegativeButton("Cancel",
@@ -155,7 +158,6 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
                             }
                         });
         Log.d(Constants.TAG, "dialog");
-//        AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
         alertDialogBuilder.show();
     }
 

@@ -29,14 +29,18 @@ public class RunmerParser {
                         for (DataSnapshot childSnapshot : snapshot.getChildren()) {
                             mUserData = childSnapshot.getValue(UserData.class);
                         }
-                        if (mUserData.getUserEmail().equals(searchData)) {
-                            Log.d(Constants.TAG, mUserData.getUserEmail().toString());
-                            Log.d(Constants.TAG, mUserData.getUserName().toString());
-                            Log.d(Constants.TAG, mUserData.getUserPhoto().toString());
-                            parseFireBaseFriendCallback.onCompleted(searchResultBean, mUserData);
+                        if (mUserData.getUserEmail() != null) {
+                            if (mUserData.getUserEmail().equals(searchData)) {
+                                Log.d(Constants.TAG, mUserData.getUserEmail().toString());
+                                Log.d(Constants.TAG, mUserData.getUserName().toString());
+                                Log.d(Constants.TAG, mUserData.getUserPhoto().toString());
+                                parseFireBaseFriendCallback.onCompleted(searchResultBean, mUserData);
+                            } else {
+                                searchResultBean = false;           //TODO 沒有東西的時候會報錯
+                                parseFireBaseFriendCallback.onCompleted(searchResultBean, new UserData());
+                            }
                         } else {
-                            searchResultBean = false;           //TODO 沒有東西的時候會報錯
-                            parseFireBaseFriendCallback.onCompleted(searchResultBean, new UserData());
+                            parseFireBaseFriendCallback.onError("There is no user! ");
                         }
                     }
 

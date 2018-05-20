@@ -80,13 +80,13 @@ public class FriendsListPresenter implements FriendsListContract.Presenter {
                     mFriendsListView.showFriendInformation(foundUser);
                 } else {
                     mFriendsListView.showNonFriend();
-                    //TODO 沒有東西的時候會報錯
                 }
             }
 
             @Override
             public void onError(String errorMessage) {
                 Log.d(Constants.TAG, errorMessage);
+                mFriendsListView.showNonFriend();
             }
         });
     }
@@ -113,6 +113,7 @@ public class FriendsListPresenter implements FriendsListContract.Presenter {
             @Override
             public void onError(String errorMessage) {
                 Log.d(Constants.TAG, errorMessage);
+                mFriendsListView.showNonFriend();
             }
         });
     }

@@ -89,7 +89,6 @@
                     android:layout_height="0dp"
                     android:layout_weight="5"
                     android:gravity="bottom"
-                    android:text="Aaron"
                     android:textSize="40dp" />
 
                 <TextView
@@ -99,7 +98,6 @@
                     android:layout_weight="4"
                     android:gravity="top"
                     android:singleLine="true"
-                    android:text="LV.10"
                     android:textSize="25dp" />
             </LinearLayout>
         </LinearLayout>

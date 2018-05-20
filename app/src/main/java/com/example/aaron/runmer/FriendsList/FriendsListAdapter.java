@@ -44,6 +44,13 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
                 //TODO if FriendRequest is true, show friend list & hide check/deny btn
                 //TODO if UserStatus is true ,show location marker
                 //TODO if UserStatus is false, hide  location marker
+        if (mFriendData.get(position).getFriendRequest().equals("invited")){
+            holder.getBtnAddFriend().setVisibility(View.VISIBLE);
+            holder.getBtnDenyFriend().setVisibility(View.VISIBLE);
+        }else {
+            holder.getBtnAddFriend().setVisibility(View.GONE);
+            holder.getBtnDenyFriend().setVisibility(View.GONE);
+        }
         holder.mTxtFriendName.setText(mFriendData.get(position).getUserName());
         holder.mTxtFriendLevel.setText(mFriendData.get(position).getUserEmail());
         Picasso.get().load(mFriendData.get(position).getUserPhoto()).placeholder(R.drawable.user_image).transform(new CircleTransform(mContext)).into(holder.mImageFriendAvatar);

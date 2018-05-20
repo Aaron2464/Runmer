@@ -44,12 +44,29 @@ public class FriendsListPresenter implements FriendsListContract.Presenter {
 
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        mFriendsListView.showFriendList(dataSnapshot.getValue(FriendData.class));
+                        if (dataSnapshot.child("FriendRequest").getValue().equals("invited")) {
+                            Log.d(Constants.TAG, "FriendRequest: " + dataSnapshot.child("FriendRequest").getValue());
+                            Log.d(Constants.TAG, "Uid: " + dataSnapshot.getKey());
+                            RunmerParser.parseFirebaseShowAddedFriend(dataSnapshot.getKey());
+                        } else if (dataSnapshot.child("FriendRequest").getValue().equals("waiting")) {
+                            Log.d(Constants.TAG, "FriendRequest: " + dataSnapshot.child("FriendRequest").getValue());
+                        } else {
+                            mFriendsListView.showFriendList(dataSnapshot.getValue(FriendData.class));
+                            Log.d(Constants.TAG, "onChildAdded.FriendRequest: " + dataSnapshot.child("userName").getValue());
+                        }
                     }
 
                     @Override
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                        FriendData mfriendData = new FriendData();
+                        mfriendData = dataSnapshot.getValue(FriendData.class);
+                        Log.d(Constants.TAG, "onChildChanged.FriendRequest: " + mfriendData.getFriendRequest());
 
+                        if (mfriendData.getFriendRequest() == null) {
+                        } else {
+                            mFriendsListView.showFriendList(dataSnapshot.getValue(FriendData.class));
+                        }
+                        Log.d(Constants.TAG, "onChildChanged.FriendRequest: " + dataSnapshot.child("userName").getValue());
                     }
 
                     @Override

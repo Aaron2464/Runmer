@@ -13,6 +13,8 @@ public interface FriendsListContract {
 
         void showFriendList(FriendData friendData);
 
+        void removeFriendList(int position);
+
         void showFABDialog();
 
         void showNonFriend();
@@ -30,7 +32,7 @@ public interface FriendsListContract {
 
         void addFriend(String s);
 
-        void denyFriend();
+        void denyFriend(String removeFriendUid, int adapterPosition);
 
         void sendFriendInvitation(String inviteFriendEmail);
 

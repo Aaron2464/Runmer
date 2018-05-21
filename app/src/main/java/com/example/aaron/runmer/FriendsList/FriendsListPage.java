@@ -80,6 +80,12 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
         //TODO 很多很多BUG要處理，還有error handle Ex:重覆加好友,add deny btn handle
     }
 
+    public void removeFriendList(int position){
+        ArrayUserData.remove(position);
+        mAdapter.notifyItemChanged(position);
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
     public void showInviteSuccess() {
         Toast.makeText(this.getContext(), "Send invitation successful !", Toast.LENGTH_LONG).show();
     }

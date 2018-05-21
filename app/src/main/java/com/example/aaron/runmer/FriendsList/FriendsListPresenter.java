@@ -119,8 +119,9 @@ public class FriendsListPresenter implements FriendsListContract.Presenter {
     }
 
     @Override
-    public void denyFriend() {
-
+    public void denyFriend(String removeFriendUid, int adapterPosition) {
+        mFriendsListView.removeFriendList(adapterPosition);
+        RunmerParser.parseFirebaseRemoveFriend(removeFriendUid);
     }
 
     @Override

@@ -140,4 +140,12 @@ public class RunmerParser {
                     }
                 });
     }
+
+    public static void parseFirebaseRemoveFriend(String removeFriendUid){
+        final FirebaseAuth mCurrentUserUid = FirebaseAuth.getInstance();
+        final DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
+        String currentUserUid = mCurrentUserUid.getCurrentUser().getUid();
+        dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child(Constants.USER_FIREBASE_FRIENDS).child(removeFriendUid).removeValue();
+        dataBaseRef.child(Constants.USER_FIREBASE).child(removeFriendUid).child(Constants.USER_FIREBASE_FRIENDS).child(currentUserUid).removeValue();
+    }
 }

@@ -15,7 +15,7 @@ public interface FriendsListContract {
 
         void removeFriendList(int position);
 
-        void showFABDialog();
+        void showFriendListFABDialog();
 
         void showNonFriend();
 
@@ -24,7 +24,7 @@ public interface FriendsListContract {
 
     interface Presenter extends BasePresenter {
 
-        void clickFABbtn();
+        void clickFriendListFABbtn();
 
         void queryAllFriendData();
 

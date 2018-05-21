@@ -113,12 +113,12 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.clickFABbtn();
+                mPresenter.clickFriendListFABbtn();
             }
         });
     }
 
-    public void showFABDialog() {
+    public void showFriendListFABDialog() {
         LayoutInflater dialogInflater = LayoutInflater.from(getContext());
         View dialogview = dialogInflater.inflate(R.layout.dialog_friend_invite, null);
         mEditTxtFriendEmail = dialogview.findViewById(R.id.edittxt_friend_invite_email);

@@ -28,8 +28,8 @@ public class FriendsListPresenter implements FriendsListContract.Presenter {
     }
 
     @Override
-    public void clickFABbtn() {
-        mFriendsListView.showFABDialog();
+    public void clickFriendListFABbtn() {
+        mFriendsListView.showFriendListFABDialog();
     }
 
     @Override

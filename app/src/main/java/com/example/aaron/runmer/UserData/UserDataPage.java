@@ -81,6 +81,7 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
                     UserDataMap.put("UserHeight", mUserHeight);
                     UserDataMap.put("UserWeight", mUserWeight);
                     UserDataMap.put("UserGender", mUserGender);
+                    UserDataMap.put("UserStatus", "false");
                     mPresenter.setUserDataToFirebase(UserDataMap);
 
                     Intent intent = new Intent();

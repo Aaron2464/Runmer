@@ -39,11 +39,11 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-                //TODO if FriendRequest is waiting, don't show friend list
-                //TODO if FriendRequest is invited, show friend list & check/deny btn. And send UserData
-                //TODO if FriendRequest is true, show friend list & hide check/deny btn
-                //TODO if UserStatus is true ,show location marker
-                //TODO if UserStatus is false, hide  location marker
+        if(mFriendData.get(position).getUserStatus().equals(true)){
+            holder.getBtnLocation().setVisibility(View.VISIBLE);
+        }else {
+            holder.getBtnLocation().setVisibility(View.GONE);
+        }
         if (mFriendData.get(position).getFriendRequest().equals("invited")){
             holder.getBtnAddFriend().setVisibility(View.VISIBLE);
             holder.getBtnDenyFriend().setVisibility(View.VISIBLE);

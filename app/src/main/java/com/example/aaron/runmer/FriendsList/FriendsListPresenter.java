@@ -57,14 +57,19 @@ public class FriendsListPresenter implements FriendsListContract.Presenter {
                     }
 
                     @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                        FriendData mfriendData = new FriendData();
+                    public void onChildChanged(DataSnapshot dataSnapshot, String uid) {
+                        FriendData mfriendData;
                         mfriendData = dataSnapshot.getValue(FriendData.class);
                         Log.d(Constants.TAG, "onChildChanged.FriendRequest: " + mfriendData.getFriendRequest());
+                        Log.d(Constants.TAG, "onChildChanged. s: " + uid);
 
                         if (mfriendData.getFriendRequest() == null) {
                         } else {
+                            if (mfriendData.getFriendRequest() == "true"){
+                            }
+                            else {
                             mFriendsListView.showFriendList(dataSnapshot.getValue(FriendData.class));
+                            }
                         }
                         Log.d(Constants.TAG, "onChildChanged.FriendRequest: " + dataSnapshot.child("userName").getValue());
                     }

@@ -89,6 +89,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="5"
                     android:gravity="bottom"
+                    android:singleLine="true"
                     android:textSize="40dp" />
 
                 <TextView

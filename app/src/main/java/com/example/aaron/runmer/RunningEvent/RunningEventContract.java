@@ -7,9 +7,12 @@ public interface RunningEventContract {
 
     interface View extends BaseView<Presenter> {
 
+        void showRunningEventFABDialog();
+
     }
 
     interface Presenter extends BasePresenter {
 
+        void clickRunningEventFABbtn();
     }
 }

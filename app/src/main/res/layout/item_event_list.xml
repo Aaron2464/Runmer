@@ -13,7 +13,7 @@
         android:layout_marginTop="5dp"
         android:background="@drawable/shape_layout_border"
         android:orientation="horizontal"
-        android:weightSum="5"
+        android:weightSum="6"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -107,7 +107,7 @@
 
         <ImageButton
             android:id="@+id/imagebtn_event_joinevent"
-            android:layout_width="wrap_content"
+            android:layout_width="4dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"

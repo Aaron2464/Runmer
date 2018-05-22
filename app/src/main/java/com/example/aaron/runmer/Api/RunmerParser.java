@@ -20,9 +20,13 @@ import java.util.ArrayList;
 
 public class RunmerParser {
 
+    public final static FirebaseAuth mCurrentUserUid = FirebaseAuth.getInstance();
+    public final static DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
+    public final static String currentUserUid = mCurrentUserUid.getCurrentUser().getUid();
+
     public static void parseFireBaseFriendData(final String searchData, final SearchFireBaseFriendDataCallback parseFireBaseFriendCallback) {
 
-        DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
+//        DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
         dataBaseRef.child(Constants.USER_FIREBASE).orderByChild(Constants.USER_FIREBASE_EMAIL).equalTo(searchData)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -55,8 +59,8 @@ public class RunmerParser {
 
     public static void parseFireBaseInviteFriend(final String inviteData, final InvitehFireBaseUserDataCallback parseFireBaseInviteFriendCallback) {
 
-        final FirebaseAuth mCurrentUserUid = FirebaseAuth.getInstance();
-        final DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
+//        final FirebaseAuth mCurrentUserUid = FirebaseAuth.getInstance();
+//        final DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
         dataBaseRef.child(Constants.USER_FIREBASE).orderByChild(Constants.USER_FIREBASE_EMAIL).equalTo(inviteData)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -82,10 +86,9 @@ public class RunmerParser {
     }
 
     public static void parseFireBaseAddFriend(String friendEmail) {
-        final FirebaseAuth mCurrentUserUid = FirebaseAuth.getInstance();
-        final String currentUserUid = mCurrentUserUid.getCurrentUser().getUid();
-        final DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
-        final ArrayList<UserData> FriendData = new ArrayList<>();
+//        final FirebaseAuth mCurrentUserUid = FirebaseAuth.getInstance();
+//        final String currentUserUid = mCurrentUserUid.getCurrentUser().getUid();
+//        final DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
         dataBaseRef.child(Constants.USER_FIREBASE).orderByChild(Constants.USER_FIREBASE_EMAIL).equalTo(friendEmail)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -124,8 +127,6 @@ public class RunmerParser {
 
     public static void parseFirebaseShowAddedFriend(final String friendUid) {
 
-        final FirebaseAuth mCurrentUserUid = FirebaseAuth.getInstance();
-        final DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
         dataBaseRef.child(Constants.USER_FIREBASE).child(friendUid)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -143,16 +144,16 @@ public class RunmerParser {
     }
 
     public static void parseFirebaseRemoveFriend(String removeFriendUid){
-        final FirebaseAuth mCurrentUserUid = FirebaseAuth.getInstance();
-        final DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
+//        final FirebaseAuth mCurrentUserUid = FirebaseAuth.getInstance();
+//        final DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
         String currentUserUid = mCurrentUserUid.getCurrentUser().getUid();
         dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child(Constants.USER_FIREBASE_FRIENDS).child(removeFriendUid).removeValue();
         dataBaseRef.child(Constants.USER_FIREBASE).child(removeFriendUid).child(Constants.USER_FIREBASE_FRIENDS).child(currentUserUid).removeValue();
     }
 
     public static void parseFirebaseRunningEvent(EventData mEventData) {
-        final FirebaseAuth mCurrentUserUid = FirebaseAuth.getInstance();
-        final DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
+//        final FirebaseAuth mCurrentUserUid = FirebaseAuth.getInstance();
+//        final DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
         String currentUserUid = mCurrentUserUid.getCurrentUser().getUid();
 
         Log.d(Constants.TAG,"EVENTUID: " + currentUserUid);

@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.aaron.runmer.Api.Callback.InvitehFireBaseUserDataCallback;
 import com.example.aaron.runmer.Api.Callback.SearchFireBaseFriendDataCallback;
 import com.example.aaron.runmer.Api.Callback.firebaseShowAddedFriendDataCallback;
+import com.example.aaron.runmer.Objects.EventData;
 import com.example.aaron.runmer.Objects.FriendData;
 import com.example.aaron.runmer.Objects.UserData;
 import com.example.aaron.runmer.util.Constants;
@@ -147,5 +148,15 @@ public class RunmerParser {
         String currentUserUid = mCurrentUserUid.getCurrentUser().getUid();
         dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child(Constants.USER_FIREBASE_FRIENDS).child(removeFriendUid).removeValue();
         dataBaseRef.child(Constants.USER_FIREBASE).child(removeFriendUid).child(Constants.USER_FIREBASE_FRIENDS).child(currentUserUid).removeValue();
+    }
+
+    public static void parseFirebaseRunningEvent(EventData mEventData) {
+        final FirebaseAuth mCurrentUserUid = FirebaseAuth.getInstance();
+        final DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
+        String currentUserUid = mCurrentUserUid.getCurrentUser().getUid();
+
+        Log.d(Constants.TAG,"EVENTUID: " + currentUserUid);
+        dataBaseRef.child(Constants.EVENT_FIREBASE).child(currentUserUid).push().setValue(mEventData);
+
     }
 }

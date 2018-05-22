@@ -1,11 +1,13 @@
 package com.example.aaron.runmer.RunningEvent;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
@@ -18,9 +20,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.aaron.runmer.Objects.EventData;
 import com.example.aaron.runmer.R;
 import com.example.aaron.runmer.util.Constants;
 import com.example.aaron.runmer.util.LinearItemDecoration;
+
+import java.util.HashMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -32,7 +37,8 @@ public class RunningEventPage extends Fragment implements RunningEventContract.V
     TextInputEditText mEditTxtEventTitle;
     TextInputEditText mEditTxtEventPlace;
     TextInputEditText mEditTxtEventNumOfPeople;
-
+    ConstraintLayout mRunningeventLayout;
+    private HashMap<String,String> UserMap=new  HashMap<String,String>();
     private RunningEventContract.Presenter mPresenter;
 
     @Override
@@ -48,11 +54,13 @@ public class RunningEventPage extends Fragment implements RunningEventContract.V
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_event, container, false);
         mRecyclerView = view.findViewById(R.id.recyclerView_eventlist);
+        mRunningeventLayout = view.findViewById(R.id.runningeventLayout);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(layoutManager);
 //        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         mRecyclerView.setHasFixedSize(true);   //如果可以確定每個item的高度是固定的，設置這個選項可以提高性能
         mRecyclerView.addItemDecoration(new LinearItemDecoration(1, Color.parseColor("#e7e7e7")));
+        mPresenter.quertAllRunningEvent();
         mRecyclerView.setAdapter(mAdapter);
         return view;
     }
@@ -65,7 +73,6 @@ public class RunningEventPage extends Fragment implements RunningEventContract.V
             @Override
             public void onClick(View v) {
                 mPresenter.clickRunningEventFABbtn();
-//                showRunningEventFABDialog();
             }
         });
     }
@@ -91,8 +98,31 @@ public class RunningEventPage extends Fragment implements RunningEventContract.V
                 .setCancelable(true)
                 .setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        if(TextUtils.isEmpty(mEditTxtEventTitle.getText().toString())
+                                || TextUtils.isEmpty(mEditTxtEventPlace.getText().toString())
+                                || TextUtils.isEmpty(mEditTxtEventNumOfPeople.getText().toString())){
+                            dialog.dismiss();
+                            Snackbar.make(mRunningeventLayout,"青春不留白，走過必留下痕跡 ",Snackbar.LENGTH_SHORT).show();
+                        }else{
+                            String eventTitle = mEditTxtEventTitle.getText().toString();
+                            String eventPlace = mEditTxtEventPlace.getText().toString();
+                            String eventNumOfPeople = mEditTxtEventNumOfPeople.getText().toString();
+                            String userName = getContext().getSharedPreferences(Constants.USER_FIREBASE, Context.MODE_PRIVATE).getString(Constants.USER_FIREBASE_NAME,"");
+                            String userPhoto = getContext().getSharedPreferences(Constants.USER_FIREBASE,Context.MODE_PRIVATE).getString(Constants.USER_FIREBASE_PHOTO,"");
 
-                        dialog.cancel();
+                            EventData mEventData = new EventData();
+                            mEventData.setMasterName(userName);
+                            mEventData.setMasterPhoto(userPhoto);
+                            mEventData.setEventTitle(eventTitle);
+                            mEventData.setEventPlace(eventPlace);
+                            mEventData.setPeopleParticipate("1");
+                            mEventData.setPeopleTotle(eventNumOfPeople);
+
+                            Log.d(Constants.TAG,"EventData: " + userName);
+
+                            mPresenter.setEventDataToFirebase(mEventData);
+                            dialog.cancel();
+                        }
                     }
                 })
                 .setNegativeButton("Cancel",

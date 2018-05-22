@@ -157,7 +157,7 @@ public class RunmerParser {
         String currentUserUid = mCurrentUserUid.getCurrentUser().getUid();
 
         Log.d(Constants.TAG,"EVENTUID: " + currentUserUid);
-        dataBaseRef.child(Constants.EVENT_FIREBASE).child(currentUserUid).push().setValue(mEventData);
+        dataBaseRef.child(Constants.EVENT_FIREBASE).push().setValue(mEventData);
 
     }
 }

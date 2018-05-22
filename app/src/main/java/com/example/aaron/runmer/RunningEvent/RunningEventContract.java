@@ -10,6 +10,8 @@ public interface RunningEventContract {
 
         void showRunningEventFABDialog();
 
+        void showRunningEventList(EventData mEventData);
+
     }
 
     interface Presenter extends BasePresenter {

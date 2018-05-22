@@ -25,6 +25,7 @@ import com.example.aaron.runmer.R;
 import com.example.aaron.runmer.util.Constants;
 import com.example.aaron.runmer.util.LinearItemDecoration;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -39,12 +40,12 @@ public class RunningEventPage extends Fragment implements RunningEventContract.V
     TextInputEditText mEditTxtEventNumOfPeople;
     ConstraintLayout mRunningeventLayout;
     private HashMap<String,String> UserMap=new  HashMap<String,String>();
+    private ArrayList<EventData> ArrayEventData = new ArrayList<>();
     private RunningEventContract.Presenter mPresenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAdapter = new RunningEventAdapter(getContext());
         mPresenter = new RunningEventPresenter(this);
     }
 
@@ -133,6 +134,14 @@ public class RunningEventPage extends Fragment implements RunningEventContract.V
                         });
         Log.d(Constants.TAG, "dialog");
         alertDialogBuilder.show();
+    }
+
+    @Override
+    public void showRunningEventList(EventData mEventData) {
+        ArrayEventData.add(mEventData);
+        mAdapter = new RunningEventAdapter(getContext(),ArrayEventData);
+        mAdapter.notifyDataSetChanged();
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override

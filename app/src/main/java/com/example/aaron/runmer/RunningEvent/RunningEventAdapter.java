@@ -10,13 +10,21 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.aaron.runmer.Objects.EventData;
 import com.example.aaron.runmer.R;
+import com.example.aaron.runmer.util.CircleTransform;
 import com.example.aaron.runmer.util.Constants;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 public class RunningEventAdapter extends RecyclerView.Adapter<RunningEventAdapter.ViewHolder> {
 
-    public RunningEventAdapter(Context context) {
-
+    Context mContext;
+    ArrayList<EventData> mEventData;
+    public RunningEventAdapter(Context context, ArrayList<EventData> mEventData) {
+        mContext = context;
+        this.mEventData = mEventData;
     }
 
     @Override
@@ -28,16 +36,17 @@ public class RunningEventAdapter extends RecyclerView.Adapter<RunningEventAdapte
     @Override
     public void onBindViewHolder(RunningEventAdapter.ViewHolder holder, int position) {
 
-        holder.mTxtEventTitle.setText("跑跑跑");
-        holder.mTxtEventPlace.setText("國父紀念館");
-        holder.mTxtCurrentPeopleNum.setText("5");
-        holder.mTxtPeopleSum.setText("50");
+        holder.mTxtEventTitle.setText(mEventData.get(position).getEventTitle());
+        holder.mTxtEventPlace.setText(mEventData.get(position).getEventPlace());
+        holder.mTxtCurrentPeopleNum.setText(mEventData.get(position).getPeopleParticipate());
+        holder.mTxtPeopleSum.setText(mEventData.get(position).getPeopleTotle());
+        Picasso.get().load(mEventData.get(position).getMasterPhoto()).placeholder(R.drawable.running).transform(new CircleTransform(mContext)).into(holder.mImageEventFriendAvatar);
 
     }
 
     @Override
     public int getItemCount() {
-        return 1;
+        return mEventData.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -57,13 +66,15 @@ public class RunningEventAdapter extends RecyclerView.Adapter<RunningEventAdapte
             mTxtCurrentPeopleNum = itemView.findViewById(R.id.txt_event_pcurrentnum);
             mTxtPeopleSum = itemView.findViewById(R.id.txt_event_psum);
             mBtnJoinEvent = itemView.findViewById(R.id.imagebtn_event_joinevent);
+
+            mBtnJoinEvent.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.imagebtn_event_joinevent:
-                    Log.d(Constants.TAG, "Join~~~~~");
+                    Log.d(Constants.TAG, "Join~~~~~:" + getAdapterPosition());
                     break;
                 default:
                     break;

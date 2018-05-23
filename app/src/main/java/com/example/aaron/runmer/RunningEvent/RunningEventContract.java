@@ -12,6 +12,7 @@ public interface RunningEventContract {
 
         void showRunningEventList(EventData mEventData);
 
+        void addPeopleRunningEventList(int position, int numOfPeople);
     }
 
     interface Presenter extends BasePresenter {
@@ -21,5 +22,7 @@ public interface RunningEventContract {
         void quertAllRunningEvent();
 
         void setEventDataToFirebase(EventData mEventData);
+
+        void setEventPeopleParticipate(int position, String mEventId);
     }
 }

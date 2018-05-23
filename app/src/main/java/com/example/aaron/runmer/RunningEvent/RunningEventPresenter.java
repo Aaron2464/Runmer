@@ -1,9 +1,8 @@
 package com.example.aaron.runmer.RunningEvent;
 
+import com.example.aaron.runmer.Api.Callback.SetEventPeopleJoinCallback;
 import com.example.aaron.runmer.Api.RunmerParser;
 import com.example.aaron.runmer.Objects.EventData;
-import com.example.aaron.runmer.Objects.UserData;
-import com.example.aaron.runmer.UserData.UserDataPage;
 import com.example.aaron.runmer.util.Constants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -30,25 +29,36 @@ public class RunningEventPresenter implements RunningEventContract.Presenter {
 
     @Override
     public void setEventDataToFirebase(EventData mEventData) {
-
         RunmerParser.parseFirebaseRunningEvent(mEventData);
+    }
+
+    @Override
+    public void setEventPeopleParticipate(final int position, String mEventId) {
+        RunmerParser.parseFirebaseJoinRunningEvent(mEventId, new SetEventPeopleJoinCallback() {
+            @Override
+            public void onCompleted(int numOfPeople) {
+                mRunningEventView.addPeopleRunningEventList(position, numOfPeople);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+            }
+        });
     }
 
     @Override
     public void quertAllRunningEvent() {
         final FirebaseAuth mCurrentUserUid = FirebaseAuth.getInstance();
-        final String currentUserUid = mCurrentUserUid.getCurrentUser().getUid();
         final DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
 
         dataBaseRef.child(Constants.EVENT_FIREBASE).addChildEventListener(new ChildEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            public void onChildAdded(final DataSnapshot dataSnapshot, String key) {
                 mRunningEventView.showRunningEventList(dataSnapshot.getValue(EventData.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override

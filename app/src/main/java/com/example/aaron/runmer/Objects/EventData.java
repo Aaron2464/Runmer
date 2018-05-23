@@ -1,6 +1,7 @@
 package com.example.aaron.runmer.Objects;
 
 public class EventData {
+    private String EventId;
     private String MasterName;
     private String MasterPhoto;
     private String EventTitle;
@@ -10,6 +11,14 @@ public class EventData {
     private String PeopleTotle;
 
     public EventData() {
+    }
+
+    public String getEventId() {
+        return EventId;
+    }
+
+    public void setEventId(String eventId) {
+        EventId = eventId;
     }
 
     public String getMasterName() {

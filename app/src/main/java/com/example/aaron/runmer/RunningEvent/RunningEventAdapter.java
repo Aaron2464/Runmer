@@ -20,10 +20,14 @@ import java.util.ArrayList;
 
 public class RunningEventAdapter extends RecyclerView.Adapter<RunningEventAdapter.ViewHolder> {
 
+    String mUserName;
     Context mContext;
     ArrayList<EventData> mEventData;
-    public RunningEventAdapter(Context context, ArrayList<EventData> mEventData) {
+    RunningEventContract.Presenter mPresenter;
+
+    public RunningEventAdapter(Context context, ArrayList<EventData> mEventData, RunningEventContract.Presenter presenter) {
         mContext = context;
+        mPresenter = presenter;
         this.mEventData = mEventData;
     }
 
@@ -36,10 +40,15 @@ public class RunningEventAdapter extends RecyclerView.Adapter<RunningEventAdapte
     @Override
     public void onBindViewHolder(RunningEventAdapter.ViewHolder holder, int position) {
 
+        mUserName = mContext.getSharedPreferences(Constants.USER_FIREBASE, Context.MODE_PRIVATE).getString(Constants.USER_FIREBASE_NAME, "");
         holder.mTxtEventTitle.setText(mEventData.get(position).getEventTitle());
         holder.mTxtEventPlace.setText(mEventData.get(position).getEventPlace());
         holder.mTxtCurrentPeopleNum.setText(mEventData.get(position).getPeopleParticipate());
         holder.mTxtPeopleSum.setText(mEventData.get(position).getPeopleTotle());
+        if (mEventData.get(position).getMasterName().equals(mUserName)) {
+            holder.mBtnJoinEvent.setImageResource(R.drawable.joinrunningevent);
+            holder.mBtnJoinEvent.setClickable(false);
+        }
         Picasso.get().load(mEventData.get(position).getMasterPhoto()).placeholder(R.drawable.running).transform(new CircleTransform(mContext)).into(holder.mImageEventFriendAvatar);
 
     }
@@ -74,6 +83,10 @@ public class RunningEventAdapter extends RecyclerView.Adapter<RunningEventAdapte
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.imagebtn_event_joinevent:
+                    mBtnJoinEvent.setImageResource(R.drawable.joinrunningevent);
+                    mBtnJoinEvent.setClickable(false);
+                    String mEventId = mEventData.get(getAdapterPosition()).getEventId();
+                    mPresenter.setEventPeopleParticipate(getAdapterPosition(), mEventId);
                     Log.d(Constants.TAG, "Join~~~~~:" + getAdapterPosition());
                     break;
                 default:

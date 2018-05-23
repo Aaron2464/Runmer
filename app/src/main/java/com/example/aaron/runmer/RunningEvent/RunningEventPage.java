@@ -39,7 +39,7 @@ public class RunningEventPage extends Fragment implements RunningEventContract.V
     TextInputEditText mEditTxtEventPlace;
     TextInputEditText mEditTxtEventNumOfPeople;
     ConstraintLayout mRunningeventLayout;
-    private HashMap<String,String> UserMap=new  HashMap<String,String>();
+    private HashMap<String, String> UserMap = new HashMap<String, String>();
     private ArrayList<EventData> ArrayEventData = new ArrayList<>();
     private RunningEventContract.Presenter mPresenter;
 
@@ -99,17 +99,17 @@ public class RunningEventPage extends Fragment implements RunningEventContract.V
                 .setCancelable(true)
                 .setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if(TextUtils.isEmpty(mEditTxtEventTitle.getText().toString())
+                        if (TextUtils.isEmpty(mEditTxtEventTitle.getText().toString())
                                 || TextUtils.isEmpty(mEditTxtEventPlace.getText().toString())
-                                || TextUtils.isEmpty(mEditTxtEventNumOfPeople.getText().toString())){
+                                || TextUtils.isEmpty(mEditTxtEventNumOfPeople.getText().toString())) {
                             dialog.dismiss();
-                            Snackbar.make(mRunningeventLayout,"青春不留白，走過必留下痕跡 ",Snackbar.LENGTH_SHORT).show();
-                        }else{
+                            Snackbar.make(mRunningeventLayout, "青春不留白，走過必留下痕跡 ", Snackbar.LENGTH_SHORT).show();
+                        } else {
                             String eventTitle = mEditTxtEventTitle.getText().toString();
                             String eventPlace = mEditTxtEventPlace.getText().toString();
                             String eventNumOfPeople = mEditTxtEventNumOfPeople.getText().toString();
-                            String userName = getContext().getSharedPreferences(Constants.USER_FIREBASE, Context.MODE_PRIVATE).getString(Constants.USER_FIREBASE_NAME,"");
-                            String userPhoto = getContext().getSharedPreferences(Constants.USER_FIREBASE,Context.MODE_PRIVATE).getString(Constants.USER_FIREBASE_PHOTO,"");
+                            String userName = getContext().getSharedPreferences(Constants.USER_FIREBASE, Context.MODE_PRIVATE).getString(Constants.USER_FIREBASE_NAME, "");
+                            String userPhoto = getContext().getSharedPreferences(Constants.USER_FIREBASE, Context.MODE_PRIVATE).getString(Constants.USER_FIREBASE_PHOTO, "");
 
                             EventData mEventData = new EventData();
                             mEventData.setMasterName(userName);
@@ -119,7 +119,7 @@ public class RunningEventPage extends Fragment implements RunningEventContract.V
                             mEventData.setPeopleParticipate("1");
                             mEventData.setPeopleTotle(eventNumOfPeople);
 
-                            Log.d(Constants.TAG,"EventData: " + userName);
+                            Log.d(Constants.TAG, "EventData: " + userName);
 
                             mPresenter.setEventDataToFirebase(mEventData);
                             dialog.cancel();
@@ -139,10 +139,21 @@ public class RunningEventPage extends Fragment implements RunningEventContract.V
     @Override
     public void showRunningEventList(EventData mEventData) {
         ArrayEventData.add(mEventData);
-        mAdapter = new RunningEventAdapter(getContext(),ArrayEventData);
+        mAdapter = new RunningEventAdapter(getContext(), ArrayEventData, mPresenter);
         mAdapter.notifyDataSetChanged();
         mRecyclerView.setAdapter(mAdapter);
     }
+
+    @Override
+    public void addPeopleRunningEventList(int position, int numOfPeople) {
+        ArrayEventData.get(position).setPeopleParticipate(String.valueOf(numOfPeople));
+        mAdapter = new RunningEventAdapter(getContext(), ArrayEventData, mPresenter);
+        mAdapter.notifyItemChanged(position);
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    ;
+
 
     @Override
     public void setPresenter(RunningEventContract.Presenter presenter) {

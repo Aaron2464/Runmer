@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.example.aaron.runmer.Api.Callback.InvitehFireBaseUserDataCallback;
 import com.example.aaron.runmer.Api.Callback.SearchFireBaseFriendDataCallback;
-import com.example.aaron.runmer.Api.Callback.firebaseShowAddedFriendDataCallback;
+import com.example.aaron.runmer.Api.Callback.SetEventPeopleJoinCallback;
 import com.example.aaron.runmer.Objects.EventData;
 import com.example.aaron.runmer.Objects.FriendData;
 import com.example.aaron.runmer.Objects.UserData;
@@ -15,8 +15,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 
 public class RunmerParser {
 
@@ -143,7 +141,7 @@ public class RunmerParser {
                 });
     }
 
-    public static void parseFirebaseRemoveFriend(String removeFriendUid){
+    public static void parseFirebaseRemoveFriend(String removeFriendUid) {
 //        final FirebaseAuth mCurrentUserUid = FirebaseAuth.getInstance();
 //        final DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
         String currentUserUid = mCurrentUserUid.getCurrentUser().getUid();
@@ -154,10 +152,26 @@ public class RunmerParser {
     public static void parseFirebaseRunningEvent(EventData mEventData) {
 //        final FirebaseAuth mCurrentUserUid = FirebaseAuth.getInstance();
 //        final DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
-        String currentUserUid = mCurrentUserUid.getCurrentUser().getUid();
+        String getkey = dataBaseRef.child(Constants.EVENT_FIREBASE).push().getKey();
+        dataBaseRef.child(Constants.EVENT_FIREBASE).child(getkey).setValue(mEventData);
+        dataBaseRef.child(Constants.EVENT_FIREBASE).child(getkey).child(Constants.EVENT_FIREBASE_ID).setValue(getkey);
+        Log.d(Constants.TAG, "getKey: " + getkey);
+    }
 
-        Log.d(Constants.TAG,"EVENTUID: " + currentUserUid);
-        dataBaseRef.child(Constants.EVENT_FIREBASE).push().setValue(mEventData);
+    public static void parseFirebaseJoinRunningEvent(final String mEventId, final SetEventPeopleJoinCallback parseFirebaseJoinRunningEventCallback) {
+        dataBaseRef.child(Constants.EVENT_FIREBASE).child(mEventId).child("peopleParticipate").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int numOfPeople = Integer.parseInt(dataSnapshot.getValue().toString()) + 1;
 
+                dataBaseRef.child(Constants.EVENT_FIREBASE).child(mEventId).child("peopleParticipate").setValue(String.valueOf(numOfPeople));
+                parseFirebaseJoinRunningEventCallback.onCompleted(numOfPeople);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

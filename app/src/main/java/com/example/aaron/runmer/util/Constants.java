@@ -12,6 +12,7 @@ public class Constants {
 
     public static final String USER_FIREBASE = "Users";
     public static final String EVENT_FIREBASE = "Events";
+    public static final String EVENT_FIREBASE_ID = "EventId";
     public static final String USER_FIREBASE_NAME = "UserName";
     public static final String USER_FIREBASE_EMAIL = "UserEmail";
     public static final String USER_FIREBASE_PHOTO = "UserPhoto";

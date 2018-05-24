@@ -152,9 +152,6 @@ public class RunningEventPage extends Fragment implements RunningEventContract.V
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    ;
-
-
     @Override
     public void setPresenter(RunningEventContract.Presenter presenter) {
         mPresenter = checkNotNull(presenter);

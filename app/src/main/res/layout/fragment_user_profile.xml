@@ -20,7 +20,7 @@
                 android:id="@+id/imageview_userprofile_userimage"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="15dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="15dp"
-                android:text="LV.10"
+                android:text="LV.1"
                 android:textSize="25dp"
                 app:layout_constraintStart_toEndOf="@+id/imageview_userprofile_userimage"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -101,7 +101,7 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/constraintLayout_userprofile_badge"
             android:layout_width="match_parent"
-            android:layout_height="131dp"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout_userprofile_userstatus">
@@ -110,9 +110,11 @@
                 android:id="@+id/image_userprofile_distance"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_marginBottom="20dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="55dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/image_userprofile_bigevent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -227,8 +229,8 @@
                 android:id="@+id/txt_birth_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="Birth:"
+                android:layout_marginTop="10dp"
+                android:text="Calories:"
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="@+id/txt_age_title"
                 app:layout_constraintTop_toBottomOf="@+id/txt_age_title" />
@@ -238,7 +240,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Height: "
+                android:text="Created Event: "
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="@+id/txt_birth_title"
                 app:layout_constraintTop_toBottomOf="@+id/txt_birth_title" />
@@ -248,7 +250,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Weight: "
+                android:text="Joined Event: "
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="@+id/txt_height_title"
                 app:layout_constraintTop_toBottomOf="@+id/txt_height_title" />
@@ -264,24 +266,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/txt_weight_title" />
 
             <TextView
-                android:id="@+id/txt_avgdistance_title"
+                android:id="@+id/txt_totaldistance_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Average distance: "
+                android:text="Total distance: "
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="@+id/txt_avgspeed_title"
                 app:layout_constraintTop_toBottomOf="@+id/txt_avgspeed_title" />
-
-            <TextView
-                android:id="@+id/txt_longestdistance_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Longest distance: "
-                android:textSize="20dp"
-                app:layout_constraintStart_toStartOf="@+id/txt_avgdistance_title"
-                app:layout_constraintTop_toBottomOf="@+id/txt_avgdistance_title" />
 
             <TextView
                 android:id="@+id/txt_speedfast_title"
@@ -290,8 +282,19 @@
                 android:layout_marginTop="10dp"
                 android:text="FastSpeed:"
                 android:textSize="20dp"
-                app:layout_constraintStart_toStartOf="@+id/txt_longestdistance_title"
-                app:layout_constraintTop_toBottomOf="@+id/txt_longestdistance_title" />
+                app:layout_constraintStart_toStartOf="@+id/txt_totaldistance_title"
+                app:layout_constraintTop_toBottomOf="@+id/txt_totaldistance_title" />
+
+            <TextView
+                android:id="@+id/txt_longestdistance_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Longest distance: "
+                android:textSize="20dp"
+                app:layout_constraintStart_toStartOf="@+id/txt_speedfast_title"
+                app:layout_constraintTop_toBottomOf="@+id/txt_speedfast_title" />
+
 
             <TextView
                 android:id="@+id/txt_age"
@@ -302,63 +305,63 @@
                 android:text="23"
                 android:textSize="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
-
-            <TextView
-                android:id="@+id/txt_birth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="05/12"
-                android:textSize="20dp"
-                app:layout_constraintEnd_toEndOf="@+id/txt_age"
-                app:layout_constraintTop_toBottomOf="@+id/txt_age" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
-                android:id="@+id/linear_height"
+                android:id="@+id/linear_calories"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="@+id/txt_birth"
-                app:layout_constraintTop_toBottomOf="@+id/txt_birth">
+                app:layout_constraintEnd_toEndOf="@+id/txt_age"
+                app:layout_constraintTop_toBottomOf="@+id/txt_age">
 
                 <TextView
-                    android:id="@+id/txt_height"
+                    android:id="@+id/txt_calories"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="180"
+                    android:text="1254.2"
                     android:textSize="20dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="cm"
+                    android:text="Cal"
                     android:textSize="15dp" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linear_weight"
+                android:id="@+id/linear_eventcreated"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="@+id/linear_height"
-                app:layout_constraintTop_toBottomOf="@+id/linear_height">
+                app:layout_constraintEnd_toEndOf="@+id/linear_calories"
+                app:layout_constraintTop_toBottomOf="@+id/linear_calories">
 
                 <TextView
-                    android:id="@+id/txt_weight"
+                    android:id="@+id/txt_eventcreated"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="50"
+                    android:text="1"
                     android:textSize="20dp" />
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_eventjoined"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="@+id/linear_eventcreated"
+                app:layout_constraintTop_toBottomOf="@+id/linear_eventcreated">
+
                 <TextView
+                    android:id="@+id/txt_eventjoined"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="kg"
-                    android:textSize="15dp" />
+                    android:text="2"
+                    android:textSize="20dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -367,10 +370,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="@+id/linear_weight"
-                app:layout_constraintTop_toBottomOf="@+id/linear_weight">
+                app:layout_constraintEnd_toEndOf="@+id/linear_eventjoined"
+                app:layout_constraintTop_toBottomOf="@+id/linear_eventjoined">
 
                 <TextView
+                    android:id="@+id/txt_speedavg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="8"
@@ -380,7 +384,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="km/h"
-                    android:textSize="20dp" />
+                    android:textSize="15dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -393,7 +397,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/linear_avgspeed">
 
                 <TextView
-                    android:id="@+id/txt_longestdistance"
+                    android:id="@+id/txt_distancetotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0.1"
@@ -407,7 +411,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linear_longestdistance"
+                android:id="@+id/linear_fastspeed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -416,29 +420,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/linear_avgdistance">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="12"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="km"
-                    android:textSize="20dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linear_fastspeed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="@+id/linear_longestdistance"
-                app:layout_constraintTop_toBottomOf="@+id/linear_longestdistance">
-
-                <TextView
-                    android:id="@+id/txt_speed_fast"
+                    android:id="@+id/txt_speedfast"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="10"
@@ -448,6 +430,29 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="km/h"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_longestdistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="@+id/linear_fastspeed"
+                app:layout_constraintTop_toBottomOf="@+id/linear_fastspeed">
+
+                <TextView
+                    android:id="@+id/txt_distancelongest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="km"
                     android:textSize="15dp" />
             </LinearLayout>
         </android.support.constraint.ConstraintLayout>

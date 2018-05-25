@@ -189,8 +189,10 @@ public class MapPage extends BaseActivity implements MapContract.View
 
     @Override
     public void showGeoFriends(String key, GeoLocation mlocation, String friendAvatar) {
-
+        mMarkerMap.clear();                   //目前還不知道有什麼影響，特此註解以供驗證
+        mUriMap.clear();                       //目前還不知道有什麼影響，特此註解以供驗證
         Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(mlocation.latitude, mlocation.longitude)));
+        Log.d(Constants.TAG, "MMarker: " + marker.getId());
         this.mMarkerMap.put(key, marker);
         Log.d(Constants.TAG, "MKEY: " + key);
         Log.d(Constants.TAG, "MUri: " + friendAvatar.toString());
@@ -204,6 +206,7 @@ public class MapPage extends BaseActivity implements MapContract.View
         if (marker != null) {
             marker.remove();
             this.mMarkerMap.remove(key);
+            this.mMarkerMap.clear();            //目前還不知道有什麼影響，特此註解以供驗證
         }
     }
 

@@ -69,7 +69,7 @@ public class MapPresenter implements MapContract.Presenter {
             geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
                 @Override
                 public void onKeyEntered(final String key, final GeoLocation location) {
-
+                    Log.d(Constants.TAG,"onKeyEntered");
                     if (!key.equals(mAuth.getCurrentUser().getUid())) {
                         mFriendRef.child(key).child("userPhoto").addListenerForSingleValueEvent(
                                 new ValueEventListener() {
@@ -120,6 +120,7 @@ public class MapPresenter implements MapContract.Presenter {
 
                 @Override
                 public void onKeyExited(String key) {
+                    Log.d(Constants.TAG,"onKeyExited");
                     mMapsView.removeGeoFriends(key);
                 }
 

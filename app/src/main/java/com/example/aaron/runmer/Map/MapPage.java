@@ -196,8 +196,8 @@ public class MapPage extends BaseActivity implements MapContract.View
         this.mMarkerMap.put(key, marker);
         Log.d(Constants.TAG, "MKEY: " + key);
         Log.d(Constants.TAG, "MUri: " + friendAvatar.toString());
-        this.mUriMap.put(marker.getId(),friendAvatar);
-        mMap.setInfoWindowAdapter(new UserinfoWindow(this,mUriMap));
+        this.mUriMap.put(marker.getId(), friendAvatar);
+        mMap.setInfoWindowAdapter(new UserinfoWindow(this, mUriMap));
     }
 
     @Override
@@ -211,7 +211,7 @@ public class MapPage extends BaseActivity implements MapContract.View
     }
 
     @Override
-    public void moveGeoFriends(String key, GeoLocation location){
+    public void moveGeoFriends(String key, GeoLocation location) {
         final double lat = location.latitude;
         final double lng = location.longitude;
         final Marker marker = this.mMarkerMap.get(key);
@@ -225,7 +225,7 @@ public class MapPage extends BaseActivity implements MapContract.View
                 @Override
                 public void run() {
                     float elapsed = SystemClock.uptimeMillis() - start;
-                    float t = elapsed/DURATION_MS;
+                    float t = elapsed / DURATION_MS;
                     float v = interpolator.getInterpolation(t);
 
                     double currentLat = (lat - startPosition.latitude) * v + startPosition.latitude;
@@ -264,6 +264,9 @@ public class MapPage extends BaseActivity implements MapContract.View
     @Override
     protected void onStart() {
         super.onStart();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
     }
 
     @Override

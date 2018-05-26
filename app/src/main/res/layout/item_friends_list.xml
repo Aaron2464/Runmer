@@ -57,12 +57,15 @@
 
             <TextView
                 android:id="@+id/txt_friend_name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="105dp"
                 android:layout_marginStart="10dp"
                 android:gravity="top"
-                android:text="Aaron"
+                android:singleLine="true"
+                android:text="00000000000000"
                 android:textSize="25dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/image_friend_avatar"
                 app:layout_constraintTop_toTopOf="@+id/image_friend_avatar" />
 

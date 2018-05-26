@@ -7,7 +7,6 @@
     <android.support.v7.widget.CardView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:cardBackgroundColor="@color/gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,8 +45,8 @@
 
             <ImageView
                 android:id="@+id/image_friend_avatar"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
@@ -60,9 +59,10 @@
                 android:id="@+id/txt_friend_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
+                android:layout_marginStart="10dp"
+                android:gravity="top"
                 android:text="Aaron"
-                android:textSize="30dp"
+                android:textSize="25dp"
                 app:layout_constraintStart_toEndOf="@+id/image_friend_avatar"
                 app:layout_constraintTop_toTopOf="@+id/image_friend_avatar" />
 
@@ -70,9 +70,9 @@
                 android:id="@+id/txt_friend_level"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
+                android:layout_marginStart="10dp"
                 android:text="LV.10"
-                android:textSize="20dp"
+                android:textSize="15dp"
                 app:layout_constraintBottom_toBottomOf="@+id/image_friend_avatar"
                 app:layout_constraintStart_toEndOf="@+id/image_friend_avatar" />
         </android.support.constraint.ConstraintLayout>

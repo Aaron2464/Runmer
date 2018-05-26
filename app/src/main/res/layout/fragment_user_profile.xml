@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -20,7 +21,7 @@
                 android:id="@+id/imageview_userprofile_userimage"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -32,10 +33,9 @@
                 android:layout_height="25dp"
                 android:layout_marginStart="55dp"
                 android:layout_marginTop="55dp"
-                android:background="@android:color/transparent"
+                android:background="@drawable/edit"
                 app:layout_constraintStart_toStartOf="@+id/imageview_userprofile_userimage"
-                app:layout_constraintTop_toTopOf="@+id/imageview_userprofile_userimage"
-                app:srcCompat="@android:drawable/ic_menu_camera" />
+                app:layout_constraintTop_toTopOf="@+id/imageview_userprofile_userimage" />
 
             <TextView
                 android:id="@+id/txt_userprofile_userlevel"
@@ -43,27 +43,37 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="15dp"
-                android:text="LV.1"
+                android:fontFamily="serif"
+                android:text="LV."
                 android:textSize="25dp"
                 app:layout_constraintStart_toEndOf="@+id/imageview_userprofile_userimage"
                 app:layout_constraintTop_toTopOf="parent" />
-
+            <TextView
+                android:id="@+id/txt_userprofile_userlevelnum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:text="1"
+                android:textSize="25dp"
+                app:layout_constraintStart_toEndOf="@+id/txt_userprofile_userlevel"
+                app:layout_constraintTop_toTopOf="@+id/txt_userprofile_userlevel" />
             <TextView
                 android:id="@+id/txt_userprofile_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:fontFamily="sans-serif"
                 android:text="Aaron Huang"
                 android:textSize="25dp"
-                app:layout_constraintStart_toEndOf="@+id/txt_userprofile_userlevel"
-                app:layout_constraintTop_toTopOf="@+id/txt_userprofile_userlevel" />
+                app:layout_constraintStart_toEndOf="@+id/txt_userprofile_userlevelnum"
+                app:layout_constraintTop_toTopOf="@+id/txt_userprofile_userlevelnum" />
 
             <ProgressBar
                 android:id="@+id/progbar_userprofile_exp"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/txt_userprofile_userlevel"
                 app:layout_constraintTop_toBottomOf="@+id/txt_userprofile_userlevel" />
@@ -91,6 +101,7 @@
                 android:id="@+id/txt_userprofile_totalexp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
                 android:text="20000000"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/txt_userprofile_slash"
@@ -169,7 +180,9 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/constraintLayout3"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="120dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout_userprofile_badge">
@@ -178,7 +191,6 @@
                 android:id="@+id/dashboard_speed_fast"
                 android:layout_width="115dp"
                 android:layout_height="110dp"
-                android:layout_marginEnd="3dp"
                 android:layout_marginStart="15dp"
                 app:layout_constraintEnd_toStartOf="@+id/dashboard_speed_avg"
                 app:layout_constraintStart_toStartOf="parent"
@@ -188,8 +200,6 @@
                 android:id="@+id/dashboard_speed_avg"
                 android:layout_width="115dp"
                 android:layout_height="110dp"
-                android:layout_marginEnd="3dp"
-                android:layout_marginStart="3dp"
                 app:layout_constraintEnd_toStartOf="@+id/dashboard_willpower"
                 app:layout_constraintStart_toEndOf="@+id/dashboard_speed_fast"
                 app:layout_constraintTop_toTopOf="@+id/dashboard_speed_fast" />
@@ -199,7 +209,6 @@
                 android:layout_width="115dp"
                 android:layout_height="110dp"
                 android:layout_marginEnd="15dp"
-                android:layout_marginStart="3dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/dashboard_speed_avg"
                 app:layout_constraintTop_toTopOf="@+id/dashboard_speed_avg" />
@@ -218,9 +227,10 @@
                 android:id="@+id/txt_age_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
-                android:text="Age: "
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/faster_one"
+                android:text="Age"
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -230,7 +240,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Calories:"
+                android:fontFamily="@font/faster_one"
+                android:text="Calories"
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="@+id/txt_age_title"
                 app:layout_constraintTop_toBottomOf="@+id/txt_age_title" />
@@ -240,7 +251,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Created Event: "
+                android:fontFamily="@font/faster_one"
+                android:text="Created Event"
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="@+id/txt_birth_title"
                 app:layout_constraintTop_toBottomOf="@+id/txt_birth_title" />
@@ -250,7 +262,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Joined Event: "
+                android:fontFamily="@font/faster_one"
+                android:text="Joined Event"
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="@+id/txt_height_title"
                 app:layout_constraintTop_toBottomOf="@+id/txt_height_title" />
@@ -260,7 +273,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Average speed:"
+                android:fontFamily="@font/faster_one"
+                android:text="Average speed"
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="@+id/txt_weight_title"
                 app:layout_constraintTop_toBottomOf="@+id/txt_weight_title" />
@@ -270,7 +284,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Total distance: "
+                android:fontFamily="@font/faster_one"
+                android:text="Total distance"
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="@+id/txt_avgspeed_title"
                 app:layout_constraintTop_toBottomOf="@+id/txt_avgspeed_title" />
@@ -280,7 +295,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="FastSpeed:"
+                android:fontFamily="@font/faster_one"
+                android:text="FastSpeed"
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="@+id/txt_totaldistance_title"
                 app:layout_constraintTop_toBottomOf="@+id/txt_totaldistance_title" />
@@ -290,7 +306,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Longest distance: "
+                android:fontFamily="@font/faster_one"
+                android:text="Longest distance"
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="@+id/txt_speedfast_title"
                 app:layout_constraintTop_toBottomOf="@+id/txt_speedfast_title" />
@@ -300,8 +317,9 @@
                 android:id="@+id/txt_age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/faster_one"
                 android:text="23"
                 android:textSize="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -319,12 +337,14 @@
                     android:id="@+id/txt_calories"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/faster_one"
                     android:text="1254.2"
                     android:textSize="20dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/faster_one"
                     android:text="Cal"
                     android:textSize="15dp" />
             </LinearLayout>
@@ -342,6 +362,7 @@
                     android:id="@+id/txt_eventcreated"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/faster_one"
                     android:text="1"
                     android:textSize="20dp" />
 
@@ -360,6 +381,7 @@
                     android:id="@+id/txt_eventjoined"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/faster_one"
                     android:text="2"
                     android:textSize="20dp" />
             </LinearLayout>
@@ -377,12 +399,14 @@
                     android:id="@+id/txt_speedavg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/faster_one"
                     android:text="8"
                     android:textSize="20dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/faster_one"
                     android:text="km/h"
                     android:textSize="15dp" />
             </LinearLayout>
@@ -400,12 +424,14 @@
                     android:id="@+id/txt_distancetotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/faster_one"
                     android:text="0.1"
                     android:textSize="20dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/faster_one"
                     android:text="km"
                     android:textSize="15dp" />
             </LinearLayout>
@@ -423,12 +449,14 @@
                     android:id="@+id/txt_speedfast"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/faster_one"
                     android:text="10"
                     android:textSize="20dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/faster_one"
                     android:text="km/h"
                     android:textSize="15dp" />
             </LinearLayout>
@@ -446,12 +474,14 @@
                     android:id="@+id/txt_distancelongest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/faster_one"
                     android:text="12"
                     android:textSize="20dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/faster_one"
                     android:text="km"
                     android:textSize="15dp" />
             </LinearLayout>

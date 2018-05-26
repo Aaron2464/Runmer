@@ -6,8 +6,8 @@ public class Constants {
     public final static String TAG_DASHBOARD = "DASHBOARD";
 
     public static final int REQUEST_LOCATION = 2;
-    public static int UPDATE_INTERVAL = 5000;
-    public static int FATEST_INTERVAL = 3000;
+    public static int UPDATE_INTERVAL = 1000;
+    public static int FATEST_INTERVAL = 1000;
     public static int DISPLACEMENT = 10;
 
     public static final String USER_FIREBASE = "Users";

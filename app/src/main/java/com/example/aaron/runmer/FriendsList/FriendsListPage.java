@@ -61,7 +61,7 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
         mDialogLayout.setVisibility(View.VISIBLE);        //uperCamel & lowerCamel different?
 
         mTxtInviteFriendName.setText(foundUser.getUserName().toString());
-        mTxtInviteFriendLevel.setText(foundUser.getUserEmail().toString());
+        mTxtInviteFriendEmail.setText(foundUser.getUserEmail().toString());
         Picasso.get().load(foundUser.getUserPhoto()).transform(new CircleTransform(getContext())).placeholder(R.drawable.user_image).into(mImageInviteFriendAvatar);
         Log.d(Constants.TAG, "mTxtInviteFriendName : " + foundUser.getUserName());
         Log.d(Constants.TAG, "mTxtInviteFriendLevel : " + foundUser.getUserEmail());
@@ -123,7 +123,7 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
         View dialogview = dialogInflater.inflate(R.layout.dialog_friend_invite, null);
         mEditTxtFriendEmail = dialogview.findViewById(R.id.edittxt_friend_invite_email);
         mBtnSearchFriend = dialogview.findViewById(R.id.btn_search_friend);
-        mTxtInviteFriendEmail = dialogview.findViewById(R.id.txt_invite_friendlevel);
+        mTxtInviteFriendEmail = dialogview.findViewById(R.id.txt_invite_friendemail);
         mDialogLayout = dialogview.findViewById(R.id.add_friend_detail);
         mImageInviteFriendAvatar = dialogview.findViewById(R.id.image_invite_friendavatar);
         mTxtInviteFriendName = dialogview.findViewById(R.id.txt_invite_friendname);

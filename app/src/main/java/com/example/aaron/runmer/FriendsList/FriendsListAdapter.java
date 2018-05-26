@@ -88,8 +88,6 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            //TODO if click denybtn, delet send UserData.
-            //TODO if click checkbtn, change FriendRequest and send UserData
             //TODO if click location marker show map fragment
             switch (v.getId()) {
                 case R.id.btn_location:

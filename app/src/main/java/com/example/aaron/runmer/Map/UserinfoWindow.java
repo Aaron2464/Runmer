@@ -35,8 +35,14 @@ public class UserinfoWindow implements GoogleMap.InfoWindowAdapter {
 //                TextView txtPickupTitle = (TextView)myView.findViewById(R.id.txtInfo);
         ImageView imageFriendAvatar = myView.findViewById(R.id.image_geofriend_avatar);
         Log.d(Constants.TAG, "UMarkerId: " + marker.getId());
-        Log.d(Constants.TAG, "UUri: " + mUriMap.get(marker.getId()).toString());
-        Picasso.get().load(mUriMap.get(marker.getId())).transform(new CircleTransform(mContext)).placeholder(R.drawable.user_image).into(imageFriendAvatar);
+
+        if (mUriMap.containsKey(marker.getId())) {
+            imageFriendAvatar.setVisibility(View.VISIBLE);
+            Picasso.get().load(mUriMap.get(marker.getId())).transform(new CircleTransform(mContext)).placeholder(R.drawable.user_image).into(imageFriendAvatar);
+            Log.d(Constants.TAG, "UUri: " + mUriMap.get(marker.getId()).toString());
+        } else {
+            imageFriendAvatar.setVisibility(View.GONE);
+        }
         return myView;
     }
 

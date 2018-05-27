@@ -60,7 +60,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ViewPagerMain.ViewPagerActivity"
+            android:name="com.aaron.runmer.ViewPagerMain.ViewPagerActivity"
             android:screenOrientation="portrait" />
 
         <meta-data

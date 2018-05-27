@@ -1,4 +1,4 @@
-package com.example.aaron.runmer;
+package com.aaron.runmer;
 
 import org.junit.Test;
 

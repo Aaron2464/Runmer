@@ -20,6 +20,7 @@
             android:background="@color/transparent">
 
             <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraintLayout_mappage_userstatus"
                 android:layout_width="0dp"
                 android:layout_height="70dp"
                 android:background="@color/user_status_bar"
@@ -83,6 +84,23 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </android.support.constraint.ConstraintLayout>
 
+            <com.example.aaron.runmer.RunnerDashBoard
+                android:id="@+id/dashboard_speed"
+                android:layout_width="115dp"
+                android:layout_height="110dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout_mappage_userstatus" />
+
+            <com.example.aaron.runmer.RunnerDashBoard
+                android:id="@+id/dashboard_avg"
+                android:layout_width="115dp"
+                android:layout_height="110dp"
+                android:layout_marginEnd="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/dashboard_speed" />
+
             <android.support.constraint.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="100dp"
@@ -139,6 +157,7 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/comment_message_background"
             android:hint="@string/leave_a_message"
+            android:paddingLeft="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/CommentOption_message_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/CommentOption_message_background"

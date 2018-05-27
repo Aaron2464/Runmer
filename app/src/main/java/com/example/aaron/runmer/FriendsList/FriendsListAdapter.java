@@ -1,38 +1,68 @@
 package com.example.aaron.runmer.FriendsList;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.aaron.runmer.Objects.FriendData;
+import com.example.aaron.runmer.Objects.UserData;
 import com.example.aaron.runmer.R;
+import com.example.aaron.runmer.util.CircleTransform;
+import com.example.aaron.runmer.util.Constants;
+import com.squareup.picasso.Picasso;
 
-public class FriendsListAdapter extends RecyclerView.Adapter {
+import java.util.ArrayList;
+
+public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.ViewHolder> {
 
     private FriendsListContract.Presenter mPresenter;
-    public FriendsListAdapter(FriendsListContract.Presenter presenter) {
+    private ArrayList<FriendData> mFriendData;
+    private Context mContext;
+
+    public FriendsListAdapter(Context context, ArrayList<FriendData> userData, FriendsListContract.Presenter presenter) {
         mPresenter = presenter;
+        mFriendData = userData;
+        mContext = context;
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        return null;
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_friends_list, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        if(mFriendData.get(position).getUserStatus().equals(true)){
+            holder.getBtnLocation().setVisibility(View.VISIBLE);
+        }else {
+            holder.getBtnLocation().setVisibility(View.GONE);
+        }
+        if (mFriendData.get(position).getFriendRequest().equals("invited")){
+            holder.getBtnAddFriend().setVisibility(View.VISIBLE);
+            holder.getBtnDenyFriend().setVisibility(View.VISIBLE);
+        }else {
+            holder.getBtnAddFriend().setVisibility(View.GONE);
+            holder.getBtnDenyFriend().setVisibility(View.GONE);
+        }
+        holder.mTxtFriendName.setText(mFriendData.get(position).getUserName());
+        holder.mTxtFriendLevel.setText(mFriendData.get(position).getUserEmail());
+        Picasso.get().load(mFriendData.get(position).getUserPhoto()).placeholder(R.drawable.user_image).transform(new CircleTransform(mContext)).into(holder.mImageFriendAvatar);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        Log.d(Constants.TAG, "mUserData" + mFriendData);
+        return mFriendData.size();
     }
 
-    private class FriendsListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private Button mBtnLocation;
         private Button mBtnAddFriend;
@@ -41,7 +71,7 @@ public class FriendsListAdapter extends RecyclerView.Adapter {
         private TextView mTxtFriendName;
         private TextView mTxtFriendLevel;
 
-        public FriendsListViewHolder(View itemView) {
+        public ViewHolder(final View itemView) {
             super(itemView);
             mBtnLocation = itemView.findViewById(R.id.btn_location);
             mBtnAddFriend = itemView.findViewById(R.id.btn_add_friend);
@@ -57,26 +87,34 @@ public class FriendsListAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onClick(View v) {
-
-            switch (v.getId()){
+            int position = getAdapterPosition();
+            //TODO if click location marker show map fragment
+            switch (v.getId()) {
                 case R.id.btn_location:
                     break;
                 case R.id.btn_add_friend:
+                    mPresenter.addFriend(mTxtFriendLevel.getText().toString());
+                    mBtnAddFriend.setVisibility(View.GONE);
+                    mBtnDenyFriend.setVisibility(View.GONE);
                     break;
                 case R.id.btn_deny_friend:
+                    String removeFriendUid = mFriendData.get(position).getUserUid();
+                    mPresenter.denyFriend(removeFriendUid, position);
                     break;
                 default:
                     break;
             }
         }
 
-        public Button getBtnAddFriend(){
+        public Button getBtnAddFriend() {
             return mBtnAddFriend;
         }
-        public Button getBtnDenyFriend(){
+
+        public Button getBtnDenyFriend() {
             return mBtnDenyFriend;
         }
-        public Button getBtnLocation(){
+
+        public Button getBtnLocation() {
             return mBtnLocation;
         }
     }

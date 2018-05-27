@@ -6,9 +6,9 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/image_userprofile_milestrophy"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
+        android:id="@+id/image_geofriend_avatar"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

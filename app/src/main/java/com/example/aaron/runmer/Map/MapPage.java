@@ -8,12 +8,16 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -24,6 +28,7 @@ import com.example.aaron.runmer.R;
 import com.example.aaron.runmer.ViewPagerMain.ViewPagerActivity;
 import com.example.aaron.runmer.util.CircleTransform;
 import com.example.aaron.runmer.util.Constants;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -40,6 +45,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.example.aaron.runmer.util.Constants.DISPLACEMENT;
 import static com.example.aaron.runmer.util.Constants.FATEST_INTERVAL;
@@ -62,6 +70,8 @@ public class MapPage extends BaseActivity implements MapContract.View
     private Marker mMarker;
     private Switch mSwitch;
     private ImageView mImageUser;
+    private Map<String, Marker> mMarkerMap;
+    private Map<String, String> mUriMap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,6 +81,8 @@ public class MapPage extends BaseActivity implements MapContract.View
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_map);
         mapFragment.getMapAsync(this);
+        this.mMarkerMap = new HashMap<String, Marker>();
+        this.mUriMap = new HashMap<String, String>();
         mPresenter = new MapPresenter(this);
         mPresenter.setUserPhoto();
         setupMyLocation();
@@ -176,6 +188,60 @@ public class MapPage extends BaseActivity implements MapContract.View
     }
 
     @Override
+    public void showGeoFriends(String key, GeoLocation mlocation, String friendAvatar) {
+        mMarkerMap.clear();                   //目前還不知道有什麼影響，特此註解以供驗證
+        mUriMap.clear();                       //目前還不知道有什麼影響，特此註解以供驗證
+        Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(mlocation.latitude, mlocation.longitude)));
+        Log.d(Constants.TAG, "MMarker: " + marker.getId());
+        this.mMarkerMap.put(key, marker);
+        Log.d(Constants.TAG, "MKEY: " + key);
+        Log.d(Constants.TAG, "MUri: " + friendAvatar.toString());
+        this.mUriMap.put(marker.getId(), friendAvatar);
+        mMap.setInfoWindowAdapter(new UserinfoWindow(this, mUriMap));
+    }
+
+    @Override
+    public void removeGeoFriends(String key) {
+        Marker marker = this.mMarkerMap.get(key);
+        if (marker != null) {
+            marker.remove();
+            this.mMarkerMap.remove(key);
+            this.mMarkerMap.clear();            //目前還不知道有什麼影響，特此註解以供驗證
+        }
+    }
+
+    @Override
+    public void moveGeoFriends(String key, GeoLocation location) {
+        final double lat = location.latitude;
+        final double lng = location.longitude;
+        final Marker marker = this.mMarkerMap.get(key);
+        if (marker != null) {               //            this.animateMarkerTo(marker, location.latitude, location.longitude)↓
+            final Handler handler = new Handler();
+            final long start = SystemClock.uptimeMillis();
+            final long DURATION_MS = 3000;
+            final Interpolator interpolator = new AccelerateDecelerateInterpolator();
+            final LatLng startPosition = marker.getPosition();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    float elapsed = SystemClock.uptimeMillis() - start;
+                    float t = elapsed / DURATION_MS;
+                    float v = interpolator.getInterpolation(t);
+
+                    double currentLat = (lat - startPosition.latitude) * v + startPosition.latitude;
+                    double currentLng = (lng - startPosition.longitude) * v + startPosition.longitude;
+                    marker.setPosition(new LatLng(currentLat, currentLng));
+
+                    // if animation is not finished yet, repeat
+                    if (t < 1) {
+                        handler.postDelayed(this, 16);
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
     public void showUserPhoto(String userimage) {
         mImageUser = findViewById(R.id.imageUser_mapView);
         Log.d(Constants.TAG, "MapPageUserImage :" + userimage);
@@ -198,6 +264,9 @@ public class MapPage extends BaseActivity implements MapContract.View
     @Override
     protected void onStart() {
         super.onStart();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
     }
 
     @Override
@@ -222,6 +291,7 @@ public class MapPage extends BaseActivity implements MapContract.View
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
+        mGoogleApiClient.connect();
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
     }
 
@@ -245,8 +315,9 @@ public class MapPage extends BaseActivity implements MapContract.View
 
     @Override
     public void onLocationChanged(Location location) {
-        displayLocation();
         mMap.clear();
+        displayLocation();
+        mPresenter.queryfriendlocation(location);
     }
 
     @Override

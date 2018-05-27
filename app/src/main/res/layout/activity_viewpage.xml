@@ -9,8 +9,8 @@
         android:id="@+id/back_to_map"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="8dp"
-        android:background="@mipmap/ic_back"
+        android:background="@drawable/back_key"
+        app:layout_constraintEnd_toStartOf="@+id/tablayout_main"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,7 +21,7 @@
         android:background="@color/tab_bar_background"
         app:tabSelectedTextColor="@color/white"
         app:tabTextColor="@color/gray"
-        app:tabIndicatorColor="@color/tab_underline"
+        app:tabIndicatorColor="@color/color_yellow"
         app:layout_constraintBottom_toBottomOf="@+id/back_to_map"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/back_to_map"

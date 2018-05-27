@@ -9,6 +9,9 @@ public class UserData {
     private String UserHeight;
     private String UserWeight;
     private String UserGender;
+    private Boolean UserStatus;
+    private Double lat;
+    private Double lng;
 
     public UserData() {
 
@@ -76,5 +79,29 @@ public class UserData {
 
     public void setUserGender(String userGender) {
         UserGender = userGender;
+    }
+
+    public Boolean getUserStatus() {
+        return UserStatus;
+    }
+
+    public void setUserStatus(Boolean userStatus) {
+        UserStatus = userStatus;
+    }
+
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    public Double getLng() {
+        return lng;
+    }
+
+    public void setLng(Double lng) {
+        this.lng = lng;
     }
 }

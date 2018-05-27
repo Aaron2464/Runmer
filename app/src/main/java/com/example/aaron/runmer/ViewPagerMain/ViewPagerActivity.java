@@ -42,6 +42,7 @@ public class ViewPagerActivity extends BaseActivity implements ViewPagerMainCont
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
         mTabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
+        mViewPager.setOffscreenPageLimit(2);            //懶載入
         mViewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
 
             @Override
@@ -49,15 +50,15 @@ public class ViewPagerActivity extends BaseActivity implements ViewPagerMainCont
                 switch (position) {
                     case 0:
                         mUserProfilePage = new UserProfilePage();
-                        Log.d(Constants.TAG,"mUserProfilePage ViewPager : " + position);
+                        Log.d(Constants.TAG, "mUserProfilePage ViewPager : " + position);
                         return mUserProfilePage;
                     case 1:
                         mRunningEventPage = new RunningEventPage();
-                        Log.d(Constants.TAG,"mRunningEventPage ViewPager : " + position);
+                        Log.d(Constants.TAG, "mRunningEventPage ViewPager : " + position);
                         return mRunningEventPage;
                     case 2:
                         mFriendsListPage = new FriendsListPage();
-                        Log.d(Constants.TAG,"mFriendsListPage ViewPager : " + position);
+                        Log.d(Constants.TAG, "mFriendsListPage ViewPager : " + position);
                         return mFriendsListPage;
                     default:
                         return null;

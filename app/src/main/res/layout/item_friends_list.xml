@@ -7,7 +7,6 @@
     <android.support.v7.widget.CardView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:cardBackgroundColor="@color/gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,36 +18,35 @@
 
             <Button
                 android:id="@+id/btn_location"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginBottom="37dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginTop="37dp"
+                android:layout_marginTop="10dp"
                 android:background="@mipmap/ic_location"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/btn_add_friend"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@mipmap/ic_add_friend"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/addfriend"
                 app:layout_constraintEnd_toStartOf="@+id/btn_location"
                 app:layout_constraintTop_toTopOf="@+id/btn_location" />
 
             <Button
                 android:id="@+id/btn_deny_friend"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@mipmap/ic_deny_friemd"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/denyfriend"
                 app:layout_constraintEnd_toStartOf="@+id/btn_add_friend"
                 app:layout_constraintTop_toTopOf="@+id/btn_add_friend" />
 
             <ImageView
                 android:id="@+id/image_friend_avatar"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
@@ -59,11 +57,15 @@
 
             <TextView
                 android:id="@+id/txt_friend_name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:text="Aaron"
-                android:textSize="30dp"
+                android:layout_marginEnd="105dp"
+                android:layout_marginStart="10dp"
+                android:gravity="top"
+                android:singleLine="true"
+                android:text="00000000000000"
+                android:textSize="25dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/image_friend_avatar"
                 app:layout_constraintTop_toTopOf="@+id/image_friend_avatar" />
 
@@ -71,9 +73,9 @@
                 android:id="@+id/txt_friend_level"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
+                android:layout_marginStart="10dp"
                 android:text="LV.10"
-                android:textSize="20dp"
+                android:textSize="15dp"
                 app:layout_constraintBottom_toBottomOf="@+id/image_friend_avatar"
                 app:layout_constraintStart_toEndOf="@+id/image_friend_avatar" />
         </android.support.constraint.ConstraintLayout>

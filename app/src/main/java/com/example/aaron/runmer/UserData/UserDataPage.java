@@ -81,6 +81,17 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
                     UserDataMap.put("UserHeight", mUserHeight);
                     UserDataMap.put("UserWeight", mUserWeight);
                     UserDataMap.put("UserGender", mUserGender);
+                    UserDataMap.put("UserStatus", "false");
+
+                    getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).edit()
+                            .putString(Constants.USER_FIREBASE_NAME, mUserName)
+                            .putString(Constants.USER_FIREBASE_EMAIL, mUserEmail)
+                            .putString(Constants.USER_FIREBASE_PHOTO, mUserPhoto)
+                            .putString(Constants.USER_FIREBASE_BIRTH, mUserBirth)
+                            .putString(Constants.USER_FIREBASE_HEIGHT, mUserHeight)
+                            .putString(Constants.USER_FIREBASE_WEIGHT, mUserWeight)
+                            .putString(Constants.USER_FIREBASE_GENDER, mUserGender).apply();
+
                     mPresenter.setUserDataToFirebase(UserDataMap);
 
                     Intent intent = new Intent();

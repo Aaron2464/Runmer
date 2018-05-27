@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -52,6 +51,7 @@
             android:layout_height="55dp"
             android:layout_weight="1"
             app:srcCompat="@drawable/album_icon" />
+
         <TextView
             android:id="@+id/txt_album"
             android:layout_width="match_parent"
@@ -59,7 +59,7 @@
             android:layout_weight="4"
             android:gravity="center"
             android:text="Select photo from gallery"
-        android:textSize="20dp" />
+            android:textSize="20dp" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -84,7 +84,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </android.support.constraint.ConstraintLayout>
 
-            <com.example.aaron.runmer.RunnerDashBoard
+            <com.aaron.runmer.RunnerDashBoard
                 android:id="@+id/dashboard_speed"
                 android:layout_width="115dp"
                 android:layout_height="110dp"
@@ -93,7 +93,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout_mappage_userstatus" />
 
-            <com.example.aaron.runmer.RunnerDashBoard
+            <com.aaron.runmer.RunnerDashBoard
                 android:id="@+id/dashboard_avg"
                 android:layout_width="115dp"
                 android:layout_height="110dp"

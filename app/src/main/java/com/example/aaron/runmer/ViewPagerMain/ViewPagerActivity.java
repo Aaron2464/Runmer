@@ -1,15 +1,19 @@
 package com.example.aaron.runmer.ViewPagerMain;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 
 import com.example.aaron.runmer.Base.BaseActivity;
 import com.example.aaron.runmer.FriendsList.FriendsListPage;
+import com.example.aaron.runmer.Map.MapPage;
 import com.example.aaron.runmer.R;
 import com.example.aaron.runmer.RunningEvent.RunningEventPage;
 import com.example.aaron.runmer.UserProfile.UserProfilePage;
@@ -19,11 +23,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class ViewPagerActivity extends BaseActivity implements ViewPagerMainContract.View
         , ViewPager.OnPageChangeListener
-        , TabLayout.OnTabSelectedListener {
+        , TabLayout.OnTabSelectedListener
+        , View.OnClickListener {
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
-
+    private Button mBtnBackToMap;
     private UserProfilePage mUserProfilePage;
     private FriendsListPage mFriendsListPage;
     private RunningEventPage mRunningEventPage;
@@ -38,9 +43,11 @@ public class ViewPagerActivity extends BaseActivity implements ViewPagerMainCont
 
         mViewPager = findViewById(R.id.viewpager_main);
         mTabLayout = findViewById(R.id.tablayout_main);
+        mBtnBackToMap = findViewById(R.id.back_to_map);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
         mTabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+        mBtnBackToMap.setOnClickListener(this);
 
         mViewPager.setOffscreenPageLimit(2);            //懶載入
         mViewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
@@ -107,5 +114,12 @@ public class ViewPagerActivity extends BaseActivity implements ViewPagerMainCont
     @Override
     public void setPresenter(ViewPagerMainContract.Presenter presenter) {
         mPresenter = checkNotNull(presenter);
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent();
+        intent.setClass(ViewPagerActivity.this, MapPage.class);
+        ViewPagerActivity.this.finish();
     }
 }

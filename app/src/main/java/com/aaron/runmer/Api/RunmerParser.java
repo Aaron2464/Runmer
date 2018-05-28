@@ -1,14 +1,14 @@
-package com.example.aaron.runmer.Api;
+package com.aaron.runmer.Api;
 
 import android.util.Log;
 
-import com.example.aaron.runmer.Api.Callback.InvitehFireBaseUserDataCallback;
-import com.example.aaron.runmer.Api.Callback.SearchFireBaseFriendDataCallback;
-import com.example.aaron.runmer.Api.Callback.SetEventPeopleJoinCallback;
-import com.example.aaron.runmer.Objects.EventData;
-import com.example.aaron.runmer.Objects.FriendData;
-import com.example.aaron.runmer.Objects.UserData;
-import com.example.aaron.runmer.util.Constants;
+import com.aaron.runmer.Api.Callback.SearchFireBaseFriendDataCallback;
+import com.aaron.runmer.Api.Callback.SetEventPeopleJoinCallback;
+import com.aaron.runmer.Api.Callback.InvitehFireBaseUserDataCallback;
+import com.aaron.runmer.Objects.EventData;
+import com.aaron.runmer.Objects.FriendData;
+import com.aaron.runmer.Objects.UserData;
+import com.aaron.runmer.util.Constants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -155,6 +155,7 @@ public class RunmerParser {
         String getkey = dataBaseRef.child(Constants.EVENT_FIREBASE).push().getKey();
         dataBaseRef.child(Constants.EVENT_FIREBASE).child(getkey).setValue(mEventData);
         dataBaseRef.child(Constants.EVENT_FIREBASE).child(getkey).child(Constants.EVENT_FIREBASE_ID).setValue(getkey);
+        dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child(Constants.EVENT_FIREBASE).child(getkey).setValue("Join");
         Log.d(Constants.TAG, "getKey: " + getkey);
     }
 
@@ -173,5 +174,7 @@ public class RunmerParser {
 
             }
         });
+
+        dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child(Constants.EVENT_FIREBASE).child(mEventId).setValue("Join");
     }
 }

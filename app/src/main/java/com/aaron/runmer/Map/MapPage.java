@@ -1,6 +1,10 @@
-package com.example.aaron.runmer.Map;
+package com.aaron.runmer.Map;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,16 +22,18 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.example.aaron.runmer.Base.BaseActivity;
-import com.example.aaron.runmer.R;
-import com.example.aaron.runmer.ViewPagerMain.ViewPagerActivity;
-import com.example.aaron.runmer.util.CircleTransform;
-import com.example.aaron.runmer.util.Constants;
+import com.aaron.runmer.Base.BaseActivity;
+import com.aaron.runmer.R;
+import com.aaron.runmer.RunnerDashBoard;
+import com.aaron.runmer.ViewPagerMain.ViewPagerActivity;
+import com.aaron.runmer.util.CircleTransform;
+import com.aaron.runmer.util.Constants;
 import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -48,11 +54,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
-import static com.example.aaron.runmer.util.Constants.DISPLACEMENT;
-import static com.example.aaron.runmer.util.Constants.FATEST_INTERVAL;
-import static com.example.aaron.runmer.util.Constants.REQUEST_LOCATION;
-import static com.example.aaron.runmer.util.Constants.UPDATE_INTERVAL;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class MapPage extends BaseActivity implements MapContract.View
@@ -72,6 +75,9 @@ public class MapPage extends BaseActivity implements MapContract.View
     private ImageView mImageUser;
     private Map<String, Marker> mMarkerMap;
     private Map<String, String> mUriMap;
+    private RunnerDashBoard mRunnerDashBoardSpeed;
+    private RunnerDashBoard mRunnerDashBoardAvg;
+    private boolean isAnimFinished = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,9 +90,46 @@ public class MapPage extends BaseActivity implements MapContract.View
         this.mMarkerMap = new HashMap<String, Marker>();
         this.mUriMap = new HashMap<String, String>();
         mPresenter = new MapPresenter(this);
+        mRunnerDashBoardSpeed = findViewById(R.id.dashboard_speed);
+        mRunnerDashBoardAvg = findViewById(R.id.dashboard_avg);
         mPresenter.setUserPhoto();
         setupMyLocation();
         selectUserStatus();
+        dashBoardAnimation(mRunnerDashBoardSpeed);
+        dashBoardAnimation(mRunnerDashBoardAvg);
+    }
+
+    private void dashBoardAnimation(final RunnerDashBoard mRunnerDashBoard) {
+
+        if (isAnimFinished) {
+            @SuppressLint("ObjectAnimatorBinding") ObjectAnimator animator = ObjectAnimator.ofInt(mRunnerDashBoard, "mRealTimeValue",
+                    mRunnerDashBoard.getVelocity(), new Random().nextInt(180));
+            animator.setDuration(1500).setInterpolator(new LinearInterpolator());
+            animator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    isAnimFinished = false;
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    isAnimFinished = true;
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    isAnimFinished = true;
+                }
+            });
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    int value = (int) animation.getAnimatedValue();
+                    mRunnerDashBoard.setVelocity(value);
+                }
+            });
+            animator.start();
+        }
     }
 
     private void selectUserStatus() {
@@ -114,7 +157,7 @@ public class MapPage extends BaseActivity implements MapContract.View
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+                    Manifest.permission.ACCESS_FINE_LOCATION}, Constants.REQUEST_LOCATION);
         } else {
             if (checkPlayServices()) {                      //mMapPageModel.checkPlayServices();
                 buildGoogleApiClient();
@@ -128,7 +171,7 @@ public class MapPage extends BaseActivity implements MapContract.View
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode))
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this, REQUEST_LOCATION).show();
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this, Constants.REQUEST_LOCATION).show();
             else {
                 Toast.makeText(this, "不支援此裝置", Toast.LENGTH_LONG).show();
                 finish();
@@ -151,10 +194,10 @@ public class MapPage extends BaseActivity implements MapContract.View
 
     private void createLocationRequest() {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(UPDATE_INTERVAL);
-        mLocationRequest.setFastestInterval(FATEST_INTERVAL);
+        mLocationRequest.setInterval(Constants.UPDATE_INTERVAL);
+        mLocationRequest.setFastestInterval(Constants.FATEST_INTERVAL);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setSmallestDisplacement(DISPLACEMENT);
+        mLocationRequest.setSmallestDisplacement(Constants.DISPLACEMENT);
     }
 
     private void displayLocation() {
@@ -185,12 +228,13 @@ public class MapPage extends BaseActivity implements MapContract.View
 
 //        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userlocation, 13));
 //        mMap.getUiSettings().setZoomControlsEnabled(true);\
+
     }
 
     @Override
     public void showGeoFriends(String key, GeoLocation mlocation, String friendAvatar) {
-        mMarkerMap.clear();                   //目前還不知道有什麼影響，特此註解以供驗證
-        mUriMap.clear();                       //目前還不知道有什麼影響，特此註解以供驗證
+//        mMarkerMap.clear();                   //目前還不知道有什麼影響，特此註解以供驗證
+//        mUriMap.clear();                       //目前還不知道有什麼影響，特此註解以供驗證
         Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(mlocation.latitude, mlocation.longitude)));
         Log.d(Constants.TAG, "MMarker: " + marker.getId());
         this.mMarkerMap.put(key, marker);
@@ -317,6 +361,7 @@ public class MapPage extends BaseActivity implements MapContract.View
     public void onLocationChanged(Location location) {
         mMap.clear();
         displayLocation();
+        dashBoardAnimation(mRunnerDashBoardAvg);
         mPresenter.queryfriendlocation(location);
     }
 
@@ -328,7 +373,7 @@ public class MapPage extends BaseActivity implements MapContract.View
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case REQUEST_LOCATION:
+            case Constants.REQUEST_LOCATION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (checkPlayServices()) {
                         createLocationRequest();

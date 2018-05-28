@@ -16,6 +16,8 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
@@ -24,8 +26,11 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.runmer.Base.BaseActivity;
@@ -77,6 +82,11 @@ public class MapPage extends BaseActivity implements MapContract.View
     private Map<String, String> mUriMap;
     private RunnerDashBoard mRunnerDashBoardSpeed;
     private RunnerDashBoard mRunnerDashBoardAvg;
+    private TextView mTxtRightComment;
+    private TextView mTxtLeftComment;
+    private ImageButton mBtnSendComment;
+    private EditText mEditTxtCommentMessage;
+    private ConstraintLayout mConstraintLayout;
     private boolean isAnimFinished = true;
 
     @Override
@@ -92,11 +102,31 @@ public class MapPage extends BaseActivity implements MapContract.View
         mPresenter = new MapPresenter(this);
         mRunnerDashBoardSpeed = findViewById(R.id.dashboard_speed);
         mRunnerDashBoardAvg = findViewById(R.id.dashboard_avg);
+        mTxtLeftComment = findViewById(R.id.txt_leftcomment);
+        mTxtRightComment = findViewById(R.id.txt_rightcomment);
+        mBtnSendComment = findViewById(R.id.CommentOption_btn_fb_send_comment);
+        mEditTxtCommentMessage = findViewById(R.id.CommentOption_edittxt_comments_message);
+        mConstraintLayout = findViewById(R.id.map_page_layout);
         mPresenter.setUserPhoto();
         setupMyLocation();
         selectUserStatus();
+        sendGeomessageToFriend();
         dashBoardAnimation(mRunnerDashBoardSpeed);
         dashBoardAnimation(mRunnerDashBoardAvg);
+    }
+
+    private void sendGeomessageToFriend() {
+        mBtnSendComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String cheermessage = mEditTxtCommentMessage.getText().toString();
+                if (!cheermessage.equals("")) {
+                    mPresenter.sendMessage(cheermessage);
+                } else {
+                    mPresenter.noMessage();
+                }
+            }
+        });
     }
 
     private void dashBoardAnimation(final RunnerDashBoard mRunnerDashBoard) {
@@ -252,6 +282,19 @@ public class MapPage extends BaseActivity implements MapContract.View
             this.mMarkerMap.remove(key);
             this.mMarkerMap.clear();            //目前還不知道有什麼影響，特此註解以供驗證
         }
+    }
+
+    @Override
+    public void showLeftComment(String Uid, String message) {
+        mTxtLeftComment.setVisibility(View.VISIBLE);
+        mTxtRightComment.setVisibility(View.GONE);
+        mTxtLeftComment.setText(message);
+        mEditTxtCommentMessage.setText("");
+    }
+
+    @Override
+    public void noComment() {
+        Snackbar.make(mConstraintLayout, "可以講講話啊", Snackbar.LENGTH_SHORT).show();
     }
 
     @Override

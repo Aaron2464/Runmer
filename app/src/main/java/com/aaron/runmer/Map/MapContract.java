@@ -19,6 +19,10 @@ public interface MapContract {
         void moveGeoFriends(String key, GeoLocation location);
 
         void removeGeoFriends(String key);
+
+        void showLeftComment(String Uid, String message);
+
+        void noComment();
     }
 
     interface Presenter extends BasePresenter {
@@ -32,5 +36,9 @@ public interface MapContract {
         void setUserStatus(boolean isChecked);
 
         void setUserPhoto();
+
+        void sendMessage(String cheermessage);
+
+        void noMessage();
     }
 }

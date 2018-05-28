@@ -23,6 +23,7 @@ public class MapPresenter implements MapContract.Presenter {
     DatabaseReference mFriendRef = FirebaseDatabase.getInstance().getReference("Users").child(mUserUid).child("Friends");
     DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference("Users").child(mUserUid);
     DatabaseReference mUserLocation = FirebaseDatabase.getInstance().getReference("Location");
+    DatabaseReference mComment = FirebaseDatabase.getInstance().getReference("Comments");
     GeoFire mGeoFire = new GeoFire(mUserLocation);
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
@@ -161,6 +162,19 @@ public class MapPresenter implements MapContract.Presenter {
 
             }
         });
+    }
+
+    @Override
+    public void sendMessage(String cheermessage) {
+        String getkey = mComment.push().getKey();
+        mComment.child(getkey).child("CommentId").setValue(cheermessage);
+        mComment.child(getkey).child("UserUid").setValue(mUserUid);
+        mMapsView.showLeftComment(mUserUid,cheermessage);
+    }
+
+    @Override
+    public void noMessage() {
+        mMapsView.noComment();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.aaron.runmer.Map;
 
 import android.location.Location;
+import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 
 import com.aaron.runmer.util.Constants;
@@ -9,10 +10,12 @@ import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -132,6 +135,40 @@ public class MapPresenter implements MapContract.Presenter {
 
                 @Override
                 public void onGeoQueryReady() {
+                    mComment.addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                            Log.d(Constants.TAG,"GeoQuery: " + String.valueOf(dataSnapshot));
+                            String dskey = dataSnapshot.getKey();
+                            Log.d(Constants.TAG, "GeoQuery: " + dskey);
+                            Log.d(Constants.TAG, "GeoQuery: " + dataSnapshot.child("UserUid").getValue());
+                            if(!dataSnapshot.child("UserUid").getValue().equals(mAuth.getCurrentUser().getUid())){
+                                String message = String.valueOf(dataSnapshot.child("CommentId").getValue());
+                                Log.d(Constants.TAG, "GeoQuery: " + message);
+                                mMapsView.showRightComment(message);
+                            }
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
                 }
 
@@ -175,6 +212,10 @@ public class MapPresenter implements MapContract.Presenter {
     @Override
     public void noMessage() {
         mMapsView.noComment();
+    }
+
+    @Override
+    public void getFriendMessage() {
     }
 
     @Override

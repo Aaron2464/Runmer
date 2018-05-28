@@ -22,6 +22,8 @@ public interface MapContract {
 
         void showLeftComment(String Uid, String message);
 
+        void showRightComment(String message);
+
         void noComment();
     }
 
@@ -40,5 +42,7 @@ public interface MapContract {
         void sendMessage(String cheermessage);
 
         void noMessage();
+
+        void getFriendMessage();
     }
 }

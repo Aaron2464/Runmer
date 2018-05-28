@@ -14,6 +14,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -58,6 +59,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
@@ -88,6 +90,7 @@ public class MapPage extends BaseActivity implements MapContract.View
     private EditText mEditTxtCommentMessage;
     private ConstraintLayout mConstraintLayout;
     private boolean isAnimFinished = true;
+    TextToSpeech textToSpeech;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -111,8 +114,13 @@ public class MapPage extends BaseActivity implements MapContract.View
         setupMyLocation();
         selectUserStatus();
         sendGeomessageToFriend();
+        queryGeoFriendMessage();
         dashBoardAnimation(mRunnerDashBoardSpeed);
         dashBoardAnimation(mRunnerDashBoardAvg);
+    }
+
+    private void queryGeoFriendMessage() {
+        mPresenter.getFriendMessage();
     }
 
     private void sendGeomessageToFriend() {
@@ -290,6 +298,23 @@ public class MapPage extends BaseActivity implements MapContract.View
         mTxtRightComment.setVisibility(View.GONE);
         mTxtLeftComment.setText(message);
         mEditTxtCommentMessage.setText("");
+    }
+
+    @Override
+    public void showRightComment(final String message) {
+        mTxtRightComment.setVisibility(View.VISIBLE);
+        mTxtLeftComment.setVisibility(View.GONE);
+        mTxtRightComment.setText(message);
+
+        textToSpeech = new TextToSpeech(mContext, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status == TextToSpeech.SUCCESS){
+                    textToSpeech.setLanguage(Locale.TAIWAN);
+                    textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH,null);
+                }
+            }
+        });
     }
 
     @Override

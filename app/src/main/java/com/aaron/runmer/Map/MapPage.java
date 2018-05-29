@@ -35,8 +35,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aaron.runmer.Base.BaseActivity;
+import com.aaron.runmer.DashBoardPackage.RunnerDashBoardSpeedAvgIntime;
 import com.aaron.runmer.R;
-import com.aaron.runmer.RunnerDashBoard;
+import com.aaron.runmer.DashBoardPackage.RunnerDashBoardSpeedIntime;
 import com.aaron.runmer.ViewPagerMain.ViewPagerActivity;
 import com.aaron.runmer.util.CircleTransform;
 import com.aaron.runmer.util.Constants;
@@ -61,7 +62,6 @@ import com.squareup.picasso.Picasso;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -82,8 +82,8 @@ public class MapPage extends BaseActivity implements MapContract.View
     private ImageView mImageUser;
     private Map<String, Marker> mMarkerMap;
     private Map<String, String> mUriMap;
-    private RunnerDashBoard mRunnerDashBoardSpeed;
-    private RunnerDashBoard mRunnerDashBoardAvg;
+    private RunnerDashBoardSpeedIntime mRunnerDashBoardSpeedIntimeSpeed;
+    private RunnerDashBoardSpeedAvgIntime mRunnerDashBoardAvg;
     private TextView mTxtRightComment;
     private TextView mTxtLeftComment;
     private ImageButton mBtnSendComment;
@@ -103,20 +103,22 @@ public class MapPage extends BaseActivity implements MapContract.View
         this.mMarkerMap = new HashMap<String, Marker>();
         this.mUriMap = new HashMap<String, String>();
         mPresenter = new MapPresenter(this);
-        mRunnerDashBoardSpeed = findViewById(R.id.dashboard_speed);
+        init();
+        mPresenter.setUserPhoto();
+    }
+
+    private void init() {
+        mRunnerDashBoardSpeedIntimeSpeed = findViewById(R.id.dashboard_speed);
         mRunnerDashBoardAvg = findViewById(R.id.dashboard_avg);
         mTxtLeftComment = findViewById(R.id.txt_leftcomment);
         mTxtRightComment = findViewById(R.id.txt_rightcomment);
         mBtnSendComment = findViewById(R.id.CommentOption_btn_fb_send_comment);
         mEditTxtCommentMessage = findViewById(R.id.CommentOption_edittxt_comments_message);
         mConstraintLayout = findViewById(R.id.map_page_layout);
-        mPresenter.setUserPhoto();
         setupMyLocation();
         selectUserStatus();
         sendGeomessageToFriend();
         queryGeoFriendMessage();
-        dashBoardAnimation(mRunnerDashBoardSpeed);
-        dashBoardAnimation(mRunnerDashBoardAvg);
     }
 
     private void queryGeoFriendMessage() {
@@ -137,11 +139,11 @@ public class MapPage extends BaseActivity implements MapContract.View
         });
     }
 
-    private void dashBoardAnimation(final RunnerDashBoard mRunnerDashBoard) {
+    private void dashBoardAnimation(final RunnerDashBoardSpeedIntime mRunnerDashBoardSpeedIntime, int speed) {
 
         if (isAnimFinished) {
-            @SuppressLint("ObjectAnimatorBinding") ObjectAnimator animator = ObjectAnimator.ofInt(mRunnerDashBoard, "mRealTimeValue",
-                    mRunnerDashBoard.getVelocity(), new Random().nextInt(180));
+            @SuppressLint("ObjectAnimatorBinding") ObjectAnimator animator = ObjectAnimator.ofInt(mRunnerDashBoardSpeedIntime, "mRealTimeValue",
+                    mRunnerDashBoardSpeedIntime.getVelocity(), speed);
             animator.setDuration(1500).setInterpolator(new LinearInterpolator());
             animator.addListener(new AnimatorListenerAdapter() {
                 @Override
@@ -163,7 +165,7 @@ public class MapPage extends BaseActivity implements MapContract.View
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     int value = (int) animation.getAnimatedValue();
-                    mRunnerDashBoard.setVelocity(value);
+                    mRunnerDashBoardSpeedIntime.setVelocity(value);
                 }
             });
             animator.start();
@@ -429,8 +431,16 @@ public class MapPage extends BaseActivity implements MapContract.View
     public void onLocationChanged(Location location) {
         mMap.clear();
         displayLocation();
-        dashBoardAnimation(mRunnerDashBoardAvg);
         mPresenter.queryfriendlocation(location);
+        calculateSpeed(location);
+    }
+
+    private void calculateSpeed(Location location) {
+        if(location.hasSpeed()){
+            int speed = (int)(location.getSpeed() *3.6);
+            dashBoardAnimation(mRunnerDashBoardSpeedIntimeSpeed,speed);
+            Log.d(Constants.TAG_DASHBOARD, "Speed: " + speed);
+        }
     }
 
     @Override

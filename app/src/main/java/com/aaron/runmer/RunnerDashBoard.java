@@ -22,7 +22,7 @@ public class RunnerDashBoard extends View {
     private int mStartAngle = 150;          // 起始角度
     private int mSweepAngle = 240;         // 繪製角度
     private int mMin = 0;                   // 最小值
-    private int mMax = 180;                 // 最大值
+    private int mMax = 70;                 // 最大值
     private int mSection = 9;                // 值域（mMax-mMin）等分份数
     private int mPortion = 2;                // 一個mSection等分份數
     private String mHeaderText = "km/h";   // 表頭

@@ -9,6 +9,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@drawable/back_key"
+        android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@+id/tablayout_main"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -17,8 +18,7 @@
         android:id="@+id/tablayout_main"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:background="@color/tab_bar_background"
-        app:layout_constraintBottom_toBottomOf="@+id/back_to_map"
+        android:background="@color/color_blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/back_to_map"
         app:layout_constraintTop_toTopOf="parent"

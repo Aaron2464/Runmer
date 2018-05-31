@@ -6,20 +6,26 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -30,14 +36,15 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aaron.runmer.Api.GpsServices;
 import com.aaron.runmer.Base.BaseActivity;
-import com.aaron.runmer.DashBoardPackage.RunnerDashBoardSpeedAvgIntime;
+import com.aaron.runmer.DashBoardPackage.RunnerDashBoard;
 import com.aaron.runmer.R;
-import com.aaron.runmer.DashBoardPackage.RunnerDashBoardSpeedIntime;
 import com.aaron.runmer.ViewPagerMain.ViewPagerActivity;
 import com.aaron.runmer.util.CircleTransform;
 import com.aaron.runmer.util.Constants;
@@ -45,7 +52,6 @@ import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -57,6 +63,7 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -67,7 +74,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class MapPage extends BaseActivity implements MapContract.View
         , GoogleMap.OnMyLocationButtonClickListener
-        , OnMapReadyCallback, LocationListener
+        , OnMapReadyCallback
+        , com.google.android.gms.location.LocationListener
+        , android.location.LocationListener
         , GoogleApiClient.ConnectionCallbacks
         , GoogleApiClient.OnConnectionFailedListener {
 
@@ -82,15 +91,21 @@ public class MapPage extends BaseActivity implements MapContract.View
     private ImageView mImageUser;
     private Map<String, Marker> mMarkerMap;
     private Map<String, String> mUriMap;
-    private RunnerDashBoardSpeedIntime mRunnerDashBoardSpeedIntimeSpeed;
-    private RunnerDashBoardSpeedAvgIntime mRunnerDashBoardAvg;
+    private RunnerDashBoard mRunnerDashBoardIntimeSpeed;
+    private RunnerDashBoard mRunnerDashBoardAvg;
     private TextView mTxtRightComment;
     private TextView mTxtLeftComment;
     private ImageButton mBtnSendComment;
     private EditText mEditTxtCommentMessage;
     private ConstraintLayout mConstraintLayout;
+    private ProgressBar mBarExp;
     private boolean isAnimFinished = true;
-    TextToSpeech textToSpeech;
+    private TextToSpeech textToSpeech;
+    private SpeedData.onGpsServiceUpdate onGpsServiceUpdate;
+    private static SpeedData data;
+    private SharedPreferences sharedPreferences;
+    String bestProv;
+    Long startTime, currentTime, time;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,18 +118,70 @@ public class MapPage extends BaseActivity implements MapContract.View
         this.mMarkerMap = new HashMap<String, Marker>();
         this.mUriMap = new HashMap<String, String>();
         mPresenter = new MapPresenter(this);
+        currentTime = SystemClock.elapsedRealtime();
+        startTime = currentTime;
         init();
         mPresenter.setUserPhoto();
+        startGps();
+    }
+
+    private void startGps() {
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        data.setRunning(true);
+        data.setFirstTime(true);
+        startService(new Intent(getBaseContext(), GpsServices.class));
+        onGpsServiceUpdate = new SpeedData.onGpsServiceUpdate() {
+            @Override
+            public void update() {
+                double maxSpeedTemp = data.getMaxSpeed();
+                double distanceTemp = data.getDistance();
+                double averageTemp;
+                if (sharedPreferences.getBoolean("auto_average", false)) {
+                    averageTemp = data.getAverageSpeedMotion();
+                } else {
+                    averageTemp = data.getAverageSpeed();
+                }
+
+                if (sharedPreferences.getBoolean("miles_per_hour", false)) {
+                    maxSpeedTemp *= 0.62137119;
+                    distanceTemp = distanceTemp / 1000.0 * 0.62137119;
+                    averageTemp *= 0.62137119;
+                }
+                getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).edit()
+                        .putInt(Constants.USER_MAPPAGE_MAXSPEED, (int) maxSpeedTemp)
+                        .putInt(Constants.USER_MAPPAGE_DISTANCE, (int) distanceTemp)
+                        .putInt(Constants.USER_MAPPAGE_AVGSPEED, (int) averageTemp).commit();
+                mRunnerDashBoardIntimeSpeed.setVelocity((int) maxSpeedTemp);
+                mRunnerDashBoardAvg.setVelocity((int) averageTemp);
+                mBarExp.setProgress((int) distanceTemp);
+                Log.d(Constants.TAG, "distanceTemp: " + String.valueOf(distanceTemp));
+                Log.d(Constants.TAG, "averageTemp: " + String.valueOf(averageTemp));
+                Log.d(Constants.TAG, "maxSpeedTemp: " + String.valueOf(maxSpeedTemp));
+            }
+        };
+    }
+
+    public static SpeedData getData() {
+        return data;
     }
 
     private void init() {
-        mRunnerDashBoardSpeedIntimeSpeed = findViewById(R.id.dashboard_speed);
+        mRunnerDashBoardIntimeSpeed = findViewById(R.id.dashboard_speed);
         mRunnerDashBoardAvg = findViewById(R.id.dashboard_avg);
         mTxtLeftComment = findViewById(R.id.txt_leftcomment);
         mTxtRightComment = findViewById(R.id.txt_rightcomment);
         mBtnSendComment = findViewById(R.id.CommentOption_btn_fb_send_comment);
         mEditTxtCommentMessage = findViewById(R.id.CommentOption_edittxt_comments_message);
         mConstraintLayout = findViewById(R.id.map_page_layout);
+        mBarExp = findViewById(R.id.progressBar_exp);
+        data = new SpeedData(onGpsServiceUpdate);
+        int maxdistance = getApplicationContext()
+                .getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE)
+                .getInt(Constants.USER_MAPPAGE_DISTANCE, 0);
+        Log.d(Constants.TAG, "MaxDistance: " + maxdistance);
+        data.addDistance(Double.valueOf(maxdistance));
+
         setupMyLocation();
         selectUserStatus();
         sendGeomessageToFriend();
@@ -139,11 +206,11 @@ public class MapPage extends BaseActivity implements MapContract.View
         });
     }
 
-    private void dashBoardAnimation(final RunnerDashBoardSpeedIntime mRunnerDashBoardSpeedIntime, int speed) {
+    private void dashBoardAnimation(final RunnerDashBoard mRunnerDashBoard, int speed) {
 
         if (isAnimFinished) {
-            @SuppressLint("ObjectAnimatorBinding") ObjectAnimator animator = ObjectAnimator.ofInt(mRunnerDashBoardSpeedIntime, "mRealTimeValue",
-                    mRunnerDashBoardSpeedIntime.getVelocity(), speed);
+            @SuppressLint("ObjectAnimatorBinding") ObjectAnimator animator = ObjectAnimator.ofInt(mRunnerDashBoard, "mRealTimeValue",
+                    mRunnerDashBoard.getVelocity(), speed);
             animator.setDuration(1500).setInterpolator(new LinearInterpolator());
             animator.addListener(new AnimatorListenerAdapter() {
                 @Override
@@ -165,7 +232,7 @@ public class MapPage extends BaseActivity implements MapContract.View
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     int value = (int) animation.getAnimatedValue();
-                    mRunnerDashBoardSpeedIntime.setVelocity(value);
+                    mRunnerDashBoard.setVelocity(value);
                 }
             });
             animator.start();
@@ -199,7 +266,7 @@ public class MapPage extends BaseActivity implements MapContract.View
                     Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.ACCESS_FINE_LOCATION}, Constants.REQUEST_LOCATION);
         } else {
-            if (checkPlayServices()) {                      //mMapPageModel.checkPlayServices();
+            if (checkPlayServices()) {
                 buildGoogleApiClient();
                 createLocationRequest();
                 displayLocation();
@@ -229,7 +296,8 @@ public class MapPage extends BaseActivity implements MapContract.View
                 .build();
         mGoogleApiClient.connect();
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
+        Criteria criteria = new Criteria();
+        bestProv = mLocationManager.getBestProvider(criteria, true);
     }
 
     private void createLocationRequest() {
@@ -311,9 +379,9 @@ public class MapPage extends BaseActivity implements MapContract.View
         textToSpeech = new TextToSpeech(mContext, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
-                if(status == TextToSpeech.SUCCESS){
+                if (status == TextToSpeech.SUCCESS) {
                     textToSpeech.setLanguage(Locale.TAIWAN);
-                    textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH,null);
+                    textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, null);
                 }
             }
         });
@@ -436,11 +504,98 @@ public class MapPage extends BaseActivity implements MapContract.View
     }
 
     private void calculateSpeed(Location location) {
-        if(location.hasSpeed()){
-            int speed = (int)(location.getSpeed() *3.6);
-            dashBoardAnimation(mRunnerDashBoardSpeedIntimeSpeed,speed);
+        if (location.hasSpeed()) {
+            int speed = (int) (location.getSpeed() * 3.6);
+            dashBoardAnimation(mRunnerDashBoardIntimeSpeed, speed);
             Log.d(Constants.TAG_DASHBOARD, "Speed: " + speed);
+            currentTime = SystemClock.elapsedRealtime();
+            time = currentTime - startTime;
+            Log.e(Constants.TAG, "currentTime:" + currentTime);
+            Log.e(Constants.TAG, "startTime:" + startTime);
+            data.setTime(time);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        data.setRunning(false);
+        stopService(new Intent(getBaseContext(), GpsServices.class));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!data.isRunning()) {
+            Gson gson = new Gson();
+            String json = sharedPreferences.getString("data", "");
+            data = gson.fromJson(json, SpeedData.class);
+        }
+        if (data == null) {
+            data = new SpeedData(onGpsServiceUpdate);
+        } else {
+            data.setOnGpsServiceUpdate(onGpsServiceUpdate);
+        }
+
+        if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                mLocationManager.requestLocationUpdates(bestProv, 3000, 0, this);
+            }
+        } else {
+            Log.w("MainActivity", "No GPS location provider found. GPS data display will not be available.");
+        }
+
+        if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            showGpsDisabledDialog();            //TODO bug
+        }
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+//        mLocationManager.addGpsStatusListener((GpsStatus.Listener) this);
+    }
+
+    public void showGpsDisabledDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
+
+        alertDialogBuilder
+                .setCancelable(false)
+                .setMessage("Please turn the GPS!")
+                .setPositiveButton("check", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        startActivity(new Intent("android.settings.LOCATION_SOURCE_SETTINGS"));
+                        dialog.cancel();
+                    }
+                });
+        alertDialogBuilder.show();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mLocationManager.removeUpdates(this);
+//        mLocationManager.removeGpsStatusListener((GpsStatus.Listener) this);
+        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(data);
+        prefsEditor.putString("data", json);
+        prefsEditor.commit();
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 
     @Override

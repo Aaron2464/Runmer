@@ -72,7 +72,7 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <service android:name="com.aaron.runmer.DashBoardPackage.GpsServices" />
+        <service android:name="com.aaron.runmer.Api.GpsServices" />
     </application>
 
 </manifest>

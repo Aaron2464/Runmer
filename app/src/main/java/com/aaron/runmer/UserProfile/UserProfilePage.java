@@ -1,6 +1,6 @@
 package com.aaron.runmer.UserProfile;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,14 +13,16 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.aaron.runmer.RunnerDashBoard;
+import com.aaron.runmer.DashBoardPackage.RunnerDashBoard;
+import com.aaron.runmer.Objects.UserData;
+import com.aaron.runmer.R;
 import com.aaron.runmer.util.CircleTransform;
 import com.aaron.runmer.util.Constants;
-import com.aaron.runmer.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class UserProfilePage extends Fragment implements UserProfileContract.View {
@@ -32,7 +34,7 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
     TextView mTxtUserProfileCurrentExp;
     TextView mTxtUserProfileTotalExp;
     ProgressBar mBarUserProfileExp;
-    RunnerDashBoard mDashBoardSpeedFast;
+    RunnerDashBoard mDashBoardSpeedMax;
     RunnerDashBoard mDashBoardSpeedAvg;
     RunnerDashBoard mDashBoardWillPower;
 
@@ -64,7 +66,7 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
         mTxtUserProfileCurrentExp = view.findViewById(R.id.txt_userprofile_currentexp);
         mTxtUserProfileTotalExp = view.findViewById(R.id.txt_userprofile_totalexp);
         mBarUserProfileExp = view.findViewById(R.id.progbar_userprofile_exp);
-        mDashBoardSpeedFast = view.findViewById(R.id.dashboard_speed_fast);
+        mDashBoardSpeedMax = view.findViewById(R.id.dashboard_speed_fast);
         mDashBoardSpeedAvg = view.findViewById(R.id.dashboard_speed_avg);
         mDashBoardWillPower = view.findViewById(R.id.dashboard_willpower);
 
@@ -77,16 +79,24 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
         mTxtSpeedFast = view.findViewById(R.id.txt_speedfast);
         mTxtDistanceLongest = view.findViewById(R.id.txt_distancelongest);
 
-        String userName = getContext().getSharedPreferences(Constants.USER_FIREBASE, Context.MODE_PRIVATE).getString(Constants.USER_FIREBASE_NAME, "");
-        String userPhoto = getContext().getSharedPreferences(Constants.USER_FIREBASE, Context.MODE_PRIVATE).getString(Constants.USER_FIREBASE_PHOTO, "");
-        String userBirth = getContext().getSharedPreferences(Constants.USER_FIREBASE, Context.MODE_PRIVATE).getString(Constants.USER_FIREBASE_BIRTH, "");
+        String userName = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_NAME, "");
+        String userPhoto = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_PHOTO, "");
+        String userBirth = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_BIRTH, "");
+        int maxdistance = getContext().getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_DISTANCE, 0);
+        if (userName.equals("")) {
+            Intent intent = new Intent();
+            intent.setClass(getContext(), UserData.class);
+            startActivity(intent);
+            getActivity().finish();
+        } else {
+            mHashMapUserStatus.put(Constants.USER_FIREBASE_NAME, userName);
+            mHashMapUserStatus.put(Constants.USER_FIREBASE_PHOTO, userPhoto);
+            mHashMapUserStatus.put(Constants.USER_FIREBASE_BIRTH, userBirth);
 
-        mHashMapUserStatus.put(Constants.USER_FIREBASE_NAME, userName);
-        mHashMapUserStatus.put(Constants.USER_FIREBASE_PHOTO, userPhoto);
-        mHashMapUserStatus.put(Constants.USER_FIREBASE_BIRTH, userBirth);
-
-        mPresenter.setUserStatus(mHashMapUserStatus);
-        mPresenter.setUserAge(mHashMapUserStatus);
+            mPresenter.setUserStatus(mHashMapUserStatus);
+            mPresenter.setUserAge(mHashMapUserStatus);
+            mPresenter.setUserExp(maxdistance);
+        }
     }
 
     @Override
@@ -98,6 +108,12 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
     @Override
     public void showUserBirth(int age) {
         mTxtAge.setText(String.valueOf(age));
+    }
+
+    @Override
+    public void showUserExp(int maxdistance) {
+        mBarUserProfileExp.setProgress(maxdistance);
+        mTxtUserProfileCurrentExp.setText(String.valueOf(maxdistance));
     }
 
     @Override

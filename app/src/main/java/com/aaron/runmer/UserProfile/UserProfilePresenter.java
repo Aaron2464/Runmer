@@ -50,6 +50,11 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
     }
 
     @Override
+    public void setUserExp(int maxdistance) {
+        mUserProfileView.showUserExp(maxdistance);
+    }
+
+    @Override
     public void start() {
 
     }

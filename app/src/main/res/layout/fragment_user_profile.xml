@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="15dp"
-                android:fontFamily="serif"
+                android:fontFamily="@font/jockey_one"
                 android:text="LV."
                 android:textSize="25dp"
                 app:layout_constraintStart_toEndOf="@+id/imageview_userprofile_userimage"
@@ -52,7 +52,7 @@
                 android:id="@+id/txt_userprofile_userlevelnum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="serif"
+                android:fontFamily="@font/jockey_one"
                 android:text="1"
                 android:textSize="25dp"
                 app:layout_constraintStart_toEndOf="@+id/txt_userprofile_userlevel"
@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:fontFamily="sans-serif"
+                android:fontFamily="@font/jockey_one"
                 android:text="Aaron Huang"
                 android:textSize="25dp"
                 app:layout_constraintStart_toEndOf="@+id/txt_userprofile_userlevelnum"
@@ -188,7 +188,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout_userprofile_badge">
 
-            <com.aaron.runmer.RunnerDashBoard
+            <com.aaron.runmer.DashBoardPackage.RunnerDashBoardSpeedIntime
                 android:id="@+id/dashboard_speed_fast"
                 android:layout_width="115dp"
                 android:layout_height="110dp"
@@ -197,7 +197,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/constraintLayout3" />
 
-            <com.aaron.runmer.RunnerDashBoard
+            <com.aaron.runmer.DashBoardPackage.RunnerDashBoardSpeedIntime
                 android:id="@+id/dashboard_speed_avg"
                 android:layout_width="115dp"
                 android:layout_height="110dp"
@@ -205,7 +205,7 @@
                 app:layout_constraintStart_toEndOf="@+id/dashboard_speed_fast"
                 app:layout_constraintTop_toTopOf="@+id/dashboard_speed_fast" />
 
-            <com.aaron.runmer.RunnerDashBoard
+            <com.aaron.runmer.DashBoardPackage.RunnerDashBoardSpeedIntime
                 android:id="@+id/dashboard_willpower"
                 android:layout_width="115dp"
                 android:layout_height="110dp"

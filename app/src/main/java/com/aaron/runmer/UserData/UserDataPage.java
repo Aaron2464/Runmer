@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -59,6 +61,12 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
         mAuth = FirebaseAuth.getInstance();
         init();
         getUserDataAndIntentToMapPage();
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION}, Constants.REQUEST_LOCATION);
+        }
     }
 
     private void getUserDataAndIntentToMapPage() {

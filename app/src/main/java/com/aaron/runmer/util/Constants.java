@@ -24,4 +24,9 @@ public class Constants {
     public static final String USER_FIREBASE_UID = "UserUid";
     public static final String USER_FIREBASE_STATUS = "UserStatus";
 
+    public static final String USER_MAPPAGE_SPEED = "UsersSpeed";
+    public static final String USER_MAPPAGE_CURRENTSPEED = "UsersCurrentSpeed";
+    public static final String USER_MAPPAGE_AVGSPEED = "UsersAvgSpeed";
+    public static final String USER_MAPPAGE_MAXSPEED = "UsersMaxSpeed";
+    public static final String USER_MAPPAGE_DISTANCE = "UsersDistance";
 }

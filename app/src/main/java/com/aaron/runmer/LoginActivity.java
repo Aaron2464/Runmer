@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.aaron.runmer.Base.BaseActivity;
@@ -22,7 +24,6 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -36,6 +37,7 @@ import java.util.Arrays;
 
 public class LoginActivity extends BaseActivity {
     private FirebaseAuth mAuth;
+    private Button loginButton;
     boolean isLoggedIn = AccessToken.getCurrentAccessToken() == null;
     //    boolean isExpired = AccessToken.getCurrentAccessToken().isExpired();              //I don't know what it can do?
     CallbackManager mCallbackManager;
@@ -51,26 +53,31 @@ public class LoginActivity extends BaseActivity {
             mAuth = FirebaseAuth.getInstance();
             // Initialize Facebook Login button
             mCallbackManager = CallbackManager.Factory.create();
-            LoginButton loginButton = findViewById(R.id.login_button);
+            loginButton = findViewById(R.id.login_button);
 
-            loginButton.setReadPermissions("email");
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email"));
-            getkeyhash();
-            loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+//            loginButton.setReadPermissions("email");
+            loginButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onSuccess(LoginResult loginResult) {
-                    Log.d(Constants.TAG, "facebook:onSuccess:" + loginResult);
-                    handleFacebookAccessToken(loginResult.getAccessToken());
-                }
+                public void onClick(View v) {
+                    LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("email"));
+                    getkeyhash();
+                    LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+                        @Override
+                        public void onSuccess(LoginResult loginResult) {
+                            Log.d(Constants.TAG, "facebook:onSuccess:" + loginResult);
+                            handleFacebookAccessToken(loginResult.getAccessToken());
+                        }
 
-                @Override
-                public void onCancel() {
-                    Log.d(Constants.TAG, "facebook:onCancel");
-                }
+                        @Override
+                        public void onCancel() {
+                            Log.d(Constants.TAG, "facebook:onCancel");
+                        }
 
-                @Override
-                public void onError(FacebookException error) {
-                    Log.d(Constants.TAG, "facebook:onError", error);
+                        @Override
+                        public void onError(FacebookException error) {
+                            Log.d(Constants.TAG, "facebook:onError", error);
+                        }
+                    });
                 }
             });
         } else {

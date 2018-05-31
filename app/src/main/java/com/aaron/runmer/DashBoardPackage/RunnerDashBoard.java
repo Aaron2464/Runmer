@@ -17,7 +17,7 @@ import android.view.View;
 import com.aaron.runmer.R;
 import com.aaron.runmer.util.Constants;
 
-public class RunnerDashBoardSpeedIntime extends View {
+public class RunnerDashBoard extends View {
 
     private int mRadius;                    // 扇形半徑
     private int mStartAngle = 150;          // 起始角度
@@ -43,17 +43,17 @@ public class RunnerDashBoardSpeedIntime extends View {
     private String[] mTexts;
     private int[] mColors;
 
-    public RunnerDashBoardSpeedIntime(Context context) {
+    public RunnerDashBoard(Context context) {
         this(context, null);
         Log.d(Constants.TAG_DASHBOARD, "DashBoard: " + "1");
     }
 
-    public RunnerDashBoardSpeedIntime(Context context, AttributeSet attrs) {
+    public RunnerDashBoard(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
         Log.d(Constants.TAG_DASHBOARD, "DashBoard: " + "2");
     }
 
-    public RunnerDashBoardSpeedIntime(Context context, AttributeSet attrs, int defStyleAttr) {
+    public RunnerDashBoard(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         Log.d(Constants.TAG_DASHBOARD, "DashBoard: " + "3");
         init();

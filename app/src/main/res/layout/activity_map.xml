@@ -87,7 +87,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </android.support.constraint.ConstraintLayout>
 
-            <com.aaron.runmer.DashBoardPackage.RunnerDashBoardSpeedIntime
+            <com.aaron.runmer.DashBoardPackage.RunnerDashBoard
                 android:id="@+id/dashboard_speed"
                 android:layout_width="115dp"
                 android:layout_height="110dp"

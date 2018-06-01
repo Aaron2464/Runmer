@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -43,26 +42,28 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="15dp"
-                android:fontFamily="serif"
+                android:fontFamily="@font/jockey_one"
                 android:text="LV."
                 android:textSize="25dp"
                 app:layout_constraintStart_toEndOf="@+id/imageview_userprofile_userimage"
                 app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/txt_userprofile_userlevelnum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="serif"
+                android:fontFamily="@font/jockey_one"
                 android:text="1"
                 android:textSize="25dp"
                 app:layout_constraintStart_toEndOf="@+id/txt_userprofile_userlevel"
                 app:layout_constraintTop_toTopOf="@+id/txt_userprofile_userlevel" />
+
             <TextView
                 android:id="@+id/txt_userprofile_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:fontFamily="sans-serif"
+                android:fontFamily="@font/jockey_one"
                 android:text="Aaron Huang"
                 android:textSize="25dp"
                 app:layout_constraintStart_toEndOf="@+id/txt_userprofile_userlevelnum"
@@ -74,6 +75,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
+                android:max="10000"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/txt_userprofile_userlevel"
                 app:layout_constraintTop_toBottomOf="@+id/txt_userprofile_userlevel" />
@@ -83,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="13205514"
+                android:text="0"
                 app:layout_constraintEnd_toStartOf="@+id/txt_userprofile_slash"
                 app:layout_constraintStart_toStartOf="@+id/progbar_userprofile_exp"
                 app:layout_constraintTop_toBottomOf="@+id/progbar_userprofile_exp" />
@@ -102,7 +104,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
-                android:text="20000000"
+                android:text="10000"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/txt_userprofile_slash"
                 app:layout_constraintTop_toTopOf="@+id/txt_userprofile_currentexp" />
@@ -180,44 +182,84 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/constraintLayout3"
             android:layout_width="0dp"
-            android:layout_height="120dp"
+            android:layout_height="150dp"
             android:layout_marginEnd="5dp"
             android:layout_marginStart="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout_userprofile_badge">
 
-            <com.example.aaron.runmer.RunnerDashBoard
+            <com.aaron.runmer.DashBoardPackage.RunnerDashBoard
                 android:id="@+id/dashboard_speed_fast"
                 android:layout_width="115dp"
                 android:layout_height="110dp"
                 android:layout_marginStart="15dp"
-                app:layout_constraintEnd_toStartOf="@+id/dashboard_speed_avg"
+                app:layout_constraintEnd_toStartOf="@+id/dashboard_willpower"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/constraintLayout3" />
 
-            <com.example.aaron.runmer.RunnerDashBoard
-                android:id="@+id/dashboard_speed_avg"
+            <TextView
+                android:id="@+id/txt_speed_max"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/faster_one"
+                android:text="MAX"
+                android:textSize="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/dashboard_speed_fast"
+                app:layout_constraintEnd_toEndOf="@+id/dashboard_speed_fast"
+                app:layout_constraintStart_toStartOf="@+id/dashboard_speed_fast" />
+
+            <com.aaron.runmer.DashBoardPackage.RunnerDashBoard
+                android:id="@+id/dashboard_willpower"
                 android:layout_width="115dp"
                 android:layout_height="110dp"
-                app:layout_constraintEnd_toStartOf="@+id/dashboard_willpower"
+                app:layout_constraintEnd_toStartOf="@+id/dashboard_speed_avg"
                 app:layout_constraintStart_toEndOf="@+id/dashboard_speed_fast"
                 app:layout_constraintTop_toTopOf="@+id/dashboard_speed_fast" />
 
-            <com.example.aaron.runmer.RunnerDashBoard
-                android:id="@+id/dashboard_willpower"
+            <TextView
+                android:id="@+id/txt_willpower"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/faster_one"
+                android:text="WILLPOWER"
+                android:textSize="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/dashboard_willpower"
+                app:layout_constraintEnd_toEndOf="@+id/dashboard_willpower"
+                app:layout_constraintStart_toStartOf="@+id/dashboard_willpower" />
+
+            <com.aaron.runmer.DashBoardPackage.RunnerDashBoard
+                android:id="@+id/dashboard_speed_avg"
                 android:layout_width="115dp"
                 android:layout_height="110dp"
                 android:layout_marginEnd="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/dashboard_speed_avg"
-                app:layout_constraintTop_toTopOf="@+id/dashboard_speed_avg" />
+                app:layout_constraintStart_toEndOf="@+id/dashboard_willpower"
+                app:layout_constraintTop_toTopOf="@+id/dashboard_willpower" />
+
+            <TextView
+                android:id="@+id/txt_speed_avg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/faster_one"
+                android:text="AVG"
+                android:textSize="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/dashboard_speed_avg"
+                app:layout_constraintEnd_toEndOf="@+id/dashboard_speed_avg"
+                app:layout_constraintStart_toStartOf="@+id/dashboard_speed_avg" />
+
 
         </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="0dp"
-            android:layout_height="300dp"
+            android:layout_height="264dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

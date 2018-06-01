@@ -5,16 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/cover"
-    tools:context="com.example.aaron.runmer.LoginActivity">
+    tools:context="com.aaron.runmer.LoginActivity">
 
-    <com.facebook.login.widget.LoginButton
+    <Button
         android:id="@+id/login_button"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="60dp"
-        android:layout_marginEnd="103dp"
-        android:layout_marginStart="103dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/facebooklogin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

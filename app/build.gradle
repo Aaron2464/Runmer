@@ -4,11 +4,11 @@ apply plugin: 'io.fabric'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.example.aaron.runmer"
+        applicationId "com.aaron.runmer"
         minSdkVersion 24
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 18052703
+        versionName "1.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true  //fix Unable to merge dex
     }
@@ -33,6 +33,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:11.4.2'
     implementation 'com.google.android.gms:play-services-maps:11.4.2'
     implementation 'com.google.android.gms:play-services:11.4.2'
+    implementation 'com.google.code.gson:gson:2.8.4'
 
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
 

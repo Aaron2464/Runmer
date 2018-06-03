@@ -60,6 +60,11 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
     }
 
     @Override
+    public void setUserAvgSpeed(int avgSpeed) {
+        mUserProfileView.showAvgSpeed(avgSpeed);
+    }
+
+    @Override
     public void start() {
 
     }

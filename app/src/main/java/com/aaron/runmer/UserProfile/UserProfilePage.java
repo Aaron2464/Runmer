@@ -81,6 +81,7 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
         String userBirth = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_BIRTH, "");
         int maxdistance = getContext().getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_DISTANCE, 0);
         int maxspeed = getContext().getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_MAXSPEED, 0);
+        int avgspeed = getContext().getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_AVGSPEED, 0);
         mHashMapUserStatus.put(Constants.USER_FIREBASE_NAME, userName);
         mHashMapUserStatus.put(Constants.USER_FIREBASE_PHOTO, userPhoto);
         mHashMapUserStatus.put(Constants.USER_FIREBASE_BIRTH, userBirth);
@@ -89,6 +90,7 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
         mPresenter.setUserAge(mHashMapUserStatus);
         mPresenter.setUserExp(maxdistance);
         mPresenter.setUserMaxSpeed(maxspeed);
+        mPresenter.setUserAvgSpeed(avgspeed);
     }
 
     @Override
@@ -112,6 +114,11 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
     @Override
     public void showMaxSpeed(int maxSpeed) {
         mTxtSpeedFast.setText(String.valueOf(maxSpeed));
+    }
+
+    @Override
+    public void showAvgSpeed(int avgSpeed) {
+        mTxtSpeedAvg.setText(String.valueOf(avgSpeed));
     }
 
     @Override

@@ -36,7 +36,7 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
     RunnerDashBoard mDashBoardSpeedAvg;
     RunnerDashBoard mDashBoardWillPower;
 
-    TextView mTxtAge, mTxtCal, mTxtEventCreated, mTxtEventJoined, mTxtSpeedAvg, mTxtDistaanceTotal, mTxtSpeedFast, mTxtDistanceLongest;
+    TextView mTxtAge, mTxtCal, mTxtEventCreated, mTxtEventJoined, mTxtSpeedAvg, mTxtDistaanceTotal, mTxtSpeedFast;
     HashMap<String, String> mHashMapUserStatus = new HashMap<>();
     private UserProfileContract.Presenter mPresenter;
 
@@ -75,7 +75,6 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
         mTxtSpeedAvg = view.findViewById(R.id.txt_speedavg);
         mTxtDistaanceTotal = view.findViewById(R.id.txt_distancetotal);
         mTxtSpeedFast = view.findViewById(R.id.txt_speedfast);
-        mTxtDistanceLongest = view.findViewById(R.id.txt_distancelongest);
 
         String userName = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_NAME, "");
         String userPhoto = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_PHOTO, "");
@@ -105,6 +104,7 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
     public void showUserExp(int maxdistance) {
         mBarUserProfileExp.setProgress(maxdistance);
         mTxtUserProfileCurrentExp.setText(String.valueOf(maxdistance));
+        mTxtDistaanceTotal.setText(String.valueOf(maxdistance / 1000));
     }
 
     @Override

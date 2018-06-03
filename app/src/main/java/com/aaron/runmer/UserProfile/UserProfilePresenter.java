@@ -2,6 +2,8 @@ package com.aaron.runmer.UserProfile;
 
 import android.util.Log;
 
+import com.aaron.runmer.Api.Callback.CountCreatedJoinedCallback;
+import com.aaron.runmer.Api.RunmerParser;
 import com.aaron.runmer.util.Constants;
 
 import java.text.ParseException;
@@ -62,6 +64,21 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
     @Override
     public void setUserAvgSpeed(int avgSpeed) {
         mUserProfileView.showAvgSpeed(avgSpeed);
+    }
+
+    @Override
+    public void setJoinedEvents() {
+        RunmerParser.parseFirebaseCountJoineddEvents(new CountCreatedJoinedCallback() {
+            @Override
+            public void onCompleted(int CountJoinedEvents) {
+                mUserProfileView.showJoinedEvents(CountJoinedEvents);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+
+            }
+        });
     }
 
     @Override

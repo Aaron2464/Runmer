@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,6 +92,7 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
         mPresenter.setUserExp(maxdistance);
         mPresenter.setUserMaxSpeed(maxspeed);
         mPresenter.setUserAvgSpeed(avgspeed);
+        mPresenter.setJoinedEvents();
     }
 
     @Override
@@ -121,6 +123,12 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
     public void showAvgSpeed(int avgSpeed) {
         mDashBoardSpeedAvg.setVelocity(avgSpeed);
         mTxtSpeedAvg.setText(String.valueOf(avgSpeed));
+    }
+
+    @Override
+    public void showJoinedEvents(int CountJoinedEvents) {
+        mTxtEventJoined.setText(String.valueOf(CountJoinedEvents));
+        Log.d(Constants.TAG, "eventCount" + CountJoinedEvents);
     }
 
     @Override

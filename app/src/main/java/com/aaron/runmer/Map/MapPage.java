@@ -526,15 +526,16 @@ public class MapPage extends BaseActivity implements MapContract.View
     @Override
     protected void onResume() {
         super.onResume();
-        if (!data.isRunning()) {
-            Gson gson = new Gson();
-            String json = sharedPreferences.getString("data", "");
-            data = gson.fromJson(json, SpeedData.class);
-        }
         if (data == null) {
             data = new SpeedData(onGpsServiceUpdate);
         } else {
             data.setOnGpsServiceUpdate(onGpsServiceUpdate);
+        }
+
+        if (!data.isRunning()) {
+            Gson gson = new Gson();
+            String json = sharedPreferences.getString("data", "");
+            data = gson.fromJson(json, SpeedData.class);
         }
 
         if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {

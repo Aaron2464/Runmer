@@ -55,6 +55,11 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
     }
 
     @Override
+    public void setUserMaxSpeed(int maxSpeed) {
+        mUserProfileView.showMaxSpeed(maxSpeed);
+    }
+
+    @Override
     public void start() {
 
     }

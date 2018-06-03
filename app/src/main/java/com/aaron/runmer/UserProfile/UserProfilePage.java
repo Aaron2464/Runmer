@@ -80,6 +80,7 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
         String userPhoto = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_PHOTO, "");
         String userBirth = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_BIRTH, "");
         int maxdistance = getContext().getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_DISTANCE, 0);
+        int maxspeed = getContext().getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_MAXSPEED, 0);
         mHashMapUserStatus.put(Constants.USER_FIREBASE_NAME, userName);
         mHashMapUserStatus.put(Constants.USER_FIREBASE_PHOTO, userPhoto);
         mHashMapUserStatus.put(Constants.USER_FIREBASE_BIRTH, userBirth);
@@ -87,6 +88,7 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
         mPresenter.setUserStatus(mHashMapUserStatus);
         mPresenter.setUserAge(mHashMapUserStatus);
         mPresenter.setUserExp(maxdistance);
+        mPresenter.setUserMaxSpeed(maxspeed);
     }
 
     @Override
@@ -105,6 +107,11 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
         mBarUserProfileExp.setProgress(maxdistance);
         mTxtUserProfileCurrentExp.setText(String.valueOf(maxdistance));
         mTxtDistaanceTotal.setText(String.valueOf(maxdistance / 1000));
+    }
+
+    @Override
+    public void showMaxSpeed(int maxSpeed) {
+        mTxtSpeedFast.setText(String.valueOf(maxSpeed));
     }
 
     @Override

@@ -113,11 +113,13 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
 
     @Override
     public void showMaxSpeed(int maxSpeed) {
+        mDashBoardSpeedMax.setVelocity(maxSpeed);
         mTxtSpeedFast.setText(String.valueOf(maxSpeed));
     }
 
     @Override
     public void showAvgSpeed(int avgSpeed) {
+        mDashBoardSpeedAvg.setVelocity(avgSpeed);
         mTxtSpeedAvg.setText(String.valueOf(avgSpeed));
     }
 

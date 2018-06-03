@@ -343,17 +343,6 @@
                 app:layout_constraintStart_toStartOf="@+id/txt_totaldistance_title"
                 app:layout_constraintTop_toBottomOf="@+id/txt_totaldistance_title" />
 
-            <TextView
-                android:id="@+id/txt_longestdistance_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/faster_one"
-                android:text="Longest distance"
-                android:textSize="20dp"
-                app:layout_constraintStart_toStartOf="@+id/txt_speedfast_title"
-                app:layout_constraintTop_toBottomOf="@+id/txt_speedfast_title" />
-
 
             <TextView
                 android:id="@+id/txt_age"
@@ -454,7 +443,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linear_avgdistance"
+                android:id="@+id/linear_distancetotal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -484,8 +473,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="@+id/linear_avgdistance"
-                app:layout_constraintTop_toBottomOf="@+id/linear_avgdistance">
+                app:layout_constraintEnd_toEndOf="@+id/linear_distancetotal"
+                app:layout_constraintTop_toBottomOf="@+id/linear_distancetotal">
 
                 <TextView
                     android:id="@+id/txt_speedfast"
@@ -500,31 +489,6 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/faster_one"
                     android:text="km/h"
-                    android:textSize="15dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linear_longestdistance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="@+id/linear_fastspeed"
-                app:layout_constraintTop_toBottomOf="@+id/linear_fastspeed">
-
-                <TextView
-                    android:id="@+id/txt_distancelongest"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/faster_one"
-                    android:text="12"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/faster_one"
-                    android:text="km"
                     android:textSize="15dp" />
             </LinearLayout>
         </android.support.constraint.ConstraintLayout>

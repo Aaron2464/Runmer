@@ -44,7 +44,9 @@ import android.widget.Toast;
 import com.aaron.runmer.Api.GpsServices;
 import com.aaron.runmer.Base.BaseActivity;
 import com.aaron.runmer.DashBoardPackage.RunnerDashBoard;
+import com.aaron.runmer.Objects.UserData;
 import com.aaron.runmer.R;
+import com.aaron.runmer.UserData.UserDataPage;
 import com.aaron.runmer.ViewPagerMain.ViewPagerActivity;
 import com.aaron.runmer.util.CircleTransform;
 import com.aaron.runmer.util.Constants;
@@ -435,10 +437,16 @@ public class MapPage extends BaseActivity implements MapContract.View
         mImageUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(MapPage.this, ViewPagerActivity.class);
-                startActivity(intent);
-//                MapPage.this.finish();
+                String userName = mContext.getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_NAME, "");
+                if (userName.equals("")) {
+                    Intent intent = new Intent();
+                    intent.setClass(mContext, UserDataPage.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent();
+                    intent.setClass(MapPage.this, ViewPagerActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }

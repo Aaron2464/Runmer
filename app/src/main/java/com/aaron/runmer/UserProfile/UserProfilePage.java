@@ -1,6 +1,5 @@
 package com.aaron.runmer.UserProfile;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,7 +13,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aaron.runmer.DashBoardPackage.RunnerDashBoard;
-import com.aaron.runmer.Objects.UserData;
 import com.aaron.runmer.R;
 import com.aaron.runmer.util.CircleTransform;
 import com.aaron.runmer.util.Constants;
@@ -83,20 +81,13 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
         String userPhoto = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_PHOTO, "");
         String userBirth = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_BIRTH, "");
         int maxdistance = getContext().getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_DISTANCE, 0);
-        if (userName.equals("")) {
-            Intent intent = new Intent();
-            intent.setClass(getContext(), UserData.class);
-            startActivity(intent);
-            getActivity().finish();
-        } else {
-            mHashMapUserStatus.put(Constants.USER_FIREBASE_NAME, userName);
-            mHashMapUserStatus.put(Constants.USER_FIREBASE_PHOTO, userPhoto);
-            mHashMapUserStatus.put(Constants.USER_FIREBASE_BIRTH, userBirth);
+        mHashMapUserStatus.put(Constants.USER_FIREBASE_NAME, userName);
+        mHashMapUserStatus.put(Constants.USER_FIREBASE_PHOTO, userPhoto);
+        mHashMapUserStatus.put(Constants.USER_FIREBASE_BIRTH, userBirth);
 
-            mPresenter.setUserStatus(mHashMapUserStatus);
-            mPresenter.setUserAge(mHashMapUserStatus);
-            mPresenter.setUserExp(maxdistance);
-        }
+        mPresenter.setUserStatus(mHashMapUserStatus);
+        mPresenter.setUserAge(mHashMapUserStatus);
+        mPresenter.setUserExp(maxdistance);
     }
 
     @Override

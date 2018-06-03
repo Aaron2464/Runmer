@@ -8,7 +8,7 @@
 /captures
 .externalNativeBuild
 google-services.json
-
+google_maps_api.xml
 
 # Created by https://www.gitignore.io/api/android,windows,firebase,androidstudio
 

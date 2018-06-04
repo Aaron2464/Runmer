@@ -2,8 +2,8 @@ package com.aaron.runmer.RunningEvent;
 
 import com.aaron.runmer.Api.Callback.SetEventPeopleJoinCallback;
 import com.aaron.runmer.Api.RunmerParser;
-import com.aaron.runmer.util.Constants;
 import com.aaron.runmer.Objects.EventData;
+import com.aaron.runmer.util.Constants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;

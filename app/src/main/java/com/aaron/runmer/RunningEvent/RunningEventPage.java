@@ -20,10 +20,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.aaron.runmer.util.LinearItemDecoration;
 import com.aaron.runmer.Objects.EventData;
 import com.aaron.runmer.R;
 import com.aaron.runmer.util.Constants;
+import com.aaron.runmer.util.LinearItemDecoration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -111,17 +111,19 @@ public class RunningEventPage extends Fragment implements RunningEventContract.V
                             String userName = getContext().getSharedPreferences(Constants.USER_FIREBASE, Context.MODE_PRIVATE).getString(Constants.USER_FIREBASE_NAME, "");
                             String userPhoto = getContext().getSharedPreferences(Constants.USER_FIREBASE, Context.MODE_PRIVATE).getString(Constants.USER_FIREBASE_PHOTO, "");
 
-                            EventData mEventData = new EventData();
-                            mEventData.setMasterName(userName);
-                            mEventData.setMasterPhoto(userPhoto);
-                            mEventData.setEventTitle(eventTitle);
-                            mEventData.setEventPlace(eventPlace);
-                            mEventData.setPeopleParticipate("1");
-                            mEventData.setPeopleTotle(eventNumOfPeople);
-
+                            if (!eventNumOfPeople.equals("0")) {
+                                EventData mEventData = new EventData();
+                                mEventData.setMasterName(userName);
+                                mEventData.setMasterPhoto(userPhoto);
+                                mEventData.setEventTitle(eventTitle);
+                                mEventData.setEventPlace(eventPlace);
+                                mEventData.setPeopleParticipate("1");
+                                mEventData.setPeopleTotle(eventNumOfPeople);
+                                mPresenter.setEventDataToFirebase(mEventData);
+                            } else {
+                                Snackbar.make(mRunningeventLayout, "難道...你不是人?", Snackbar.LENGTH_SHORT).show();
+                            }
                             Log.d(Constants.TAG, "EventData: " + userName);
-
-                            mPresenter.setEventDataToFirebase(mEventData);
                             dialog.cancel();
                         }
                     }

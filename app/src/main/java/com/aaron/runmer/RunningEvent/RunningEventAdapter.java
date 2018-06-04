@@ -85,9 +85,9 @@ public class RunningEventAdapter extends RecyclerView.Adapter<RunningEventAdapte
                 case R.id.imagebtn_event_joinevent:
                     mBtnJoinEvent.setImageResource(R.drawable.joinrunningevent);
                     mBtnJoinEvent.setClickable(false);
-                    String mEventId = mEventData.get(getAdapterPosition()).getEventId();
-                    mPresenter.setEventPeopleParticipate(getAdapterPosition(), mEventId);
-                    Log.d(Constants.TAG, "Join~~~~~:" + getAdapterPosition());
+                    String mEventId = mEventData.get(mEventData.size()-getAdapterPosition() - 1).getEventId();
+                    mPresenter.setEventPeopleParticipate(mEventData.size()-getAdapterPosition() - 1, mEventId);
+                    Log.d(Constants.TAG, "Join~~~~~:" + (mEventData.size()-getAdapterPosition() - 1));
                     break;
                 default:
                     break;

@@ -156,6 +156,7 @@ public class RunmerParser {
         String getkey = dataBaseRef.child(Constants.EVENT_FIREBASE).push().getKey();
         dataBaseRef.child(Constants.EVENT_FIREBASE).child(getkey).setValue(mEventData);
         dataBaseRef.child(Constants.EVENT_FIREBASE).child(getkey).child(Constants.EVENT_FIREBASE_ID).setValue(getkey);
+        dataBaseRef.child(Constants.EVENT_FIREBASE).child(getkey).child(Constants.USER_FIREBASE_UID).child(currentUserUid).setValue("Join");
         dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child(Constants.EVENT_FIREBASE).child(getkey).setValue("Join");
         Log.d(Constants.TAG, "getKey: " + getkey);
     }
@@ -167,7 +168,17 @@ public class RunmerParser {
                 int numOfPeople = Integer.parseInt(dataSnapshot.getValue().toString()) + 1;
 
                 dataBaseRef.child(Constants.EVENT_FIREBASE).child(mEventId).child("peopleParticipate").setValue(String.valueOf(numOfPeople));
-                parseFirebaseJoinRunningEventCallback.onCompleted(numOfPeople);
+                dataBaseRef.child(Constants.EVENT_FIREBASE).child(mEventId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        parseFirebaseJoinRunningEventCallback.onCompleted(dataSnapshot.getValue(EventData.class));
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
             }
 
             @Override
@@ -175,7 +186,7 @@ public class RunmerParser {
 
             }
         });
-
+        dataBaseRef.child(Constants.EVENT_FIREBASE).child(mEventId).child("UserUid").child(currentUserUid).setValue("Join");
         dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child(Constants.EVENT_FIREBASE).child(mEventId).setValue("Join");
     }
 

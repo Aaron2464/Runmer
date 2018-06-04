@@ -1,5 +1,7 @@
 package com.aaron.runmer.RunningEvent;
 
+import android.util.Log;
+
 import com.aaron.runmer.Api.Callback.SetEventPeopleJoinCallback;
 import com.aaron.runmer.Api.RunmerParser;
 import com.aaron.runmer.Objects.EventData;
@@ -36,8 +38,8 @@ public class RunningEventPresenter implements RunningEventContract.Presenter {
     public void setEventPeopleParticipate(final int position, String mEventId) {
         RunmerParser.parseFirebaseJoinRunningEvent(mEventId, new SetEventPeopleJoinCallback() {
             @Override
-            public void onCompleted(int numOfPeople) {
-                mRunningEventView.addPeopleRunningEventList(position, numOfPeople);
+            public void onCompleted(EventData mEventData) {
+                mRunningEventView.addPeopleRunningEventList(position, mEventData);
             }
 
             @Override
@@ -54,6 +56,7 @@ public class RunningEventPresenter implements RunningEventContract.Presenter {
         dataBaseRef.child(Constants.EVENT_FIREBASE).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(final DataSnapshot dataSnapshot, String key) {
+                Log.d(Constants.TAG, "key" + key);
                 mRunningEventView.showRunningEventList(dataSnapshot.getValue(EventData.class));
             }
 

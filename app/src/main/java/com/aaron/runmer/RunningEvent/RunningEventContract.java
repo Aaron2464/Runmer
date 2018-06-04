@@ -12,7 +12,7 @@ public interface RunningEventContract {
 
         void showRunningEventList(EventData mEventData);
 
-        void addPeopleRunningEventList(int position, int numOfPeople);
+        void addPeopleRunningEventList(int position, EventData mEventData);
     }
 
     interface Presenter extends BasePresenter {

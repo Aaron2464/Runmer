@@ -14,6 +14,7 @@ import com.aaron.runmer.Objects.EventData;
 import com.aaron.runmer.R;
 import com.aaron.runmer.util.CircleTransform;
 import com.aaron.runmer.util.Constants;
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -45,12 +46,11 @@ public class RunningEventAdapter extends RecyclerView.Adapter<RunningEventAdapte
         holder.mTxtEventPlace.setText(mEventData.get(newposition).getEventPlace());
         holder.mTxtCurrentPeopleNum.setText(mEventData.get(newposition).getPeopleParticipate());
         holder.mTxtPeopleSum.setText(mEventData.get(newposition).getPeopleTotle());
-        if (mEventData.get(newposition).getMasterName().equals(mUserName)) {
+        if (mEventData.get(newposition).getMasterName().equals(mUserName) || mEventData.get(newposition).getUserUid().containsKey(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
             holder.mBtnJoinEvent.setImageResource(R.drawable.joinrunningevent);
             holder.mBtnJoinEvent.setClickable(false);
         }
         Picasso.get().load(mEventData.get(newposition).getMasterPhoto()).placeholder(R.drawable.running).transform(new CircleTransform(mContext)).into(holder.mImageEventFriendAvatar);
-
     }
 
     @Override
@@ -85,9 +85,10 @@ public class RunningEventAdapter extends RecyclerView.Adapter<RunningEventAdapte
                 case R.id.imagebtn_event_joinevent:
                     mBtnJoinEvent.setImageResource(R.drawable.joinrunningevent);
                     mBtnJoinEvent.setClickable(false);
-                    String mEventId = mEventData.get(mEventData.size()-getAdapterPosition() - 1).getEventId();
-                    mPresenter.setEventPeopleParticipate(mEventData.size()-getAdapterPosition() - 1, mEventId);
-                    Log.d(Constants.TAG, "Join~~~~~:" + (mEventData.size()-getAdapterPosition() - 1));
+                    String mEventId = mEventData.get(mEventData.size() - getAdapterPosition() - 1).getEventId();
+                    mPresenter.setEventPeopleParticipate(getAdapterPosition(), mEventId);
+                    Log.d(Constants.TAG, "EventId: " + mEventId);
+                    Log.d(Constants.TAG, "Join:" + getAdapterPosition());
                     break;
                 default:
                     break;

@@ -10,10 +10,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.aaron.runmer.util.Constants;
 import com.aaron.runmer.Objects.EventData;
 import com.aaron.runmer.R;
 import com.aaron.runmer.util.CircleTransform;
+import com.aaron.runmer.util.Constants;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -39,17 +39,17 @@ public class RunningEventAdapter extends RecyclerView.Adapter<RunningEventAdapte
 
     @Override
     public void onBindViewHolder(RunningEventAdapter.ViewHolder holder, int position) {
-
+        int newposition = mEventData.size() - position - 1;
         mUserName = mContext.getSharedPreferences(Constants.USER_FIREBASE, Context.MODE_PRIVATE).getString(Constants.USER_FIREBASE_NAME, "");
-        holder.mTxtEventTitle.setText(mEventData.get(position).getEventTitle());
-        holder.mTxtEventPlace.setText(mEventData.get(position).getEventPlace());
-        holder.mTxtCurrentPeopleNum.setText(mEventData.get(position).getPeopleParticipate());
-        holder.mTxtPeopleSum.setText(mEventData.get(position).getPeopleTotle());
-        if (mEventData.get(position).getMasterName().equals(mUserName)) {
+        holder.mTxtEventTitle.setText(mEventData.get(newposition).getEventTitle());
+        holder.mTxtEventPlace.setText(mEventData.get(newposition).getEventPlace());
+        holder.mTxtCurrentPeopleNum.setText(mEventData.get(newposition).getPeopleParticipate());
+        holder.mTxtPeopleSum.setText(mEventData.get(newposition).getPeopleTotle());
+        if (mEventData.get(newposition).getMasterName().equals(mUserName)) {
             holder.mBtnJoinEvent.setImageResource(R.drawable.joinrunningevent);
             holder.mBtnJoinEvent.setClickable(false);
         }
-        Picasso.get().load(mEventData.get(position).getMasterPhoto()).placeholder(R.drawable.running).transform(new CircleTransform(mContext)).into(holder.mImageEventFriendAvatar);
+        Picasso.get().load(mEventData.get(newposition).getMasterPhoto()).placeholder(R.drawable.running).transform(new CircleTransform(mContext)).into(holder.mImageEventFriendAvatar);
 
     }
 

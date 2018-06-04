@@ -1,10 +1,10 @@
 package com.aaron.runmer.UserProfile;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +14,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.aaron.runmer.DashBoardPackage.RunnerDashBoard;
-import com.aaron.runmer.Objects.UserData;
 import com.aaron.runmer.R;
 import com.aaron.runmer.util.CircleTransform;
 import com.aaron.runmer.util.Constants;
@@ -38,7 +37,7 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
     RunnerDashBoard mDashBoardSpeedAvg;
     RunnerDashBoard mDashBoardWillPower;
 
-    TextView mTxtAge, mTxtCal, mTxtEventCreated, mTxtEventJoined, mTxtSpeedAvg, mTxtDistaanceTotal, mTxtSpeedFast, mTxtDistanceLongest;
+    TextView mTxtAge, mTxtCal, mTxtEventCreated, mTxtEventJoined, mTxtSpeedAvg, mTxtDistaanceTotal, mTxtSpeedFast;
     HashMap<String, String> mHashMapUserStatus = new HashMap<>();
     private UserProfileContract.Presenter mPresenter;
 
@@ -77,26 +76,23 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
         mTxtSpeedAvg = view.findViewById(R.id.txt_speedavg);
         mTxtDistaanceTotal = view.findViewById(R.id.txt_distancetotal);
         mTxtSpeedFast = view.findViewById(R.id.txt_speedfast);
-        mTxtDistanceLongest = view.findViewById(R.id.txt_distancelongest);
 
         String userName = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_NAME, "");
         String userPhoto = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_PHOTO, "");
         String userBirth = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_BIRTH, "");
         int maxdistance = getContext().getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_DISTANCE, 0);
-        if (userName.equals("")) {
-            Intent intent = new Intent();
-            intent.setClass(getContext(), UserData.class);
-            startActivity(intent);
-            getActivity().finish();
-        } else {
-            mHashMapUserStatus.put(Constants.USER_FIREBASE_NAME, userName);
-            mHashMapUserStatus.put(Constants.USER_FIREBASE_PHOTO, userPhoto);
-            mHashMapUserStatus.put(Constants.USER_FIREBASE_BIRTH, userBirth);
+        int maxspeed = getContext().getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_MAXSPEED, 0);
+        int avgspeed = getContext().getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_AVGSPEED, 0);
+        mHashMapUserStatus.put(Constants.USER_FIREBASE_NAME, userName);
+        mHashMapUserStatus.put(Constants.USER_FIREBASE_PHOTO, userPhoto);
+        mHashMapUserStatus.put(Constants.USER_FIREBASE_BIRTH, userBirth);
 
-            mPresenter.setUserStatus(mHashMapUserStatus);
-            mPresenter.setUserAge(mHashMapUserStatus);
-            mPresenter.setUserExp(maxdistance);
-        }
+        mPresenter.setUserStatus(mHashMapUserStatus);
+        mPresenter.setUserAge(mHashMapUserStatus);
+        mPresenter.setUserExp(maxdistance);
+        mPresenter.setUserMaxSpeed(maxspeed);
+        mPresenter.setUserAvgSpeed(avgspeed);
+        mPresenter.setJoinedEvents();
     }
 
     @Override
@@ -114,6 +110,25 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
     public void showUserExp(int maxdistance) {
         mBarUserProfileExp.setProgress(maxdistance);
         mTxtUserProfileCurrentExp.setText(String.valueOf(maxdistance));
+        mTxtDistaanceTotal.setText(String.valueOf(maxdistance / 1000));
+    }
+
+    @Override
+    public void showMaxSpeed(int maxSpeed) {
+        mDashBoardSpeedMax.setVelocity(maxSpeed);
+        mTxtSpeedFast.setText(String.valueOf(maxSpeed));
+    }
+
+    @Override
+    public void showAvgSpeed(int avgSpeed) {
+        mDashBoardSpeedAvg.setVelocity(avgSpeed);
+        mTxtSpeedAvg.setText(String.valueOf(avgSpeed));
+    }
+
+    @Override
+    public void showJoinedEvents(int CountJoinedEvents) {
+        mTxtEventJoined.setText(String.valueOf(CountJoinedEvents));
+        Log.d(Constants.TAG, "eventCount" + CountJoinedEvents);
     }
 
     @Override

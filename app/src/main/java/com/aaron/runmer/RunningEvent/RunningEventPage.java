@@ -20,10 +20,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.aaron.runmer.util.LinearItemDecoration;
 import com.aaron.runmer.Objects.EventData;
 import com.aaron.runmer.R;
 import com.aaron.runmer.util.Constants;
+import com.aaron.runmer.util.LinearItemDecoration;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,20 +109,24 @@ public class RunningEventPage extends Fragment implements RunningEventContract.V
                             String eventTitle = mEditTxtEventTitle.getText().toString();
                             String eventPlace = mEditTxtEventPlace.getText().toString();
                             String eventNumOfPeople = mEditTxtEventNumOfPeople.getText().toString();
+                            String userUid = FirebaseAuth.getInstance().getUid();
                             String userName = getContext().getSharedPreferences(Constants.USER_FIREBASE, Context.MODE_PRIVATE).getString(Constants.USER_FIREBASE_NAME, "");
                             String userPhoto = getContext().getSharedPreferences(Constants.USER_FIREBASE, Context.MODE_PRIVATE).getString(Constants.USER_FIREBASE_PHOTO, "");
 
-                            EventData mEventData = new EventData();
-                            mEventData.setMasterName(userName);
-                            mEventData.setMasterPhoto(userPhoto);
-                            mEventData.setEventTitle(eventTitle);
-                            mEventData.setEventPlace(eventPlace);
-                            mEventData.setPeopleParticipate("1");
-                            mEventData.setPeopleTotle(eventNumOfPeople);
-
+                            if (!eventNumOfPeople.equals("0")) {
+                                EventData mEventData = new EventData();
+                                mEventData.setMasterName(userName);
+                                mEventData.setMasterUid(userUid);
+                                mEventData.setMasterPhoto(userPhoto);
+                                mEventData.setEventTitle(eventTitle);
+                                mEventData.setEventPlace(eventPlace);
+                                mEventData.setPeopleParticipate("1");
+                                mEventData.setPeopleTotle(eventNumOfPeople);
+                                mPresenter.setEventDataToFirebase(mEventData);
+                            } else {
+                                Snackbar.make(mRunningeventLayout, "難道...你不是人?", Snackbar.LENGTH_SHORT).show();
+                            }
                             Log.d(Constants.TAG, "EventData: " + userName);
-
-                            mPresenter.setEventDataToFirebase(mEventData);
                             dialog.cancel();
                         }
                     }
@@ -145,11 +150,14 @@ public class RunningEventPage extends Fragment implements RunningEventContract.V
     }
 
     @Override
-    public void addPeopleRunningEventList(int position, int numOfPeople) {
-        ArrayEventData.get(position).setPeopleParticipate(String.valueOf(numOfPeople));
+    public void addPeopleRunningEventList(int position, EventData mEventData) {
+        ArrayEventData.get(ArrayEventData.size() - position - 1).setPeopleParticipate(mEventData.getPeopleParticipate());
+        ArrayEventData.get(ArrayEventData.size() - position - 1).setUserUid(mEventData.getUserUid());
         mAdapter = new RunningEventAdapter(getContext(), ArrayEventData, mPresenter);
-        mAdapter.notifyItemChanged(position);
+        Log.d(Constants.TAG, "UID: " + ArrayEventData.get(ArrayEventData.size() - position - 1).getEventId());
+        mAdapter.notifyItemChanged(ArrayEventData.size() - position - 1, null);
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.scrollToPosition(position);
     }
 
     @Override

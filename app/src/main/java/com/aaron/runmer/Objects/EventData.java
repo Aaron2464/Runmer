@@ -1,9 +1,13 @@
 package com.aaron.runmer.Objects;
 
+import java.util.HashMap;
+
 public class EventData {
     private String EventId;
+    private String MasterUid;
     private String MasterName;
     private String MasterPhoto;
+    private HashMap<String,String> UserUid;
     private String EventTitle;
     private String EventPlace;
     private String EventDate;
@@ -21,6 +25,14 @@ public class EventData {
         EventId = eventId;
     }
 
+    public String getMasterUid() {
+        return MasterUid;
+    }
+
+    public void setMasterUid(String masterUid) {
+        MasterUid = masterUid;
+    }
+
     public String getMasterName() {
         return MasterName;
     }
@@ -35,6 +47,14 @@ public class EventData {
 
     public void setMasterPhoto(String masterPhoto) {
         MasterPhoto = masterPhoto;
+    }
+
+    public HashMap<String, String> getUserUid() {
+        return UserUid;
+    }
+
+    public void setUserUid(HashMap<String, String> userUid) {
+        UserUid = userUid;
     }
 
     public String getEventTitle() {

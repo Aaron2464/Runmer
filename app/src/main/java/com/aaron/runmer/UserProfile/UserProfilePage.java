@@ -61,7 +61,7 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
         super.onViewCreated(view, savedInstanceState);
         mImageViewUserProfileAvatar = view.findViewById(R.id.imageview_userprofile_userimage);
         mImageBtnUserProfileChange = view.findViewById(R.id.imagebtn_userprofile_changeimage);
-        mTxtUserProfileLevel = view.findViewById(R.id.txt_userprofile_userlevel);
+        mTxtUserProfileLevel = view.findViewById(R.id.txt_userprofile_userlevelnum);
         mTxtUserProfileName = view.findViewById(R.id.txt_userprofile_username);
         mTxtUserProfileCurrentExp = view.findViewById(R.id.txt_userprofile_currentexp);
         mTxtUserProfileTotalExp = view.findViewById(R.id.txt_userprofile_totalexp);
@@ -112,8 +112,28 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
 
     @Override
     public void showUserExp(int maxdistance) {
-        mBarUserProfileExp.setProgress(maxdistance);
-        mTxtUserProfileCurrentExp.setText(String.valueOf(maxdistance));
+        if (maxdistance < 10000) {
+            mBarUserProfileExp.setProgress(maxdistance);
+            mTxtUserProfileCurrentExp.setText(String.valueOf(maxdistance));
+        }else if (maxdistance >= 10000 && maxdistance < 25000 ){
+            mTxtUserProfileLevel.setText(String.valueOf(2));
+            mBarUserProfileExp.setMax(15000);
+            mBarUserProfileExp.setProgress(maxdistance - 10000);
+            mTxtUserProfileCurrentExp.setText(String.valueOf(maxdistance));
+            mTxtUserProfileTotalExp.setText(String.valueOf(25000));
+        }else if (maxdistance >= 25000 && maxdistance < 45000 ) {
+            mTxtUserProfileLevel.setText(String.valueOf(3));
+            mBarUserProfileExp.setMax(20000);
+            mBarUserProfileExp.setProgress(maxdistance - 25000);
+            mTxtUserProfileCurrentExp.setText(String.valueOf(maxdistance));
+            mTxtUserProfileTotalExp.setText(String.valueOf(45000));
+        }else {
+            mTxtUserProfileLevel.setText(String.valueOf(4));
+            mBarUserProfileExp.setMax(35000);
+            mBarUserProfileExp.setProgress(maxdistance - 45000);
+            mTxtUserProfileCurrentExp.setText(String.valueOf(maxdistance));
+            mTxtUserProfileTotalExp.setText(String.valueOf(80000));
+        }
         mTxtDistaanceTotal.setText(String.valueOf(maxdistance / 1000));
     }
 

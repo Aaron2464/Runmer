@@ -92,7 +92,7 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
         mPresenter.setUserExp(maxdistance);
         mPresenter.setUserMaxSpeed(maxspeed);
         mPresenter.setUserAvgSpeed(avgspeed);
-        mPresenter.setJoinedEvents();
+        mPresenter.setEventsJoined();
     }
 
     @Override
@@ -126,9 +126,9 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
     }
 
     @Override
-    public void showJoinedEvents(int CountJoinedEvents) {
-        mTxtEventJoined.setText(String.valueOf(CountJoinedEvents));
-        Log.d(Constants.TAG, "eventCount" + CountJoinedEvents);
+    public void showEventsJoined(int CountEventsJoined) {
+        mTxtEventJoined.setText(String.valueOf(CountEventsJoined));
+        Log.d(Constants.TAG, "eventCount" + CountEventsJoined);
     }
 
     @Override

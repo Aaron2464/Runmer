@@ -18,7 +18,7 @@ public interface UserProfileContract {
 
         void showAvgSpeed(int avgSpeed);
 
-        void showJoinedEvents(int CountJoinedEvents);
+        void showEventsJoined(int CountEventsJoined);
     }
 
     interface Presenter extends BasePresenter {
@@ -33,7 +33,7 @@ public interface UserProfileContract {
 
         void setUserAvgSpeed(int avgSpeed);
 
-        void setJoinedEvents();
+        void setEventsJoined();
 
     }
 }

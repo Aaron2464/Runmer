@@ -2,7 +2,7 @@ package com.aaron.runmer.Api;
 
 import android.util.Log;
 
-import com.aaron.runmer.Api.Callback.CountCreatedJoinedCallback;
+import com.aaron.runmer.Api.Callback.CountEventsJoinedCallback;
 import com.aaron.runmer.Api.Callback.InvitehFireBaseUserDataCallback;
 import com.aaron.runmer.Api.Callback.SearchFireBaseFriendDataCallback;
 import com.aaron.runmer.Api.Callback.SetEventPeopleJoinCallback;
@@ -190,15 +190,15 @@ public class RunmerParser {
         dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child(Constants.EVENT_FIREBASE).child(mEventId).setValue("Join");
     }
 
-    public static void parseFirebaseCountJoineddEvents(final CountCreatedJoinedCallback parseCountCreatedJoinedCallback) {
+    public static void parseFirebaseEventsJoined(final CountEventsJoinedCallback parseCountEventsJoinedCallback) {
         dataBaseRef.child(Constants.USER_FIREBASE)
                 .child(currentUserUid).child(Constants.EVENT_FIREBASE)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        int eventCounts = (int) dataSnapshot.getChildrenCount();
-                        Log.d(Constants.TAG, "eventCount" + eventCounts);
-                        parseCountCreatedJoinedCallback.onCompleted(eventCounts);
+                        int countsEventJoined = (int) dataSnapshot.getChildrenCount();
+                        Log.d(Constants.TAG, "eventCount" + countsEventJoined);
+                        parseCountEventsJoinedCallback.onCompleted(countsEventJoined);
                     }
 
                     @Override

@@ -2,6 +2,7 @@ package com.aaron.runmer.Api;
 
 import android.util.Log;
 
+import com.aaron.runmer.Api.Callback.CountEventsCreatedCallback;
 import com.aaron.runmer.Api.Callback.CountEventsJoinedCallback;
 import com.aaron.runmer.Api.Callback.InvitehFireBaseUserDataCallback;
 import com.aaron.runmer.Api.Callback.SearchFireBaseFriendDataCallback;
@@ -15,6 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class RunmerParser {
@@ -206,5 +208,22 @@ public class RunmerParser {
 
                     }
                 });
+    }
+
+    public static void parseFirebaseCountEventsCreated(final CountEventsCreatedCallback parseCountEventsCreatedCallback){
+        Query query = dataBaseRef.child(Constants.EVENT_FIREBASE).orderByChild("masterUid").equalTo(currentUserUid);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int countsEventCreated = (int) dataSnapshot.getChildrenCount();
+                Log.d(Constants.TAG,"countsEventCreated: " + countsEventCreated);
+                parseCountEventsCreatedCallback.onCompleted(countsEventCreated);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

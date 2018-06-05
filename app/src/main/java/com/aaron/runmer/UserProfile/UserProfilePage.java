@@ -93,6 +93,7 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
         mPresenter.setUserMaxSpeed(maxspeed);
         mPresenter.setUserAvgSpeed(avgspeed);
         mPresenter.setEventsJoined();
+        mPresenter.setEventsCreated();
     }
 
     @Override
@@ -131,6 +132,10 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
         Log.d(Constants.TAG, "eventCount" + CountEventsJoined);
     }
 
+    @Override
+    public void showEventsCreated(int CountEventsCreated) {
+        mTxtEventCreated.setText(String.valueOf(CountEventsCreated));
+    }
     @Override
     public void setPresenter(UserProfileContract.Presenter presenter) {
         mPresenter = checkNotNull(presenter);

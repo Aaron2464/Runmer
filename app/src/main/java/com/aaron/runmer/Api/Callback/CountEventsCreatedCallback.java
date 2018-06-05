@@ -1,6 +1,6 @@
 package com.aaron.runmer.Api.Callback;
 
-public interface CountCreatedJoinedCallback {
+public interface CountEventsCreatedCallback {
 
     public void onCompleted(int CountCreatedEvents);
 

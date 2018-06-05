@@ -2,6 +2,7 @@ package com.aaron.runmer.UserProfile;
 
 import android.util.Log;
 
+import com.aaron.runmer.Api.Callback.CountEventsCreatedCallback;
 import com.aaron.runmer.Api.Callback.CountEventsJoinedCallback;
 import com.aaron.runmer.Api.RunmerParser;
 import com.aaron.runmer.util.Constants;
@@ -72,6 +73,21 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
             @Override
             public void onCompleted(int CountJoinedEvents) {
                 mUserProfileView.showEventsJoined(CountJoinedEvents);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+
+            }
+        });
+    }
+
+    @Override
+    public void setEventsCreated() {
+        RunmerParser.parseFirebaseCountEventsCreated(new CountEventsCreatedCallback() {
+            @Override
+            public void onCompleted(int CountEventsCreated) {
+                mUserProfileView.showEventsCreated(CountEventsCreated);
             }
 
             @Override

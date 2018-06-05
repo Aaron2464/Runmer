@@ -19,6 +19,7 @@ import com.aaron.runmer.util.CircleTransform;
 import com.aaron.runmer.util.Constants;
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -80,7 +81,8 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
         String userName = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_NAME, "");
         String userPhoto = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_PHOTO, "");
         String userBirth = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_BIRTH, "");
-        int maxdistance = getContext().getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_DISTANCE, 0);
+        String userWeight = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_WEIGHT, "");
+        int distance = getContext().getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_DISTANCE, 0);
         int maxspeed = getContext().getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_MAXSPEED, 0);
         int avgspeed = getContext().getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_AVGSPEED, 0);
         mHashMapUserStatus.put(Constants.USER_FIREBASE_NAME, userName);
@@ -89,11 +91,12 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
 
         mPresenter.setUserStatus(mHashMapUserStatus);
         mPresenter.setUserAge(mHashMapUserStatus);
-        mPresenter.setUserExp(maxdistance);
+        mPresenter.setUserExp(distance);
         mPresenter.setUserMaxSpeed(maxspeed);
         mPresenter.setUserAvgSpeed(avgspeed);
         mPresenter.setEventsJoined();
         mPresenter.setEventsCreated();
+        mPresenter.setCalories(distance, userWeight);
     }
 
     @Override
@@ -136,6 +139,20 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
     public void showEventsCreated(int CountEventsCreated) {
         mTxtEventCreated.setText(String.valueOf(CountEventsCreated));
     }
+
+    @Override
+    public void showCalories(double burnCalories) {
+        if ((int) burnCalories <= 9999.99) {
+            DecimalFormat df = new DecimalFormat("##.00");
+            mTxtCal.setText(String.valueOf(df.format(burnCalories)));
+        } else if (99999 >= (int) burnCalories && (int) burnCalories > 9999.99) {
+            DecimalFormat df = new DecimalFormat("##.0");
+            mTxtCal.setText(String.valueOf(df.format(burnCalories)));
+        } else {
+            mTxtCal.setText(String.valueOf((int) burnCalories));
+        }
+    }
+
     @Override
     public void setPresenter(UserProfileContract.Presenter presenter) {
         mPresenter = checkNotNull(presenter);

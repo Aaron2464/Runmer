@@ -98,6 +98,12 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
     }
 
     @Override
+    public void setCalories(int distance, String userWeight){
+        double burnCalories = Integer.parseInt(userWeight) * distance / 1000 * 1.036;
+        mUserProfileView.showCalories(burnCalories);
+    }
+
+    @Override
     public void start() {
 
     }

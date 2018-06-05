@@ -376,7 +376,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/faster_one"
-                    android:text="Cal"
+                    android:text="KCal"
                     android:textSize="15dp" />
             </LinearLayout>
 

@@ -19,6 +19,7 @@ import com.aaron.runmer.util.CircleTransform;
 import com.aaron.runmer.util.Constants;
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -60,7 +61,7 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
         super.onViewCreated(view, savedInstanceState);
         mImageViewUserProfileAvatar = view.findViewById(R.id.imageview_userprofile_userimage);
         mImageBtnUserProfileChange = view.findViewById(R.id.imagebtn_userprofile_changeimage);
-        mTxtUserProfileLevel = view.findViewById(R.id.txt_userprofile_userlevel);
+        mTxtUserProfileLevel = view.findViewById(R.id.txt_userprofile_userlevelnum);
         mTxtUserProfileName = view.findViewById(R.id.txt_userprofile_username);
         mTxtUserProfileCurrentExp = view.findViewById(R.id.txt_userprofile_currentexp);
         mTxtUserProfileTotalExp = view.findViewById(R.id.txt_userprofile_totalexp);
@@ -80,7 +81,8 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
         String userName = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_NAME, "");
         String userPhoto = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_PHOTO, "");
         String userBirth = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_BIRTH, "");
-        int maxdistance = getContext().getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_DISTANCE, 0);
+        String userWeight = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_WEIGHT, "");
+        int distance = getContext().getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_DISTANCE, 0);
         int maxspeed = getContext().getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_MAXSPEED, 0);
         int avgspeed = getContext().getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_AVGSPEED, 0);
         mHashMapUserStatus.put(Constants.USER_FIREBASE_NAME, userName);
@@ -89,10 +91,12 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
 
         mPresenter.setUserStatus(mHashMapUserStatus);
         mPresenter.setUserAge(mHashMapUserStatus);
-        mPresenter.setUserExp(maxdistance);
+        mPresenter.setUserExp(distance);
         mPresenter.setUserMaxSpeed(maxspeed);
         mPresenter.setUserAvgSpeed(avgspeed);
-        mPresenter.setJoinedEvents();
+        mPresenter.setEventsJoined();
+        mPresenter.setEventsCreated();
+        mPresenter.setCalories(distance, userWeight);
     }
 
     @Override
@@ -108,8 +112,28 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
 
     @Override
     public void showUserExp(int maxdistance) {
-        mBarUserProfileExp.setProgress(maxdistance);
-        mTxtUserProfileCurrentExp.setText(String.valueOf(maxdistance));
+        if (maxdistance < 10000) {
+            mBarUserProfileExp.setProgress(maxdistance);
+            mTxtUserProfileCurrentExp.setText(String.valueOf(maxdistance));
+        }else if (maxdistance >= 10000 && maxdistance < 25000 ){
+            mTxtUserProfileLevel.setText(String.valueOf(2));
+            mBarUserProfileExp.setMax(15000);
+            mBarUserProfileExp.setProgress(maxdistance - 10000);
+            mTxtUserProfileCurrentExp.setText(String.valueOf(maxdistance));
+            mTxtUserProfileTotalExp.setText(String.valueOf(25000));
+        }else if (maxdistance >= 25000 && maxdistance < 45000 ) {
+            mTxtUserProfileLevel.setText(String.valueOf(3));
+            mBarUserProfileExp.setMax(20000);
+            mBarUserProfileExp.setProgress(maxdistance - 25000);
+            mTxtUserProfileCurrentExp.setText(String.valueOf(maxdistance));
+            mTxtUserProfileTotalExp.setText(String.valueOf(45000));
+        }else {
+            mTxtUserProfileLevel.setText(String.valueOf(4));
+            mBarUserProfileExp.setMax(35000);
+            mBarUserProfileExp.setProgress(maxdistance - 45000);
+            mTxtUserProfileCurrentExp.setText(String.valueOf(maxdistance));
+            mTxtUserProfileTotalExp.setText(String.valueOf(80000));
+        }
         mTxtDistaanceTotal.setText(String.valueOf(maxdistance / 1000));
     }
 
@@ -126,9 +150,27 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
     }
 
     @Override
-    public void showJoinedEvents(int CountJoinedEvents) {
-        mTxtEventJoined.setText(String.valueOf(CountJoinedEvents));
-        Log.d(Constants.TAG, "eventCount" + CountJoinedEvents);
+    public void showEventsJoined(int CountEventsJoined) {
+        mTxtEventJoined.setText(String.valueOf(CountEventsJoined));
+        Log.d(Constants.TAG, "eventCount" + CountEventsJoined);
+    }
+
+    @Override
+    public void showEventsCreated(int CountEventsCreated) {
+        mTxtEventCreated.setText(String.valueOf(CountEventsCreated));
+    }
+
+    @Override
+    public void showCalories(double burnCalories) {
+        if ((int) burnCalories <= 9999.99) {
+            DecimalFormat df = new DecimalFormat("##.00");
+            mTxtCal.setText(String.valueOf(df.format(burnCalories)));
+        } else if (99999 >= (int) burnCalories && (int) burnCalories > 9999.99) {
+            DecimalFormat df = new DecimalFormat("##.0");
+            mTxtCal.setText(String.valueOf(df.format(burnCalories)));
+        } else {
+            mTxtCal.setText(String.valueOf((int) burnCalories));
+        }
     }
 
     @Override

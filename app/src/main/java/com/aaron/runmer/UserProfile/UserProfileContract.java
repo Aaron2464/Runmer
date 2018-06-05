@@ -18,7 +18,11 @@ public interface UserProfileContract {
 
         void showAvgSpeed(int avgSpeed);
 
-        void showJoinedEvents(int CountJoinedEvents);
+        void showEventsJoined(int CountEventsJoined);
+
+        void showEventsCreated(int CountEventsCreated);
+
+        void showCalories(double burnCalories);
     }
 
     interface Presenter extends BasePresenter {
@@ -27,13 +31,16 @@ public interface UserProfileContract {
 
         void setUserAge(HashMap<String, String> hashMapUserStatus);
 
-        void setUserExp(int maxdistance);
+        void setUserExp(int distance);
 
         void setUserMaxSpeed(int maxSpeed);
 
         void setUserAvgSpeed(int avgSpeed);
 
-        void setJoinedEvents();
+        void setEventsJoined();
 
+        void setEventsCreated();
+
+        void setCalories(int distance, String userWeight);
     }
 }

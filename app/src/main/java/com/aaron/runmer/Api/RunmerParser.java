@@ -2,7 +2,8 @@ package com.aaron.runmer.Api;
 
 import android.util.Log;
 
-import com.aaron.runmer.Api.Callback.CountCreatedJoinedCallback;
+import com.aaron.runmer.Api.Callback.CountEventsCreatedCallback;
+import com.aaron.runmer.Api.Callback.CountEventsJoinedCallback;
 import com.aaron.runmer.Api.Callback.InvitehFireBaseUserDataCallback;
 import com.aaron.runmer.Api.Callback.SearchFireBaseFriendDataCallback;
 import com.aaron.runmer.Api.Callback.SetEventPeopleJoinCallback;
@@ -15,6 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class RunmerParser {
@@ -190,15 +192,15 @@ public class RunmerParser {
         dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child(Constants.EVENT_FIREBASE).child(mEventId).setValue("Join");
     }
 
-    public static void parseFirebaseCountJoineddEvents(final CountCreatedJoinedCallback parseCountCreatedJoinedCallback) {
+    public static void parseFirebaseEventsJoined(final CountEventsJoinedCallback parseCountEventsJoinedCallback) {
         dataBaseRef.child(Constants.USER_FIREBASE)
                 .child(currentUserUid).child(Constants.EVENT_FIREBASE)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        int eventCounts = (int) dataSnapshot.getChildrenCount();
-                        Log.d(Constants.TAG, "eventCount" + eventCounts);
-                        parseCountCreatedJoinedCallback.onCompleted(eventCounts);
+                        int countsEventJoined = (int) dataSnapshot.getChildrenCount();
+                        Log.d(Constants.TAG, "eventCount" + countsEventJoined);
+                        parseCountEventsJoinedCallback.onCompleted(countsEventJoined);
                     }
 
                     @Override
@@ -206,5 +208,22 @@ public class RunmerParser {
 
                     }
                 });
+    }
+
+    public static void parseFirebaseCountEventsCreated(final CountEventsCreatedCallback parseCountEventsCreatedCallback){
+        Query query = dataBaseRef.child(Constants.EVENT_FIREBASE).orderByChild("masterUid").equalTo(currentUserUid);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int countsEventCreated = (int) dataSnapshot.getChildrenCount();
+                Log.d(Constants.TAG,"countsEventCreated: " + countsEventCreated);
+                parseCountEventsCreatedCallback.onCompleted(countsEventCreated);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

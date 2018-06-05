@@ -94,6 +94,8 @@
                 android:id="@+id/txt_userprofile_slash"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
                 android:text="/"
                 app:layout_constraintEnd_toStartOf="@+id/txt_userprofile_totalexp"
                 app:layout_constraintStart_toEndOf="@+id/txt_userprofile_currentexp"
@@ -376,7 +378,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/faster_one"
-                    android:text="Cal"
+                    android:text="KCal"
                     android:textSize="15dp" />
             </LinearLayout>
 

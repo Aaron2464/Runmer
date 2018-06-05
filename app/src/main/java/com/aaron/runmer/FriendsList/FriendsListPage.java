@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
     TextView mTxtInviteFriendLevel;
     TextView mTxtInviteFriendEmail;
     ConstraintLayout mDialogLayout;
+    LinearLayout mLinearLayout;
     ArrayList<FriendData> ArrayUserData = new ArrayList<>();
 
     private FriendsListContract.Presenter mPresenter;
@@ -69,15 +71,22 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
     }
 
     public void showFriendList(FriendData friendList) {
-        ArrayUserData.add(friendList);
-        mAdapter = new FriendsListAdapter(getContext(), ArrayUserData, mPresenter);
-        Log.d(Constants.TAG, "AarayUserData : " + ArrayUserData.get(0).getUserName());
-        Log.d(Constants.TAG, "AarayUserData : " + ArrayUserData.get(0).getUserEmail());
-        Log.d(Constants.TAG, "AarayUserData : " + ArrayUserData.get(0).getUserPhoto());
-        Log.d(Constants.TAG, "AarayUserData : " + ArrayUserData.size());
-        mAdapter.notifyDataSetChanged();
-        mRecyclerView.setAdapter(mAdapter);
-        //TODO 很多很多BUG要處理，還有error handle Ex:重覆加好友,add deny btn handle
+        if(friendList == null){
+            mLinearLayout.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.GONE);
+        }else{
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mLinearLayout.setVisibility(View.GONE);
+            ArrayUserData.add(friendList);
+            mAdapter = new FriendsListAdapter(getContext(), ArrayUserData, mPresenter);
+            Log.d(Constants.TAG, "AarayUserData : " + ArrayUserData.get(0).getUserName());
+            Log.d(Constants.TAG, "AarayUserData : " + ArrayUserData.get(0).getUserEmail());
+            Log.d(Constants.TAG, "AarayUserData : " + ArrayUserData.get(0).getUserPhoto());
+            Log.d(Constants.TAG, "AarayUserData : " + ArrayUserData.size());
+            mAdapter.notifyDataSetChanged();
+            mRecyclerView.setAdapter(mAdapter);
+            //TODO 很多很多BUG要處理，還有error handle Ex:重覆加好友,add deny btn handle
+        }
     }
 
     public void removeFriendList(int position){
@@ -97,6 +106,7 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_friend_list, container, false);
         mRecyclerView = view.findViewById(R.id.recyclerView_friendlist);
+        mLinearLayout = view.findViewById(R.id.layout_nofriend);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));

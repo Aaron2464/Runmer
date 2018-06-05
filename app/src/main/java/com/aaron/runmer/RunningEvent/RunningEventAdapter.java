@@ -46,8 +46,13 @@ public class RunningEventAdapter extends RecyclerView.Adapter<RunningEventAdapte
         holder.mTxtEventPlace.setText(mEventData.get(newposition).getEventPlace());
         holder.mTxtCurrentPeopleNum.setText(mEventData.get(newposition).getPeopleParticipate());
         holder.mTxtPeopleSum.setText(mEventData.get(newposition).getPeopleTotle());
-        if (mEventData.get(newposition).getMasterName().equals(mUserName) || mEventData.get(newposition).getUserUid().containsKey(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-            holder.mBtnJoinEvent.setImageResource(R.drawable.joinrunningevent);
+        if (Integer.valueOf(mEventData.get(newposition).getPeopleTotle()) > Integer.valueOf(mEventData.get(newposition).getPeopleParticipate())){
+            if (mEventData.get(newposition).getMasterName().equals(mUserName) || mEventData.get(newposition).getUserUid().containsKey(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                holder.mBtnJoinEvent.setImageResource(R.drawable.joinrunningevent);
+                holder.mBtnJoinEvent.setClickable(false);
+            }
+        }else {
+            holder.mBtnJoinEvent.setImageResource(R.drawable.full);
             holder.mBtnJoinEvent.setClickable(false);
         }
         Picasso.get().load(mEventData.get(newposition).getMasterPhoto()).placeholder(R.drawable.running).transform(new CircleTransform(mContext)).into(holder.mImageEventFriendAvatar);

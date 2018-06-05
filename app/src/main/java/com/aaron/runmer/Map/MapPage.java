@@ -44,7 +44,6 @@ import android.widget.Toast;
 import com.aaron.runmer.Api.GpsServices;
 import com.aaron.runmer.Base.BaseActivity;
 import com.aaron.runmer.DashBoardPackage.RunnerDashBoard;
-import com.aaron.runmer.Objects.UserData;
 import com.aaron.runmer.R;
 import com.aaron.runmer.UserData.UserDataPage;
 import com.aaron.runmer.ViewPagerMain.ViewPagerActivity;
@@ -97,6 +96,8 @@ public class MapPage extends BaseActivity implements MapContract.View
     private RunnerDashBoard mRunnerDashBoardAvg;
     private TextView mTxtRightComment;
     private TextView mTxtLeftComment;
+    private TextView mTxtExpCurrent;
+    private TextView mTxtExpTotal;
     private ImageButton mBtnSendComment;
     private EditText mEditTxtCommentMessage;
     private ConstraintLayout mConstraintLayout;
@@ -156,7 +157,25 @@ public class MapPage extends BaseActivity implements MapContract.View
                         .putInt(Constants.USER_MAPPAGE_AVGSPEED, (int) averageTemp).commit();
                 mRunnerDashBoardIntimeSpeed.setVelocity((int) maxSpeedTemp);
                 mRunnerDashBoardAvg.setVelocity((int) averageTemp);
-                mBarExp.setProgress((int) distanceTemp);
+                if ((int) distanceTemp < 10000) {
+                    mTxtExpCurrent.setText(String.valueOf((int) distanceTemp));
+                    mBarExp.setProgress((int) distanceTemp);
+                } else if ((int) distanceTemp >= 10000 && (int) distanceTemp < 25000) {
+                    mTxtExpTotal.setText(String.valueOf(25000));
+                    mTxtExpCurrent.setText(String.valueOf((int) distanceTemp));
+                    mBarExp.setMax(15000);
+                    mBarExp.setProgress((int) distanceTemp - 10000);
+                } else if ((int) distanceTemp >= 25000 && (int) distanceTemp < 45000) {
+                    mTxtExpTotal.setText(String.valueOf(45000));
+                    mTxtExpCurrent.setText(String.valueOf((int) distanceTemp));
+                    mBarExp.setMax(20000);
+                    mBarExp.setProgress((int) distanceTemp - 25000);
+                } else {
+                    mTxtExpTotal.setText(String.valueOf(80000));
+                    mTxtExpCurrent.setText(String.valueOf((int) distanceTemp));
+                    mBarExp.setMax(35000);
+                    mBarExp.setProgress((int) distanceTemp - 45000);
+                }
                 Log.d(Constants.TAG, "distanceTemp: " + String.valueOf(distanceTemp));
                 Log.d(Constants.TAG, "averageTemp: " + String.valueOf(averageTemp));
                 Log.d(Constants.TAG, "maxSpeedTemp: " + String.valueOf(maxSpeedTemp));
@@ -173,6 +192,8 @@ public class MapPage extends BaseActivity implements MapContract.View
         mRunnerDashBoardAvg = findViewById(R.id.dashboard_avg);
         mTxtLeftComment = findViewById(R.id.txt_leftcomment);
         mTxtRightComment = findViewById(R.id.txt_rightcomment);
+        mTxtExpCurrent = findViewById(R.id.txt_mappage_currentexp);
+        mTxtExpTotal = findViewById(R.id.txt_mappage_totaleexp);
         mBtnSendComment = findViewById(R.id.CommentOption_btn_fb_send_comment);
         mEditTxtCommentMessage = findViewById(R.id.CommentOption_edittxt_comments_message);
         mConstraintLayout = findViewById(R.id.map_page_layout);
@@ -188,6 +209,30 @@ public class MapPage extends BaseActivity implements MapContract.View
         selectUserStatus();
         sendGeomessageToFriend();
         queryGeoFriendMessage();
+        setUserExp();
+    }
+
+    private void setUserExp() {
+        int userExp = mContext.getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_DISTANCE, 0);
+        if (userExp < 10000) {
+            mTxtExpCurrent.setText(String.valueOf(userExp));
+            mBarExp.setProgress(userExp);
+        } else if (userExp >= 10000 && userExp < 25000) {
+            mTxtExpTotal.setText(String.valueOf(25000));
+            mTxtExpCurrent.setText(String.valueOf(userExp));
+            mBarExp.setMax(15000);
+            mBarExp.setProgress(userExp - 10000);
+        } else if (userExp >= 25000 && userExp < 45000) {
+            mTxtExpTotal.setText(String.valueOf(45000));
+            mTxtExpCurrent.setText(String.valueOf(userExp));
+            mBarExp.setMax(20000);
+            mBarExp.setProgress(userExp - 25000);
+        } else {
+            mTxtExpTotal.setText(String.valueOf(80000));
+            mTxtExpCurrent.setText(String.valueOf(userExp));
+            mBarExp.setMax(35000);
+            mBarExp.setProgress(userExp - 45000);
+        }
     }
 
     private void queryGeoFriendMessage() {

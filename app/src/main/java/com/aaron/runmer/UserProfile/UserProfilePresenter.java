@@ -2,7 +2,8 @@ package com.aaron.runmer.UserProfile;
 
 import android.util.Log;
 
-import com.aaron.runmer.Api.Callback.CountCreatedJoinedCallback;
+import com.aaron.runmer.Api.Callback.CountEventsCreatedCallback;
+import com.aaron.runmer.Api.Callback.CountEventsJoinedCallback;
 import com.aaron.runmer.Api.RunmerParser;
 import com.aaron.runmer.util.Constants;
 
@@ -67,11 +68,11 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
     }
 
     @Override
-    public void setJoinedEvents() {
-        RunmerParser.parseFirebaseCountJoineddEvents(new CountCreatedJoinedCallback() {
+    public void setEventsJoined() {
+        RunmerParser.parseFirebaseEventsJoined(new CountEventsJoinedCallback() {
             @Override
             public void onCompleted(int CountJoinedEvents) {
-                mUserProfileView.showJoinedEvents(CountJoinedEvents);
+                mUserProfileView.showEventsJoined(CountJoinedEvents);
             }
 
             @Override
@@ -79,6 +80,27 @@ public class UserProfilePresenter implements UserProfileContract.Presenter {
 
             }
         });
+    }
+
+    @Override
+    public void setEventsCreated() {
+        RunmerParser.parseFirebaseCountEventsCreated(new CountEventsCreatedCallback() {
+            @Override
+            public void onCompleted(int CountEventsCreated) {
+                mUserProfileView.showEventsCreated(CountEventsCreated);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+
+            }
+        });
+    }
+
+    @Override
+    public void setCalories(int distance, String userWeight){
+        double burnCalories = Integer.parseInt(userWeight) * distance / 1000 * 1.036;
+        mUserProfileView.showCalories(burnCalories);
     }
 
     @Override

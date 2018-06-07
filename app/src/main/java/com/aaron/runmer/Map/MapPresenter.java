@@ -1,7 +1,6 @@
 package com.aaron.runmer.Map;
 
 import android.location.Location;
-import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 
 import com.aaron.runmer.util.Constants;
@@ -15,20 +14,22 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class MapPresenter implements MapContract.Presenter {
+
+    private int mNextExp, mBarLength, mBarLengthMax;
+
     private final MapContract.View mMapsView;
-    String mUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-    DatabaseReference mFriendRef = FirebaseDatabase.getInstance().getReference("Users").child(mUserUid).child("Friends");
-    DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference("Users").child(mUserUid);
-    DatabaseReference mUserLocation = FirebaseDatabase.getInstance().getReference("Location");
-    DatabaseReference mComment = FirebaseDatabase.getInstance().getReference("Comments");
-    GeoFire mGeoFire = new GeoFire(mUserLocation);
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private String mUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private DatabaseReference mFriendRef = FirebaseDatabase.getInstance().getReference("Users").child(mUserUid).child("Friends");
+    private DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference("Users").child(mUserUid);
+    private DatabaseReference mUserLocation = FirebaseDatabase.getInstance().getReference("Location");
+    private DatabaseReference mComment = FirebaseDatabase.getInstance().getReference("Comments");
+    private GeoFire mGeoFire = new GeoFire(mUserLocation);
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     public MapPresenter(MapContract.View mapsView) {
         mMapsView = checkNotNull(mapsView, "mapsView connot be null!");
@@ -73,7 +74,7 @@ public class MapPresenter implements MapContract.Presenter {
             geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
                 @Override
                 public void onKeyEntered(final String key, final GeoLocation location) {
-                    Log.d(Constants.TAG,"onKeyEntered");
+                    Log.d(Constants.TAG, "onKeyEntered");
                     if (!key.equals(mAuth.getCurrentUser().getUid())) {
                         mFriendRef.child(key).child("userPhoto").addListenerForSingleValueEvent(
                                 new ValueEventListener() {
@@ -124,7 +125,7 @@ public class MapPresenter implements MapContract.Presenter {
 
                 @Override
                 public void onKeyExited(String key) {
-                    Log.d(Constants.TAG,"onKeyExited");
+                    Log.d(Constants.TAG, "onKeyExited");
                     mMapsView.removeGeoFriends(key);
                 }
 
@@ -143,11 +144,11 @@ public class MapPresenter implements MapContract.Presenter {
 
                         @Override
                         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                            Log.d(Constants.TAG,"GeoQuery: " + String.valueOf(dataSnapshot));
+                            Log.d(Constants.TAG, "GeoQuery: " + String.valueOf(dataSnapshot));
                             String dskey = dataSnapshot.getKey();
                             Log.d(Constants.TAG, "GeoQuery: " + dskey);
                             Log.d(Constants.TAG, "GeoQuery: " + dataSnapshot.child("UserUid").getValue());
-                            if(!dataSnapshot.child("UserUid").getValue().equals(mAuth.getCurrentUser().getUid())){
+                            if (!dataSnapshot.child("UserUid").getValue().equals(mAuth.getCurrentUser().getUid())) {
                                 String message = String.valueOf(dataSnapshot.child("CommentId").getValue());
                                 Log.d(Constants.TAG, "GeoQuery: " + message);
                                 mMapsView.showRightComment(message);
@@ -202,11 +203,36 @@ public class MapPresenter implements MapContract.Presenter {
     }
 
     @Override
+    public void setUserExp(int userExp) {
+        if (userExp < 10000) {
+            mNextExp = 10000;
+            mBarLength = userExp;
+            mBarLengthMax = mNextExp;
+            mMapsView.showUserExp(userExp, mNextExp, mBarLength, mBarLengthMax);
+        } else if (userExp >= 10000 && userExp < 25000) {
+            mNextExp = 25000;
+            mBarLength = userExp - 10000;
+            mBarLengthMax = mNextExp - 10000;
+            mMapsView.showUserExp(userExp, mNextExp, mBarLength, mBarLengthMax);
+        } else if (userExp >= 25000 && userExp < 45000) {
+            mNextExp = 45000;
+            mBarLength = userExp - 25000;
+            mBarLengthMax = mNextExp - 25000;
+            mMapsView.showUserExp(userExp, mNextExp, mBarLength, mBarLengthMax);
+        } else {
+            mNextExp = 80000;
+            mBarLength = userExp - 45000;
+            mBarLengthMax = mNextExp - 45000;
+            mMapsView.showUserExp(userExp, mNextExp, mBarLength, mBarLengthMax);
+        }
+    }
+
+    @Override
     public void sendMessage(String cheermessage) {
         String getkey = mComment.push().getKey();
         mComment.child(getkey).child("CommentId").setValue(cheermessage);
         mComment.child(getkey).child("UserUid").setValue(mUserUid);
-        mMapsView.showLeftComment(mUserUid,cheermessage);
+        mMapsView.showLeftComment(mUserUid, cheermessage);
     }
 
     @Override

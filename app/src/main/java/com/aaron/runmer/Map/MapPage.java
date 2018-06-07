@@ -156,26 +156,8 @@ public class MapPage extends BaseActivity implements MapContract.View
                         .putInt(Constants.USER_MAPPAGE_DISTANCE, (int) distanceTemp)
                         .putInt(Constants.USER_MAPPAGE_AVGSPEED, (int) averageTemp).commit();
                 mRunnerDashBoardIntimeSpeed.setVelocity((int) maxSpeedTemp);
-                mRunnerDashBoardAvg.setVelocity((int) averageTemp);
-                if ((int) distanceTemp < 10000) {
-                    mTxtExpCurrent.setText(String.valueOf((int) distanceTemp));
-                    mBarExp.setProgress((int) distanceTemp);
-                } else if ((int) distanceTemp >= 10000 && (int) distanceTemp < 25000) {
-                    mTxtExpTotal.setText(String.valueOf(25000));
-                    mTxtExpCurrent.setText(String.valueOf((int) distanceTemp));
-                    mBarExp.setMax(15000);
-                    mBarExp.setProgress((int) distanceTemp - 10000);
-                } else if ((int) distanceTemp >= 25000 && (int) distanceTemp < 45000) {
-                    mTxtExpTotal.setText(String.valueOf(45000));
-                    mTxtExpCurrent.setText(String.valueOf((int) distanceTemp));
-                    mBarExp.setMax(20000);
-                    mBarExp.setProgress((int) distanceTemp - 25000);
-                } else {
-                    mTxtExpTotal.setText(String.valueOf(80000));
-                    mTxtExpCurrent.setText(String.valueOf((int) distanceTemp));
-                    mBarExp.setMax(35000);
-                    mBarExp.setProgress((int) distanceTemp - 45000);
-                }
+                mRunnerDashBoardAvgSpeed.setVelocity((int) averageTemp);
+                mPresenter.setUserExp((int) distanceTemp);
                 Log.d(Constants.TAG, "distanceTemp: " + String.valueOf(distanceTemp));
                 Log.d(Constants.TAG, "averageTemp: " + String.valueOf(averageTemp));
                 Log.d(Constants.TAG, "maxSpeedTemp: " + String.valueOf(maxSpeedTemp));
@@ -209,30 +191,15 @@ public class MapPage extends BaseActivity implements MapContract.View
         selectUserStatus();
         sendGeomessageToFriend();
         queryGeoFriendMessage();
-        setUserExp();
+        mPresenter.setUserExp(distance);
     }
 
-    private void setUserExp() {
-        int userExp = mContext.getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_DISTANCE, 0);
-        if (userExp < 10000) {
-            mTxtExpCurrent.setText(String.valueOf(userExp));
-            mBarExp.setProgress(userExp);
-        } else if (userExp >= 10000 && userExp < 25000) {
-            mTxtExpTotal.setText(String.valueOf(25000));
-            mTxtExpCurrent.setText(String.valueOf(userExp));
-            mBarExp.setMax(15000);
-            mBarExp.setProgress(userExp - 10000);
-        } else if (userExp >= 25000 && userExp < 45000) {
-            mTxtExpTotal.setText(String.valueOf(45000));
-            mTxtExpCurrent.setText(String.valueOf(userExp));
-            mBarExp.setMax(20000);
-            mBarExp.setProgress(userExp - 25000);
-        } else {
-            mTxtExpTotal.setText(String.valueOf(80000));
-            mTxtExpCurrent.setText(String.valueOf(userExp));
-            mBarExp.setMax(35000);
-            mBarExp.setProgress(userExp - 45000);
-        }
+    @Override
+    public void showUserExp(int userExp, int nextExp, int barLength, int barLengthMax) {
+        mTxtExpTotal.setText(String.valueOf(nextExp));
+        mTxtExpCurrent.setText(String.valueOf(userExp));
+        mBarExp.setMax(barLengthMax);
+        mBarExp.setProgress(barLength);
     }
 
     private void queryGeoFriendMessage() {

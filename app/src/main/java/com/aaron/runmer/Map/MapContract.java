@@ -25,6 +25,9 @@ public interface MapContract {
         void showRightComment(String message);
 
         void noComment();
+
+        void showUserExp(int userExp, int nextExp, int barLength, int barLengthMax);
+
     }
 
     interface Presenter extends BasePresenter {
@@ -38,6 +41,8 @@ public interface MapContract {
         void setUserStatus(boolean isChecked);
 
         void setUserPhoto();
+
+        void setUserExp(int userExp);
 
         void sendMessage(String cheermessage);
 

@@ -153,7 +153,6 @@ public class MapPage extends BaseActivity implements MapContract.View,
                         .putInt(Constants.USER_MAPPAGE_MAXSPEED, (int) maxSpeedTemp)
                         .putInt(Constants.USER_MAPPAGE_DISTANCE, (int) distanceTemp)
                         .putInt(Constants.USER_MAPPAGE_AVGSPEED, (int) averageTemp).commit();
-                mRunnerDashBoardIntimeSpeed.setVelocity((int) maxSpeedTemp);
                 mRunnerDashBoardAvgSpeed.setVelocity((int) averageTemp);
                 mPresenter.setUserExp((int) distanceTemp);
                 Log.d(Constants.TAG, "distanceTemp: " + String.valueOf(distanceTemp));
@@ -179,11 +178,11 @@ public class MapPage extends BaseActivity implements MapContract.View,
         mBtnSendComment = findViewById(R.id.CommentOption_btn_fb_send_comment);
         mEditTxtCommentMessage = findViewById(R.id.CommentOption_edittxt_comments_message);
         data = new SpeedData(onGpsServiceUpdate);
-        int distance = mContext.getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE)
-                .getInt(Constants.USER_MAPPAGE_DISTANCE, 0);
+        int distance = mContext.getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_DISTANCE, 0);
+        int maxSpeed = mContext.getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_MAXSPEED, 0);
         Log.d(Constants.TAG, "MaxDistance: " + distance);
         data.addDistance(Double.valueOf(distance));
-
+        data.setCurSpeed(maxSpeed);
         setupMyLocation();
         selectUserStatus();
         sendGeoMessageToFriend();
@@ -328,6 +327,11 @@ public class MapPage extends BaseActivity implements MapContract.View,
         mPresenter.openGoogleMaps(mLocation);
     }
 
+    /**
+     * show google map, add marker, create a circle
+     * @param lat
+     * @param lng
+     */
     @SuppressLint("MissingPermission")
     public void showGoogleMapUi(double lat, double lng) {
         LatLng userlocation = new LatLng(lat, lng);
@@ -349,10 +353,16 @@ public class MapPage extends BaseActivity implements MapContract.View,
 //        mMap.getUiSettings().setZoomControlsEnabled(true);\
     }
 
+    /**
+     *讓方圓300公尺的朋友能顯示在地圖上，點擊marker時可以看到好友頭像
+     *
+     * @param key
+     *@param mlocation
+     * @param friendAvatar
+     * */
     @Override
     public void showGeoFriends(String key, GeoLocation mlocation, String friendAvatar) {
-//        mMarkerMap.clear();                   //目前還不知道有什麼影響，特此註解以供驗證
-//        mUriMap.clear();                       //目前還不知道有什麼影響，特此註解以供驗證
+
         Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(mlocation.latitude, mlocation.longitude)));
         Log.d(Constants.TAG, "MMarker: " + marker.getId());
         mMarkerMap.put(key, marker);
@@ -362,6 +372,11 @@ public class MapPage extends BaseActivity implements MapContract.View,
         mMap.setInfoWindowAdapter(new UserinfoWindow(mContext, mUriMap));
     }
 
+    /**
+     * when friend leave the geofire, remove the key and marker
+     *
+     * @param key
+     */
     @Override
     public void removeGeoFriends(String key) {
         Marker marker = mMarkerMap.get(key);
@@ -372,36 +387,11 @@ public class MapPage extends BaseActivity implements MapContract.View,
         }
     }
 
-    @Override
-    public void showLeftComment(String Uid, String message) {
-        mTxtCommentLeft.setVisibility(View.VISIBLE);
-        mTxtCommentRight.setVisibility(View.GONE);
-        mTxtCommentLeft.setText(message);
-        mEditTxtCommentMessage.setText("");
-    }
-
-    @Override
-    public void showRightComment(final String message) {
-        mTxtCommentRight.setVisibility(View.VISIBLE);
-        mTxtCommentLeft.setVisibility(View.GONE);
-        mTxtCommentRight.setText(message);
-
-        textToSpeech = new TextToSpeech(mContext, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status == TextToSpeech.SUCCESS) {
-                    textToSpeech.setLanguage(Locale.TAIWAN);
-                    textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, null);
-                }
-            }
-        });
-    }
-
-    @Override
-    public void noComment() {
-        Snackbar.make(mMapPageConstraintLayout, "可以講講話啊", Snackbar.LENGTH_SHORT).show();
-    }
-
+    /**
+     * move the marker, when friend move
+     * @param key
+     * @param location
+     */
     @Override
     public void moveGeoFriends(String key, GeoLocation location) {
         final double lat = location.latitude;
@@ -433,6 +423,51 @@ public class MapPage extends BaseActivity implements MapContract.View,
         }
     }
 
+    /**
+     * talk to friend, show left comment
+     * @param message
+     */
+    @Override
+    public void showLeftComment(String message) {
+        mTxtCommentLeft.setVisibility(View.VISIBLE);
+        mTxtCommentRight.setVisibility(View.GONE);
+        mTxtCommentLeft.setText(message);
+        mEditTxtCommentMessage.setText("");
+    }
+
+    /**
+     * friend's comment when friend send comment
+     * @param message
+     */
+    @Override
+    public void showRightComment(final String message) {
+        mTxtCommentRight.setVisibility(View.VISIBLE);
+        mTxtCommentLeft.setVisibility(View.GONE);
+        mTxtCommentRight.setText(message);
+
+        textToSpeech = new TextToSpeech(mContext, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    textToSpeech.setLanguage(Locale.TAIWAN);
+                    textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, null);
+                }
+            }
+        });
+    }
+
+    /**
+     * show toast  no comment, when  click send btn
+     */
+    @Override
+    public void noComment() {
+        Snackbar.make(mMapPageConstraintLayout, "可以講講話啊", Snackbar.LENGTH_SHORT).show();
+    }
+
+    /**
+     * show avatar, when click the friend marker
+     * @param userimage
+     */
     @Override
     public void showUserPhoto(String userimage) {
         mImageUser = findViewById(R.id.imageUser_mapView);
@@ -441,6 +476,9 @@ public class MapPage extends BaseActivity implements MapContract.View,
         clickUserImage();
     }
 
+    /**
+     * Enter the detail page
+     */
     private void clickUserImage() {
         mImageUser.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -20,7 +20,7 @@ public interface MapContract {
 
         void removeGeoFriends(String key);
 
-        void showLeftComment(String Uid, String message);
+        void showLeftComment(String message);
 
         void showRightComment(String message);
 

@@ -232,7 +232,7 @@ public class MapPresenter implements MapContract.Presenter {
         String getkey = mComment.push().getKey();
         mComment.child(getkey).child("CommentId").setValue(cheermessage);
         mComment.child(getkey).child("UserUid").setValue(mUserUid);
-        mMapsView.showLeftComment(mUserUid, cheermessage);
+        mMapsView.showLeftComment(cheermessage);
     }
 
     @Override

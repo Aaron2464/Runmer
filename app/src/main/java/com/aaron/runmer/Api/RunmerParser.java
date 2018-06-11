@@ -25,9 +25,13 @@ public class RunmerParser {
     public final static DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
     public final static String currentUserUid = mCurrentUserUid.getCurrentUser().getUid();
 
-    public static void parseFireBaseFriendData(final String searchData, final SearchFireBaseFriendDataCallback parseFireBaseFriendCallback) {
-
-//        DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
+    /**
+     * search friend data
+     *
+     * @param searchData
+     * @param parseFireBaseFriendCallback
+     */
+    public static void parseFirebaseFriendData(final String searchData, final SearchFireBaseFriendDataCallback parseFireBaseFriendCallback) {
         dataBaseRef.child(Constants.USER_FIREBASE).orderByChild(Constants.USER_FIREBASE_EMAIL).equalTo(searchData)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -58,10 +62,13 @@ public class RunmerParser {
                 });
     }
 
-    public static void parseFireBaseInviteFriend(final String inviteData, final InvitehFireBaseUserDataCallback parseFireBaseInviteFriendCallback) {
-
-//        final FirebaseAuth mCurrentUserUid = FirebaseAuth.getInstance();
-//        final DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
+    /**
+     * search and send friend request
+     *
+     * @param inviteData
+     * @param parseFireBaseInviteFriendCallback
+     */
+    public static void parseFirebaseInviteFriend(final String inviteData, final InvitehFireBaseUserDataCallback parseFireBaseInviteFriendCallback) {
         dataBaseRef.child(Constants.USER_FIREBASE).orderByChild(Constants.USER_FIREBASE_EMAIL).equalTo(inviteData)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -86,10 +93,12 @@ public class RunmerParser {
                 });
     }
 
-    public static void parseFireBaseAddFriend(String friendEmail) {
-//        final FirebaseAuth mCurrentUserUid = FirebaseAuth.getInstance();
-//        final String currentUserUid = mCurrentUserUid.getCurrentUser().getUid();
-//        final DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
+    /**
+     * accept firend invite
+     *
+     * @param friendEmail
+     */
+    public static void parseFirebaseAddFriend(String friendEmail) {
         dataBaseRef.child(Constants.USER_FIREBASE).orderByChild(Constants.USER_FIREBASE_EMAIL).equalTo(friendEmail)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -144,17 +153,22 @@ public class RunmerParser {
                 });
     }
 
+    /**
+     * deny friend request
+     *
+     * @param removeFriendUid
+     */
     public static void parseFirebaseRemoveFriend(String removeFriendUid) {
-//        final FirebaseAuth mCurrentUserUid = FirebaseAuth.getInstance();
-//        final DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
-        String currentUserUid = mCurrentUserUid.getCurrentUser().getUid();
         dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child(Constants.USER_FIREBASE_FRIENDS).child(removeFriendUid).removeValue();
         dataBaseRef.child(Constants.USER_FIREBASE).child(removeFriendUid).child(Constants.USER_FIREBASE_FRIENDS).child(currentUserUid).removeValue();
     }
 
+    /**
+     * Join running event
+     *
+     * @param mEventData
+     */
     public static void parseFirebaseRunningEvent(EventData mEventData) {
-//        final FirebaseAuth mCurrentUserUid = FirebaseAuth.getInstance();
-//        final DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
         String getkey = dataBaseRef.child(Constants.EVENT_FIREBASE).push().getKey();
         dataBaseRef.child(Constants.EVENT_FIREBASE).child(getkey).setValue(mEventData);
         dataBaseRef.child(Constants.EVENT_FIREBASE).child(getkey).child(Constants.EVENT_FIREBASE_ID).setValue(getkey);
@@ -193,30 +207,28 @@ public class RunmerParser {
     }
 
     public static void parseFirebaseEventsJoined(final CountEventsJoinedCallback parseCountEventsJoinedCallback) {
-        dataBaseRef.child(Constants.USER_FIREBASE)
-                .child(currentUserUid).child(Constants.EVENT_FIREBASE)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        int countsEventJoined = (int) dataSnapshot.getChildrenCount();
-                        Log.d(Constants.TAG, "eventCount" + countsEventJoined);
-                        parseCountEventsJoinedCallback.onCompleted(countsEventJoined);
-                    }
+        dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child(Constants.EVENT_FIREBASE).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int countsEventJoined = (int) dataSnapshot.getChildrenCount();
+                Log.d(Constants.TAG, "eventCount" + countsEventJoined);
+                parseCountEventsJoinedCallback.onCompleted(countsEventJoined);
+            }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
+            }
+        });
     }
 
-    public static void parseFirebaseCountEventsCreated(final CountEventsCreatedCallback parseCountEventsCreatedCallback){
+    public static void parseFirebaseCountEventsCreated(final CountEventsCreatedCallback parseCountEventsCreatedCallback) {
         Query query = dataBaseRef.child(Constants.EVENT_FIREBASE).orderByChild("masterUid").equalTo(currentUserUid);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int countsEventCreated = (int) dataSnapshot.getChildrenCount();
-                Log.d(Constants.TAG,"countsEventCreated: " + countsEventCreated);
+                Log.d(Constants.TAG, "countsEventCreated: " + countsEventCreated);
                 parseCountEventsCreatedCallback.onCompleted(countsEventCreated);
             }
 

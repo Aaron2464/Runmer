@@ -95,7 +95,7 @@ public class FriendsListPresenter implements FriendsListContract.Presenter {
     @Override
     public void searchFriend(String friendEmail) {
         // keep checking users on fireBase and report it if there's one that is matched
-        RunmerParser.parseFireBaseFriendData(friendEmail, new SearchFireBaseFriendDataCallback() {
+        RunmerParser.parseFirebaseFriendData(friendEmail, new SearchFireBaseFriendDataCallback() {
             @Override
             public void onCompleted(Boolean searchResult, UserData foundUser) {
                 if (searchResult == true) {
@@ -115,7 +115,7 @@ public class FriendsListPresenter implements FriendsListContract.Presenter {
 
     @Override
     public void addFriend(String addFriendEmail) {
-        RunmerParser.parseFireBaseAddFriend(addFriendEmail);
+        RunmerParser.parseFirebaseAddFriend(addFriendEmail);
     }
 
     @Override
@@ -127,7 +127,7 @@ public class FriendsListPresenter implements FriendsListContract.Presenter {
     @Override
     public void sendFriendInvitation(String inviteFriendEmail) {
         Log.d(Constants.TAG, "inviteFriendEmail : " + inviteFriendEmail);
-        RunmerParser.parseFireBaseInviteFriend(inviteFriendEmail, new InvitehFireBaseUserDataCallback() {
+        RunmerParser.parseFirebaseInviteFriend(inviteFriendEmail, new InvitehFireBaseUserDataCallback() {
             @Override
             public void onCompleted() {
                 mFriendsListView.showInviteSuccess();

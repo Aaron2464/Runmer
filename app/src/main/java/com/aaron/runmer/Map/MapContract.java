@@ -20,11 +20,14 @@ public interface MapContract {
 
         void removeGeoFriends(String key);
 
-        void showLeftComment(String Uid, String message);
+        void showLeftComment(String message);
 
         void showRightComment(String message);
 
         void noComment();
+
+        void showUserExp(int userExp, int nextExp, int barLength, int barLengthMax);
+
     }
 
     interface Presenter extends BasePresenter {
@@ -38,6 +41,8 @@ public interface MapContract {
         void setUserStatus(boolean isChecked);
 
         void setUserPhoto();
+
+        void setUserExp(int userExp);
 
         void sendMessage(String cheermessage);
 

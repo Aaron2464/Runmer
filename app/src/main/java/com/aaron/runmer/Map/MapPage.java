@@ -73,42 +73,42 @@ import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class MapPage extends BaseActivity implements MapContract.View
-        , GoogleMap.OnMyLocationButtonClickListener
-        , OnMapReadyCallback
-        , com.google.android.gms.location.LocationListener
-        , android.location.LocationListener
-        , GoogleApiClient.ConnectionCallbacks
-        , GoogleApiClient.OnConnectionFailedListener {
+public class MapPage extends BaseActivity implements MapContract.View,
+        OnMapReadyCallback,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        GoogleMap.OnMyLocationButtonClickListener,
+        android.location.LocationListener,
+        com.google.android.gms.location.LocationListener {
 
     private MapContract.Presenter mPresenter;
-    private GoogleMap mMap;
+    private Location mLocation;
     private LocationManager mLocationManager;
     private LocationRequest mLocationRequest;
+    private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
-    private Location mLocation;
+    private TextToSpeech textToSpeech;
     private Marker mMarker;
-    private Switch mSwitch;
-    private ImageView mImageUser;
     private Map<String, Marker> mMarkerMap;
     private Map<String, String> mUriMap;
     private RunnerDashBoard mRunnerDashBoardIntimeSpeed;
-    private RunnerDashBoard mRunnerDashBoardAvg;
-    private TextView mTxtRightComment;
-    private TextView mTxtLeftComment;
+    private RunnerDashBoard mRunnerDashBoardAvgSpeed;
+    private Switch mSwitch;
+    private ProgressBar mBarExp;
+    private EditText mEditTxtCommentMessage;
+    private TextView mTxtCommentRight;
+    private TextView mTxtCommentLeft;
     private TextView mTxtExpCurrent;
     private TextView mTxtExpTotal;
+    private ImageView mImageUser;
     private ImageButton mBtnSendComment;
-    private EditText mEditTxtCommentMessage;
-    private ConstraintLayout mConstraintLayout;
-    private ProgressBar mBarExp;
-    private boolean isAnimFinished = true;
-    private TextToSpeech textToSpeech;
+    private ConstraintLayout mMapPageConstraintLayout;
     private SpeedData.onGpsServiceUpdate onGpsServiceUpdate;
     private static SpeedData data;
+    private boolean isAnimFinished = true;
     private SharedPreferences sharedPreferences;
-    String bestProv;
-    Long startTime, currentTime, time;
+    private Long mStartTime, mCurrentTime, time;
+    private String bestProv;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -118,18 +118,16 @@ public class MapPage extends BaseActivity implements MapContract.View
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_map);
         mapFragment.getMapAsync(this);
-        this.mMarkerMap = new HashMap<String, Marker>();
-        this.mUriMap = new HashMap<String, String>();
+        mMarkerMap = new HashMap<String, Marker>();
+        mUriMap = new HashMap<String, String>();
         mPresenter = new MapPresenter(this);
-        currentTime = SystemClock.elapsedRealtime();
-        startTime = currentTime;
+        mStartTime = SystemClock.elapsedRealtime();
         init();
         mPresenter.setUserPhoto();
         startGps();
     }
 
     private void startGps() {
-
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         data.setRunning(true);
         data.setFirstTime(true);
@@ -155,27 +153,8 @@ public class MapPage extends BaseActivity implements MapContract.View
                         .putInt(Constants.USER_MAPPAGE_MAXSPEED, (int) maxSpeedTemp)
                         .putInt(Constants.USER_MAPPAGE_DISTANCE, (int) distanceTemp)
                         .putInt(Constants.USER_MAPPAGE_AVGSPEED, (int) averageTemp).commit();
-                mRunnerDashBoardIntimeSpeed.setVelocity((int) maxSpeedTemp);
-                mRunnerDashBoardAvg.setVelocity((int) averageTemp);
-                if ((int) distanceTemp < 10000) {
-                    mTxtExpCurrent.setText(String.valueOf((int) distanceTemp));
-                    mBarExp.setProgress((int) distanceTemp);
-                } else if ((int) distanceTemp >= 10000 && (int) distanceTemp < 25000) {
-                    mTxtExpTotal.setText(String.valueOf(25000));
-                    mTxtExpCurrent.setText(String.valueOf((int) distanceTemp));
-                    mBarExp.setMax(15000);
-                    mBarExp.setProgress((int) distanceTemp - 10000);
-                } else if ((int) distanceTemp >= 25000 && (int) distanceTemp < 45000) {
-                    mTxtExpTotal.setText(String.valueOf(45000));
-                    mTxtExpCurrent.setText(String.valueOf((int) distanceTemp));
-                    mBarExp.setMax(20000);
-                    mBarExp.setProgress((int) distanceTemp - 25000);
-                } else {
-                    mTxtExpTotal.setText(String.valueOf(80000));
-                    mTxtExpCurrent.setText(String.valueOf((int) distanceTemp));
-                    mBarExp.setMax(35000);
-                    mBarExp.setProgress((int) distanceTemp - 45000);
-                }
+                mRunnerDashBoardAvgSpeed.setVelocity((int) averageTemp);
+                mPresenter.setUserExp((int) distanceTemp);
                 Log.d(Constants.TAG, "distanceTemp: " + String.valueOf(distanceTemp));
                 Log.d(Constants.TAG, "averageTemp: " + String.valueOf(averageTemp));
                 Log.d(Constants.TAG, "maxSpeedTemp: " + String.valueOf(maxSpeedTemp));
@@ -188,58 +167,42 @@ public class MapPage extends BaseActivity implements MapContract.View
     }
 
     private void init() {
-        mRunnerDashBoardIntimeSpeed = findViewById(R.id.dashboard_speed);
-        mRunnerDashBoardAvg = findViewById(R.id.dashboard_avg);
-        mTxtLeftComment = findViewById(R.id.txt_leftcomment);
-        mTxtRightComment = findViewById(R.id.txt_rightcomment);
+        mBarExp = findViewById(R.id.progressBar_exp);
+        mTxtCommentLeft = findViewById(R.id.txt_leftcomment);
+        mTxtCommentRight = findViewById(R.id.txt_rightcomment);
         mTxtExpCurrent = findViewById(R.id.txt_mappage_currentexp);
         mTxtExpTotal = findViewById(R.id.txt_mappage_totaleexp);
+        mMapPageConstraintLayout = findViewById(R.id.map_page_layout);
+        mRunnerDashBoardIntimeSpeed = findViewById(R.id.dashboard_speed);
+        mRunnerDashBoardAvgSpeed = findViewById(R.id.dashboard_avg);
         mBtnSendComment = findViewById(R.id.CommentOption_btn_fb_send_comment);
         mEditTxtCommentMessage = findViewById(R.id.CommentOption_edittxt_comments_message);
-        mConstraintLayout = findViewById(R.id.map_page_layout);
-        mBarExp = findViewById(R.id.progressBar_exp);
         data = new SpeedData(onGpsServiceUpdate);
-        int maxdistance = getApplicationContext()
-                .getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE)
-                .getInt(Constants.USER_MAPPAGE_DISTANCE, 0);
-        Log.d(Constants.TAG, "MaxDistance: " + maxdistance);
-        data.addDistance(Double.valueOf(maxdistance));
-
+        int distance = mContext.getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_DISTANCE, 0);
+        int maxSpeed = mContext.getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_MAXSPEED, 0);
+        Log.d(Constants.TAG, "MaxDistance: " + distance);
+        data.addDistance(Double.valueOf(distance));
+        data.setCurSpeed(maxSpeed);
         setupMyLocation();
         selectUserStatus();
-        sendGeomessageToFriend();
+        sendGeoMessageToFriend();
         queryGeoFriendMessage();
-        setUserExp();
+        mPresenter.setUserExp(distance);
     }
 
-    private void setUserExp() {
-        int userExp = mContext.getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_DISTANCE, 0);
-        if (userExp < 10000) {
-            mTxtExpCurrent.setText(String.valueOf(userExp));
-            mBarExp.setProgress(userExp);
-        } else if (userExp >= 10000 && userExp < 25000) {
-            mTxtExpTotal.setText(String.valueOf(25000));
-            mTxtExpCurrent.setText(String.valueOf(userExp));
-            mBarExp.setMax(15000);
-            mBarExp.setProgress(userExp - 10000);
-        } else if (userExp >= 25000 && userExp < 45000) {
-            mTxtExpTotal.setText(String.valueOf(45000));
-            mTxtExpCurrent.setText(String.valueOf(userExp));
-            mBarExp.setMax(20000);
-            mBarExp.setProgress(userExp - 25000);
-        } else {
-            mTxtExpTotal.setText(String.valueOf(80000));
-            mTxtExpCurrent.setText(String.valueOf(userExp));
-            mBarExp.setMax(35000);
-            mBarExp.setProgress(userExp - 45000);
-        }
+    @Override
+    public void showUserExp(int userExp, int nextExp, int barLength, int barLengthMax) {
+        mTxtExpTotal.setText(String.valueOf(nextExp));
+        mTxtExpCurrent.setText(String.valueOf(userExp));
+        mBarExp.setMax(barLengthMax);
+        mBarExp.setProgress(barLength);
     }
 
     private void queryGeoFriendMessage() {
         mPresenter.getFriendMessage();
     }
 
-    private void sendGeomessageToFriend() {
+    private void sendGeoMessageToFriend() {
         mBtnSendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -364,6 +327,11 @@ public class MapPage extends BaseActivity implements MapContract.View
         mPresenter.openGoogleMaps(mLocation);
     }
 
+    /**
+     * show google map, add marker, create a circle
+     * @param lat
+     * @param lng
+     */
     @SuppressLint("MissingPermission")
     public void showGoogleMapUi(double lat, double lng) {
         LatLng userlocation = new LatLng(lat, lng);
@@ -383,67 +351,52 @@ public class MapPage extends BaseActivity implements MapContract.View
 
 //        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userlocation, 13));
 //        mMap.getUiSettings().setZoomControlsEnabled(true);\
-
     }
 
+    /**
+     *讓方圓300公尺的朋友能顯示在地圖上，點擊marker時可以看到好友頭像
+     *
+     * @param key
+     *@param mlocation
+     * @param friendAvatar
+     * */
     @Override
     public void showGeoFriends(String key, GeoLocation mlocation, String friendAvatar) {
-//        mMarkerMap.clear();                   //目前還不知道有什麼影響，特此註解以供驗證
-//        mUriMap.clear();                       //目前還不知道有什麼影響，特此註解以供驗證
+
         Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(mlocation.latitude, mlocation.longitude)));
         Log.d(Constants.TAG, "MMarker: " + marker.getId());
-        this.mMarkerMap.put(key, marker);
+        mMarkerMap.put(key, marker);
         Log.d(Constants.TAG, "MKEY: " + key);
         Log.d(Constants.TAG, "MUri: " + friendAvatar.toString());
-        this.mUriMap.put(marker.getId(), friendAvatar);
-        mMap.setInfoWindowAdapter(new UserinfoWindow(this, mUriMap));
+        mUriMap.put(marker.getId(), friendAvatar);
+        mMap.setInfoWindowAdapter(new UserinfoWindow(mContext, mUriMap));
     }
 
+    /**
+     * when friend leave the geofire, remove the key and marker
+     *
+     * @param key
+     */
     @Override
     public void removeGeoFriends(String key) {
-        Marker marker = this.mMarkerMap.get(key);
+        Marker marker = mMarkerMap.get(key);
         if (marker != null) {
             marker.remove();
-            this.mMarkerMap.remove(key);
-            this.mMarkerMap.clear();            //目前還不知道有什麼影響，特此註解以供驗證
+            mMarkerMap.remove(key);
+            mMarkerMap.clear();            //目前還不知道有什麼影響，特此註解以供驗證
         }
     }
 
-    @Override
-    public void showLeftComment(String Uid, String message) {
-        mTxtLeftComment.setVisibility(View.VISIBLE);
-        mTxtRightComment.setVisibility(View.GONE);
-        mTxtLeftComment.setText(message);
-        mEditTxtCommentMessage.setText("");
-    }
-
-    @Override
-    public void showRightComment(final String message) {
-        mTxtRightComment.setVisibility(View.VISIBLE);
-        mTxtLeftComment.setVisibility(View.GONE);
-        mTxtRightComment.setText(message);
-
-        textToSpeech = new TextToSpeech(mContext, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status == TextToSpeech.SUCCESS) {
-                    textToSpeech.setLanguage(Locale.TAIWAN);
-                    textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, null);
-                }
-            }
-        });
-    }
-
-    @Override
-    public void noComment() {
-        Snackbar.make(mConstraintLayout, "可以講講話啊", Snackbar.LENGTH_SHORT).show();
-    }
-
+    /**
+     * move the marker, when friend move
+     * @param key
+     * @param location
+     */
     @Override
     public void moveGeoFriends(String key, GeoLocation location) {
         final double lat = location.latitude;
         final double lng = location.longitude;
-        final Marker marker = this.mMarkerMap.get(key);
+        final Marker marker = mMarkerMap.get(key);
         if (marker != null) {               //            this.animateMarkerTo(marker, location.latitude, location.longitude)↓
             final Handler handler = new Handler();
             final long start = SystemClock.uptimeMillis();
@@ -470,6 +423,51 @@ public class MapPage extends BaseActivity implements MapContract.View
         }
     }
 
+    /**
+     * talk to friend, show left comment
+     * @param message
+     */
+    @Override
+    public void showLeftComment(String message) {
+        mTxtCommentLeft.setVisibility(View.VISIBLE);
+        mTxtCommentRight.setVisibility(View.GONE);
+        mTxtCommentLeft.setText(message);
+        mEditTxtCommentMessage.setText("");
+    }
+
+    /**
+     * friend's comment when friend send comment
+     * @param message
+     */
+    @Override
+    public void showRightComment(final String message) {
+        mTxtCommentRight.setVisibility(View.VISIBLE);
+        mTxtCommentLeft.setVisibility(View.GONE);
+        mTxtCommentRight.setText(message);
+
+        textToSpeech = new TextToSpeech(mContext, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    textToSpeech.setLanguage(Locale.TAIWAN);
+                    textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, null);
+                }
+            }
+        });
+    }
+
+    /**
+     * show toast  no comment, when  click send btn
+     */
+    @Override
+    public void noComment() {
+        Snackbar.make(mMapPageConstraintLayout, "可以講講話啊", Snackbar.LENGTH_SHORT).show();
+    }
+
+    /**
+     * show avatar, when click the friend marker
+     * @param userimage
+     */
     @Override
     public void showUserPhoto(String userimage) {
         mImageUser = findViewById(R.id.imageUser_mapView);
@@ -478,6 +476,9 @@ public class MapPage extends BaseActivity implements MapContract.View
         clickUserImage();
     }
 
+    /**
+     * Enter the detail page
+     */
     private void clickUserImage() {
         mImageUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -539,16 +540,6 @@ public class MapPage extends BaseActivity implements MapContract.View
     }
 
     @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-    @Override
     public void onLocationChanged(Location location) {
         mMap.clear();
         displayLocation();
@@ -561,10 +552,10 @@ public class MapPage extends BaseActivity implements MapContract.View
             int speed = (int) (location.getSpeed() * 3.6);
             dashBoardAnimation(mRunnerDashBoardIntimeSpeed, speed);
             Log.d(Constants.TAG_DASHBOARD, "Speed: " + speed);
-            currentTime = SystemClock.elapsedRealtime();
-            time = currentTime - startTime;
-            Log.e(Constants.TAG, "currentTime:" + currentTime);
-            Log.e(Constants.TAG, "startTime:" + startTime);
+            mCurrentTime = SystemClock.elapsedRealtime();
+            time = mCurrentTime - mStartTime;
+            Log.e(Constants.TAG, "mCurrentTime:" + mCurrentTime);
+            Log.e(Constants.TAG, "mStartTime:" + mStartTime);
             data.setTime(time);
         }
     }
@@ -600,7 +591,7 @@ public class MapPage extends BaseActivity implements MapContract.View
         }
 
         if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            showGpsDisabledDialog();            //TODO bug
+            showGpsDisabledDialog();
         }
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -638,6 +629,21 @@ public class MapPage extends BaseActivity implements MapContract.View
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case Constants.REQUEST_LOCATION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (checkPlayServices()) {
+                        createLocationRequest();
+                        buildGoogleApiClient();
+                        displayLocation();
+                    }
+                }
+                break;
+        }
+    }
+
+    @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
 
     }
@@ -653,22 +659,17 @@ public class MapPage extends BaseActivity implements MapContract.View
     }
 
     @Override
-    public boolean onMyLocationButtonClick() {
-        return false;
+    public void onConnectionSuspended(int i) {
+
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case Constants.REQUEST_LOCATION:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (checkPlayServices()) {
-                        createLocationRequest();
-                        buildGoogleApiClient();
-                        displayLocation();
-                    }
-                }
-                break;
-        }
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public boolean onMyLocationButtonClick() {
+        return false;
     }
 }

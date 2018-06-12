@@ -6,25 +6,26 @@
 
 [<img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/get_it_on_google_play.png" width="150" height="50">](https://play.google.com/store/apps/details?id=com.aaron.runmer)
 
-## Featrue
+ ## Featrue
 
 
 
 
-# Library
+ ## Library
 
-# Screenshot
-<img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/cover.jpg" width="270" height="480"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/map_page.jpg" width="270" height="480"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/user_detail.jpg" width="270" height="480">
-<img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/running_events.jpg" width="270" height="480"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/create_event.jpg" width="270" height="480"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/add_friends.jpg" width="270" height="480"> 
+ ## Screenshot
+ <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/cover.jpg" width="270" height="480"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/map_page.jpg" width="270" height="480"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/user_detail.jpg" width="270" height="480">
+ <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/running_events.jpg" width="270" height="480"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/create_event.jpg" width="270" height="480"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/add_friends.jpg" width="270" height="480"> 
 
-# Requirement
-* Android 7+
-* Android Studio 3.0.1
+ ## Requirement
 
-# Version
+  * Android 7+
+  * Android Studio 3.0.1
+
+ ## Version
 
  
 
-# Contacts
-Aaron H. <br />
-htim2464@gmail.com 
+ ## Contacts
+  Aaron H. <br />
+  htim2464@gmail.com 

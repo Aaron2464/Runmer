@@ -8,14 +8,14 @@
 
  ## Featrue
   * Login Page
-    > 使用 Facebok API 實作登入頁
+    > 使用 Facebok API 實作登入頁 <br />
   
   * Map Page
-    > 使用 Google Map API 實作地圖
-    > 自定義 View 實現 DashBoard 顯示即時速度與平均速度
-    > 利用 GeoFire 在方圓內實時位置查詢的特性尋找好友
-    > 即時對話，接收訊息時，透過 TextToSpeech 輸出文字訊息
-    > 使用 Switch 開關控制使用者 Location 公開與隱私狀態
+    > 使用 Google Map API 實作地圖 <br />
+    > 自定義 View 實現 DashBoard 顯示即時速度與平均速度 <br />
+    > 利用 GeoFire 在方圓內實時位置查詢的特性尋找好友 <br />
+    > 即時對話，接收訊息時，透過 TextToSpeech 輸出文字訊息 <br />
+    > 使用 Switch 開關控制使用者 Location 公開與隱私狀態 <br />
   
    
 

@@ -2,7 +2,7 @@
 
 **Runmer是一個為科技冷漠灌注人性的城市慢跑App，全為個人獨立設計，** <br />
 **目的是希望讓這個App的使用者可以在城市間漫遊，利用GeoFire在方圓內實時位置查詢的特性尋找好友，** <br />
-**並在背景執行時，可以通過文字轉語音模式，給予好友加油打氣。** <br />
+**並在背景執行時，可以通過文字轉語音模式，給予好友加油打氣 :+1: 。** <br />
 
 [<img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/get_it_on_google_play.png" width="150" height="50">](https://play.google.com/store/apps/details?id=com.aaron.runmer)
 

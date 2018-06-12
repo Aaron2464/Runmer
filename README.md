@@ -31,6 +31,9 @@
     * **新增好友** <br />
     * **拒絕好友** <br />
 
+ ## Screenshot
+ <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/cover.jpg" width="270" height="480"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/map_page.jpg" width="270" height="480"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/user_detail.jpg" width="270" height="480">
+ <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/running_events.jpg" width="270" height="480"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/create_event.jpg" width="270" height="480"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/add_friends.jpg" width="270" height="480"> 
 
  ## Library
  
@@ -41,12 +44,8 @@
   * Google Map
     * Location
   * Picasso
-    
- ## Screenshot
- <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/cover.jpg" width="270" height="480"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/map_page.jpg" width="270" height="480"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/user_detail.jpg" width="270" height="480">
- <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/running_events.jpg" width="270" height="480"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/create_event.jpg" width="270" height="480"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/add_friends.jpg" width="270" height="480"> 
 
- ## Requirement
+ ## Requirements
 
   * Android 7+
   * Android Studio 3.0.1 

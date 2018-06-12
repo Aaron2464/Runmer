@@ -7,7 +7,17 @@
 [<img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/get_it_on_google_play.png" width="150" height="50">](https://play.google.com/store/apps/details?id=com.aaron.runmer)
 
  ## Featrue
-
+  * Login Page
+    > 使用 Facebok API 實作登入頁
+  
+  * Map Page
+    > 使用 Google Map API 實作地圖
+    > 自定義 View 實現 DashBoard 顯示即時速度與平均速度
+    > 利用 GeoFire 在方圓內實時位置查詢的特性尋找好友
+    > 即時對話，接收訊息時，透過 TextToSpeech 輸出文字訊息
+    > 使用 Switch 開關控制使用者 Location 公開與隱私狀態
+  
+   
 
 
 

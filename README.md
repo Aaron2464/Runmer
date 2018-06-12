@@ -45,11 +45,7 @@
  ## Requirement
 
   * Android 7+
-  * Android Studio 3.0.1
-
- ## Version
-
- 
+  * Android Studio 3.0.1 
 
  ## Contacts
   Aaron H. <br />

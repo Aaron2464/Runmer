@@ -32,8 +32,8 @@
     * 拒絕好友 <br />
 
  ## Screenshot
- <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/cover.jpg" width="270" height="480"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/map_page.jpg" width="270" height="480"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/user_detail.jpg" width="270" height="480">
- <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/running_events.jpg" width="270" height="480"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/create_event.jpg" width="270" height="480"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/add_friends.jpg" width="270" height="480"> 
+ <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/cover.jpg" width="180" height="320"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/map_page.jpg" width="180" height="320"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/user_detail.jpg" width="180" height="320"> <br />
+ <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/running_events.jpg" width="180" height="320"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/create_event.jpg" width="180" height="320"> <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/add_friends.jpg" width="180" height="320"> 
 
  ## Library
  

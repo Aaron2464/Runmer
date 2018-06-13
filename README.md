@@ -42,7 +42,7 @@
     * Database
     * Crashlytics
   * Google Map
-    * Location
+    * Location API
   * Picasso
 
  ## Requirements

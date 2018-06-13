@@ -37,12 +37,14 @@
 
  ## Library
  
+  * Facebook 
+    * Login
   * Firebase 
     * Authentication
     * Database
     * Crashlytics
   * Google Map
-    * Location API
+    * Location
   * Picasso
 
  ## Requirements

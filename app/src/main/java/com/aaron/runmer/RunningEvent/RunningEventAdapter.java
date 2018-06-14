@@ -55,7 +55,7 @@ public class RunningEventAdapter extends RecyclerView.Adapter<RunningEventAdapte
             holder.mBtnJoinEvent.setImageResource(R.drawable.full);
             holder.mBtnJoinEvent.setClickable(false);
         }
-        Picasso.get().load(mEventData.get(newposition).getMasterPhoto()).placeholder(R.drawable.running).transform(new CircleTransform(mContext)).into(holder.mImageEventFriendAvatar);
+        Picasso.get().load(mEventData.get(newposition).getMasterPhoto()).placeholder(R.drawable.runningicon).transform(new CircleTransform(mContext)).into(holder.mImageEventFriendAvatar);
     }
 
     @Override

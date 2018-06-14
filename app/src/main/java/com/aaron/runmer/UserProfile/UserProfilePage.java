@@ -101,7 +101,7 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
 
     @Override
     public void showUserStatus(HashMap<String, String> mhashmap) {
-        Picasso.get().load(mhashmap.get(Constants.USER_FIREBASE_PHOTO)).placeholder(R.drawable.running).transform(new CircleTransform(getContext())).into(mImageViewUserProfileAvatar);
+        Picasso.get().load(mhashmap.get(Constants.USER_FIREBASE_PHOTO)).placeholder(R.drawable.runningicon).transform(new CircleTransform(getContext())).into(mImageViewUserProfileAvatar);
         mTxtUserProfileName.setText(mhashmap.get(Constants.USER_FIREBASE_NAME));
     }
 

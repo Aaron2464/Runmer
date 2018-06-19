@@ -7,8 +7,8 @@ android {
         applicationId "com.aaron.runmer"
         minSdkVersion 24
         targetSdkVersion 26
-        versionCode 18061301
-        versionName "1.1.7"
+        versionCode 18061901
+        versionName "1.1.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //        multiDexEnabled true  //fix Unable to merge dex
     }

@@ -33,9 +33,9 @@
             android:drawableLeft="@mipmap/add_subtitle"
             android:hint="Title"
             android:inputType="text"
+            android:maxLength="10"
             android:singleLine="true"
-            app:counterEnabled="true"
-            app:counterMaxLength="10" />
+            app:counterEnabled="true" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -54,9 +54,9 @@
             android:drawableLeft="@mipmap/add_location"
             android:hint="Place"
             android:inputType="textPostalAddress"
+            android:maxLength="10"
             android:singleLine="true"
-            app:counterEnabled="true"
-            app:counterMaxLength="10" />
+            app:counterEnabled="true" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -74,9 +74,9 @@
             android:drawableLeft="@mipmap/add_people"
             android:hint="Num of People"
             android:inputType="number"
+            android:maxLength="5"
             android:singleLine="true"
-            app:counterEnabled="true"
-            app:counterMaxLength="10" />
+            app:counterEnabled="true" />
     </android.support.design.widget.TextInputLayout>
 
 </android.support.constraint.ConstraintLayout>

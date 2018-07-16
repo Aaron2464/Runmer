@@ -329,6 +329,7 @@ public class MapPage extends BaseActivity implements MapContract.View,
 
     /**
      * show google map, add marker, create a circle
+     *
      * @param lat
      * @param lng
      */
@@ -354,12 +355,12 @@ public class MapPage extends BaseActivity implements MapContract.View,
     }
 
     /**
-     *讓方圓300公尺的朋友能顯示在地圖上，點擊marker時可以看到好友頭像
+     * 讓方圓300公尺的朋友能顯示在地圖上，點擊marker時可以看到好友頭像
      *
      * @param key
-     *@param mlocation
+     * @param mlocation
      * @param friendAvatar
-     * */
+     */
     @Override
     public void showGeoFriends(String key, GeoLocation mlocation, String friendAvatar) {
 
@@ -389,6 +390,7 @@ public class MapPage extends BaseActivity implements MapContract.View,
 
     /**
      * move the marker, when friend move
+     *
      * @param key
      * @param location
      */
@@ -425,6 +427,7 @@ public class MapPage extends BaseActivity implements MapContract.View,
 
     /**
      * talk to friend, show left comment
+     *
      * @param message
      */
     @Override
@@ -437,6 +440,7 @@ public class MapPage extends BaseActivity implements MapContract.View,
 
     /**
      * friend's comment when friend send comment
+     *
      * @param message
      */
     @Override
@@ -466,6 +470,7 @@ public class MapPage extends BaseActivity implements MapContract.View,
 
     /**
      * show avatar, when click the friend marker
+     *
      * @param userimage
      */
     @Override

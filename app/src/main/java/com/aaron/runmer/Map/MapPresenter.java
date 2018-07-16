@@ -183,12 +183,12 @@ public class MapPresenter implements MapContract.Presenter {
 
     @Override
     public void setUserStatus(boolean isChecked) {
-        mUserRef.child("UserStatus").setValue(isChecked);
+        mUserRef.child("userStatus").setValue(isChecked);
     }
 
     @Override
     public void setUserPhoto() {
-        mUserRef.child("UserPhoto").addListenerForSingleValueEvent(new ValueEventListener() {
+        mUserRef.child("userPhoto").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mMapsView.showUserPhoto((String) dataSnapshot.getValue());

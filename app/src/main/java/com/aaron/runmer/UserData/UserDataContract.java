@@ -2,8 +2,10 @@ package com.aaron.runmer.UserData;
 
 import com.aaron.runmer.Base.BasePresenter;
 import com.aaron.runmer.Base.BaseView;
+import com.aaron.runmer.Objects.UserData;
 
 import java.util.Map;
+import java.util.Objects;
 
 public interface UserDataContract {
 
@@ -24,7 +26,7 @@ public interface UserDataContract {
 
         void setUserPhoto();
 
-        void setUserDataToFirebase(Map UserDataMap);
+        void setUserDataToFirebase(UserData userdata);
 
         void changeUserImage();
     }

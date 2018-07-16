@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.aaron.runmer.Base.BaseActivity;
 import com.aaron.runmer.Map.MapPage;
+import com.aaron.runmer.Objects.UserData;
 import com.aaron.runmer.R;
 import com.aaron.runmer.util.CircleTransform;
 import com.aaron.runmer.util.Constants;
@@ -50,6 +51,7 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
     private DatabaseReference mDatabaseReference;
     private UserDataContract.Presenter mPresenter;
     private Map<String, String> UserDataMap = new HashMap<String, String>();
+    private UserData mUserData = new UserData();
     private DisplayMetrics mPhoto;
 
     private int mYear, mMonth, mDay;
@@ -82,14 +84,21 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
 
                 if (!mUserName.equals("") && !mUserPhoto.equals("") && !mUserEmail.equals("")
                         && !mUserBirth.equals("") && !mUserHeight.equals("") && !mUserWeight.equals("") && !mUserGender.equals("")) {
-                    UserDataMap.put("UserName", mUserName);
-                    UserDataMap.put("UserEmail", mUserEmail);
-                    UserDataMap.put("UserPhoto", mUserPhoto);
-                    UserDataMap.put("UserBirth", mUserBirth);
-                    UserDataMap.put("UserHeight", mUserHeight);
-                    UserDataMap.put("UserWeight", mUserWeight);
-                    UserDataMap.put("UserGender", mUserGender);
-                    UserDataMap.put("UserStatus", "false");
+//                    UserDataMap.put("UserName", mUserName);
+//                    UserDataMap.put("UserEmail", mUserEmail);
+//                    UserDataMap.put("UserPhoto", mUserPhoto);
+//                    UserDataMap.put("UserBirth", mUserBirth);
+//                    UserDataMap.put("UserHeight", mUserHeight);
+//                    UserDataMap.put("UserWeight", mUserWeight);
+//                    UserDataMap.put("UserGender", mUserGender);
+//                    UserDataMap.put("UserStatus", "false");
+                    mUserData.setUserName(mUserName);
+                    mUserData.setUserPhoto(mUserPhoto);
+                    mUserData.setUserEmail(mUserEmail);
+                    mUserData.setUserBirth(mUserBirth);
+                    mUserData.setUserHeight(mUserHeight);
+                    mUserData.setUserWeight(mUserWeight);
+                    mUserData.setUserStatus(false);
 
                     getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).edit()
                             .putString(Constants.USER_FIREBASE_NAME, mUserName)
@@ -100,7 +109,7 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
                             .putString(Constants.USER_FIREBASE_WEIGHT, mUserWeight)
                             .putString(Constants.USER_FIREBASE_GENDER, mUserGender).apply();
 
-                    mPresenter.setUserDataToFirebase(UserDataMap);
+                    mPresenter.setUserDataToFirebase(mUserData);
 
                     Intent intent = new Intent();
                     intent.setClass(UserDataPage.this, MapPage.class);

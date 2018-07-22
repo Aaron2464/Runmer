@@ -11,16 +11,16 @@ public class Constants {
     public static int DISPLACEMENT = 10;
 
     public static final String USER_FIREBASE = "Users";
-    public static final String USER_FIREBASE_NAME = "UserName";
-    public static final String USER_FIREBASE_EMAIL = "UserEmail";
-    public static final String USER_FIREBASE_PHOTO = "UserPhoto";
+    public static final String USER_FIREBASE_NAME = "userName";
+    public static final String USER_FIREBASE_EMAIL = "userEmail";
+    public static final String USER_FIREBASE_PHOTO = "userPhoto";
     public static final String USER_FIREBASE_FRIENDS = "Friends";
-    public static final String USER_FIREBASE_BIRTH = "UserBirth";
-    public static final String USER_FIREBASE_HEIGHT = "UserHeight";
-    public static final String USER_FIREBASE_WEIGHT = "UserWeight";
-    public static final String USER_FIREBASE_GENDER = "UserGender";
+    public static final String USER_FIREBASE_BIRTH = "userBirth";
+    public static final String USER_FIREBASE_HEIGHT = "userHeight";
+    public static final String USER_FIREBASE_WEIGHT = "userWeight";
+    public static final String USER_FIREBASE_GENDER = "userGender";
     public static final String USER_FIREBASE_UID = "UserUid";
-    public static final String USER_FIREBASE_STATUS = "UserStatus";
+    public static final String USER_FIREBASE_STATUS = "userStatus";
 
     public static final String EVENT_FIREBASE = "Events";
     public static final String EVENT_FIREBASE_ID = "EventId";

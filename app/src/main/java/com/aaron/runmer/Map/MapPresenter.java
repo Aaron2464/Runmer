@@ -24,8 +24,8 @@ public class MapPresenter implements MapContract.Presenter {
 
     private final MapContract.View mMapsView;
     private String mUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-    private DatabaseReference mFriendRef = FirebaseDatabase.getInstance().getReference("Users").child(mUserUid).child("Friends");
-    private DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference("Users").child(mUserUid);
+    private DatabaseReference mFriendRef = FirebaseDatabase.getInstance().getReference(Constants.USER_FIREBASE).child(mUserUid).child("Friends");
+    private DatabaseReference mUserRef = FirebaseDatabase.getInstance().getReference(Constants.USER_FIREBASE).child(mUserUid);
     private DatabaseReference mUserLocation = FirebaseDatabase.getInstance().getReference("Location");
     private DatabaseReference mComment = FirebaseDatabase.getInstance().getReference("Comments");
     private GeoFire mGeoFire = new GeoFire(mUserLocation);
@@ -76,7 +76,7 @@ public class MapPresenter implements MapContract.Presenter {
                 public void onKeyEntered(final String key, final GeoLocation location) {
                     Log.d(Constants.TAG, "onKeyEntered");
                     if (!key.equals(mAuth.getCurrentUser().getUid())) {
-                        mFriendRef.child(key).child("userPhoto").addListenerForSingleValueEvent(
+                        mFriendRef.child(key).child(Constants.USER_FIREBASE_PHOTO).addListenerForSingleValueEvent(
                                 new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {

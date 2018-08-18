@@ -152,7 +152,7 @@ public class MapPage extends BaseActivity implements MapContract.View,
                 getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).edit()
                         .putInt(Constants.USER_MAPPAGE_MAXSPEED, (int) maxSpeedTemp)
                         .putInt(Constants.USER_MAPPAGE_DISTANCE, (int) distanceTemp)
-                        .putInt(Constants.USER_MAPPAGE_AVGSPEED, (int) averageTemp).commit();
+                        .putInt(Constants.USER_MAPPAGE_AVGSPEED, (int) averageTemp).apply();
                 mRunnerDashBoardAvgSpeed.setVelocity((int) averageTemp);
                 mPresenter.setUserExp((int) distanceTemp);
                 Log.d(Constants.TAG, "distanceTemp: " + String.valueOf(distanceTemp));
@@ -181,7 +181,7 @@ public class MapPage extends BaseActivity implements MapContract.View,
         int distance = mContext.getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_DISTANCE, 0);
         int maxSpeed = mContext.getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_MAXSPEED, 0);
         Log.d(Constants.TAG, "MaxDistance: " + distance);
-        data.addDistance(Double.valueOf(distance));
+        data.addDistance((double) distance);
         data.setCurSpeed(maxSpeed);
         setupMyLocation();
         selectUserStatus();

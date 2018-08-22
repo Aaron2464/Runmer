@@ -54,6 +54,7 @@ public class LinearItemDecoration extends RecyclerView.ItemDecoration {
 
     /**
      * 繪製分隔線
+     *
      * @param c
      * @param parent
      * @param state
@@ -71,6 +72,7 @@ public class LinearItemDecoration extends RecyclerView.ItemDecoration {
             }
         }
     }
+
     // 繪製方向是Vertical的分隔線
     private void drawVertical(Canvas c, RecyclerView parent) {
         int count = parent.getChildCount();
@@ -85,6 +87,7 @@ public class LinearItemDecoration extends RecyclerView.ItemDecoration {
             c.drawRect(left, top, right, bottom, mPaint);
         }
     }
+
     // 繪製方向是Horizontal的分隔線
     private void drawHorizontal(Canvas c, RecyclerView parent) {
         int count = parent.getChildCount();

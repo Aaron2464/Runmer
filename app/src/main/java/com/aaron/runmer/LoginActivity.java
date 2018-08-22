@@ -12,9 +12,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.aaron.runmer.Base.BaseActivity;
-import com.aaron.runmer.Map.MapPage;
-import com.aaron.runmer.UserData.UserDataPage;
+import com.aaron.runmer.base.BaseActivity;
+import com.aaron.runmer.map.MapPage;
+import com.aaron.runmer.userdata.UserDataPage;
 import com.aaron.runmer.util.Constants;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -129,9 +129,9 @@ public class LoginActivity extends BaseActivity {
 
             }
         } catch (PackageManager.NameNotFoundException e) {
-
+            e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
-
+            e.printStackTrace();
         }
     }
 }

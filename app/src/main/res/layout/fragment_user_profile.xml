@@ -191,7 +191,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout_userprofile_badge">
 
-            <com.aaron.runmer.DashBoardPackage.RunnerDashBoard
+            <com.aaron.runmer.dashboardpackage.RunnerDashBoard
                 android:id="@+id/dashboard_speed_fast"
                 android:layout_width="115dp"
                 android:layout_height="110dp"
@@ -213,7 +213,7 @@
                 app:layout_constraintEnd_toEndOf="@+id/dashboard_speed_fast"
                 app:layout_constraintStart_toStartOf="@+id/dashboard_speed_fast" />
 
-            <com.aaron.runmer.DashBoardPackage.RunnerDashBoard
+            <com.aaron.runmer.dashboardpackage.RunnerDashBoard
                 android:id="@+id/dashboard_willpower"
                 android:layout_width="115dp"
                 android:layout_height="110dp"
@@ -234,7 +234,7 @@
                 app:layout_constraintEnd_toEndOf="@+id/dashboard_willpower"
                 app:layout_constraintStart_toStartOf="@+id/dashboard_willpower" />
 
-            <com.aaron.runmer.DashBoardPackage.RunnerDashBoard
+            <com.aaron.runmer.dashboardpackage.RunnerDashBoard
                 android:id="@+id/dashboard_speed_avg"
                 android:layout_width="115dp"
                 android:layout_height="110dp"

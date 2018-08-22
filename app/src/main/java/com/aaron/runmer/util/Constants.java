@@ -2,8 +2,8 @@ package com.aaron.runmer.util;
 
 public class Constants {
     // Log
-    public final static String TAG = "Runmer";
-    public final static String TAG_DASHBOARD = "DASHBOARD";
+    public static final String TAG = "Runmer";
+    public static final String TAG_DASHBOARD = "DASHBOARD";
 
     public static final int REQUEST_LOCATION = 2;
     public static int UPDATE_INTERVAL = 1000;

@@ -62,8 +62,8 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
 //        View view = layoutInflater.inflate(R.layout.dialog_friend_invite, null);          //記憶體位置不同
         mDialogLayout.setVisibility(View.VISIBLE);        //uperCamel & lowerCamel different?
 
-        mTxtInviteFriendName.setText(foundUser.getUserName().toString());
-        mTxtInviteFriendEmail.setText(foundUser.getUserEmail().toString());
+        mTxtInviteFriendName.setText(foundUser.getUserName());
+        mTxtInviteFriendEmail.setText(foundUser.getUserEmail());
         Picasso.get().load(foundUser.getUserPhoto()).transform(new CircleTransform(getContext())).placeholder(R.drawable.user_image).into(mImageInviteFriendAvatar);
         Log.d(Constants.TAG, "mTxtInviteFriendName : " + foundUser.getUserName());
         Log.d(Constants.TAG, "mTxtInviteFriendLevel : " + foundUser.getUserEmail());

@@ -43,9 +43,9 @@ public class RunmerParser {
                         }
                         if (userData.getUserEmail() != null) {
                             if (userData.getUserEmail().equals(searchData)) {
-                                Log.d(Constants.TAG, userData.getUserEmail().toString());
-                                Log.d(Constants.TAG, userData.getUserName().toString());
-                                Log.d(Constants.TAG, userData.getUserPhoto().toString());
+                                Log.d(Constants.TAG, userData.getUserEmail());
+                                Log.d(Constants.TAG, userData.getUserName());
+                                Log.d(Constants.TAG, userData.getUserPhoto());
                                 parseFireBaseFriendCallback.onCompleted(searchResultBean, userData);
                             } else {
                                 searchResultBean = false;

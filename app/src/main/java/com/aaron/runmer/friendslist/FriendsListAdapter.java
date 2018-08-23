@@ -38,12 +38,12 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if (mFriendData.get(position).getUserStatus().equals(true)) {
+        if (mFriendData.get(position).getUserStatus()) {
             holder.getBtnLocation().setVisibility(View.VISIBLE);
         } else {
             holder.getBtnLocation().setVisibility(View.GONE);
         }
-        if (mFriendData.get(position).getFriendRequest().equals("invited")) {
+        if ("invited".equals(mFriendData.get(position).getFriendRequest())) {
             holder.getBtnAddFriend().setVisibility(View.VISIBLE);
             holder.getBtnDenyFriend().setVisibility(View.VISIBLE);
         } else {

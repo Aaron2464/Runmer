@@ -81,9 +81,9 @@ public class RunmerParser {
                         Log.d(Constants.TAG, "inviteFriendUid : " + inviteFriendUid);
                         String currentUserUid = mCurrentUserUid.getCurrentUser().getUid();
                         Log.d(Constants.TAG, "currentUserUid : " + currentUserUid);
-                        dataBaseRef.child(Constants.USER_FIREBASE).child(inviteFriendUid).child("Friends").child(currentUserUid).child("FriendRequest").setValue("invited");
+                        dataBaseRef.child(Constants.USER_FIREBASE).child(inviteFriendUid).child("Friends").child(currentUserUid).child("friendRequest").setValue("invited");
 //                        dataBaseRef.child(Constants.USER_FIREBASE).child(inviteFriendUid).child("Friends").child(currentUserUid).setValue(UserData.class);
-                        dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child("Friends").child(inviteFriendUid).child("FriendRequest").setValue("waiting");
+                        dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child("Friends").child(inviteFriendUid).child("friendRequest").setValue("waiting");
                         parseFireBaseInviteFriendCallback.onCompleted();
                     }
 
@@ -110,7 +110,7 @@ public class RunmerParser {
                         final String inviteFriendUid = String.valueOf(userData.getUserUid());
                         Log.d(Constants.TAG, "inviteFriendUid : " + inviteFriendUid);
                         Log.d(Constants.TAG, "currentUserUid : " + currentUserUid);
-                        dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child("Friends").child(inviteFriendUid).child("FriendRequest").setValue("true");
+                        dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child("Friends").child(inviteFriendUid).child("friendRequest").setValue("true");
                         dataBaseRef.child(Constants.USER_FIREBASE).orderByChild(Constants.USER_FIREBASE_UID).equalTo(currentUserUid)
                                 .addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -120,7 +120,7 @@ public class RunmerParser {
                                             userData = childSnapshot.getValue(UserData.class);
                                         }
                                         dataBaseRef.child(Constants.USER_FIREBASE).child(inviteFriendUid).child("Friends").child(currentUserUid).setValue(userData);
-                                        dataBaseRef.child(Constants.USER_FIREBASE).child(inviteFriendUid).child("Friends").child(currentUserUid).child("FriendRequest").setValue("true");
+                                        dataBaseRef.child(Constants.USER_FIREBASE).child(inviteFriendUid).child("Friends").child(currentUserUid).child("friendRequest").setValue("true");
                                     }
 
                                     @Override
@@ -142,9 +142,10 @@ public class RunmerParser {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         FriendData friendData = snapshot.getValue(FriendData.class);
+                        friendData.setFriendRequest("invited");
                         String currentUserUid = mCurrentUserUid.getCurrentUser().getUid();
                         dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child("Friends").child(friendUid).setValue(friendData);
-                        dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child("Friends").child(friendUid).child("FriendRequest").setValue("invited");
+//                        dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child("Friends").child(friendUid).child("friendRequest").setValue("invited");
                     }
 
                     @Override

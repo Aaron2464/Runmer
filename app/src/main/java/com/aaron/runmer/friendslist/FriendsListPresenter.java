@@ -44,13 +44,13 @@ public class FriendsListPresenter implements FriendsListContract.Presenter {
 
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        if (dataSnapshot.child("FriendRequest").getValue().equals("invited")) {
-                            Log.d(Constants.TAG, "FriendRequest: " + dataSnapshot.child("FriendRequest").getValue());
+                        if ("invited".equals(dataSnapshot.child("friendRequest").getValue())) {
+                            Log.d(Constants.TAG, "FriendRequest: " + dataSnapshot.child("friendRequest").getValue());
                             Log.d(Constants.TAG, "Uid: " + dataSnapshot.getKey());
                             RunmerParser.parseFirebaseShowAddedFriend(dataSnapshot.getKey());
-                        } else if (dataSnapshot.child("FriendRequest").getValue().equals("waiting")) {
-                            Log.d(Constants.TAG, "FriendRequest: " + dataSnapshot.child("FriendRequest").getValue());
-                        } else {
+                        } else if ("waiting".equals(dataSnapshot.child("friendRequest").getValue())) {
+                            Log.d(Constants.TAG, "FriendRequest: " + dataSnapshot.child("friendRequest").getValue());
+                        } else if("true".equals(dataSnapshot.child("friendRequest").getValue())){
                             mFriendsListView.showFriendList(dataSnapshot.getValue(FriendData.class));
                             Log.d(Constants.TAG, "onChildAdded.FriendRequest: " + dataSnapshot.child("userName").getValue());
                         }

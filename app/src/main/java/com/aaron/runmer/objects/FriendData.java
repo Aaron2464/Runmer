@@ -10,7 +10,7 @@ public class FriendData {
     private String UserHeight;
     private String UserWeight;
     private String UserGender;
-    private Boolean UserStatus;
+    private boolean UserStatus;
     private Double lat;
     private Double lng;
 
@@ -90,11 +90,11 @@ public class FriendData {
         UserGender = userGender;
     }
 
-    public Boolean getUserStatus() {
+    public boolean getUserStatus() {
         return UserStatus;
     }
 
-    public void setUserStatus(Boolean userStatus) {
+    public void setUserStatus(boolean userStatus) {
         UserStatus = userStatus;
     }
 

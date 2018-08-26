@@ -188,7 +188,6 @@ public class MapPage extends BaseActivity implements MapContract.View,
         setupMyLocation();
         selectUserStatus();
         sendGeoMessageToFriend();
-        queryGeoFriendMessage();
         mPresenter.setUserExp(distance);
     }
 
@@ -198,10 +197,6 @@ public class MapPage extends BaseActivity implements MapContract.View,
         mTxtExpCurrent.setText(String.valueOf(userExp));
         mBarExp.setMax(barLengthMax);
         mBarExp.setProgress(barLength);
-    }
-
-    private void queryGeoFriendMessage() {
-        mPresenter.getFriendMessage();
     }
 
     private void sendGeoMessageToFriend() {

@@ -243,10 +243,6 @@ public class MapPresenter implements MapContract.Presenter {
     }
 
     @Override
-    public void getFriendMessage() {
-    }
-
-    @Override
     public void start() {
 
     }

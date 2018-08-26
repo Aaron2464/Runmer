@@ -47,7 +47,5 @@ public interface MapContract {
         void sendMessage(String cheermessage);
 
         void noMessage();
-
-        void getFriendMessage();
     }
 }

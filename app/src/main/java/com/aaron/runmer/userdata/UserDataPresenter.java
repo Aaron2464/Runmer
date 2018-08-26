@@ -52,6 +52,12 @@ public class UserDataPresenter implements UserDataContract.Presenter {
 
     }
 
+    @Override
+    public boolean isEmail(String mUserEmail) {
+        if (mUserEmail == null) return false;
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(mUserEmail).matches();
+    }
+
 
     @Override
     public void start() {

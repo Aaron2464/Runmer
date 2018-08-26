@@ -26,5 +26,7 @@ public interface UserDataContract {
         void setUserDataToFirebase(UserData userdata);
 
         void changeUserImage();
+
+        boolean isEmail(String userEmail);
     }
 }

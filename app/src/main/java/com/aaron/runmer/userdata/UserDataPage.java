@@ -59,9 +59,7 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
     private String mUserGender;
     private Button mBtnOk;
     private FirebaseAuth mAuth;
-    private DatabaseReference mDatabaseReference;
     private UserDataContract.Presenter mPresenter;
-    private Map<String, String> mUserDataMap = new HashMap<String, String>();
     private UserData mUserData = new UserData();
     private DisplayMetrics mPhoto;
 
@@ -95,39 +93,35 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
                 mUserHeight = mEditTxtUserHeight.getText().toString().trim();
                 mUserWeight = mEditTxtUserWeight.getText().toString().trim();
 
-                if (!mUserName.equals("") && !mUserPhoto.equals("") && !mUserEmail.equals("")
+                if (!"".equals(mUserName) && !mUserPhoto.equals("") && !mUserEmail.equals("")
                         && !mUserBirth.equals("") && !mUserHeight.equals("") && !mUserWeight.equals("") && !mUserGender.equals("")) {
-//                    mUserDataMap.put("UserName", mUserName);
-//                    mUserDataMap.put("UserEmail", mUserEmail);
-//                    mUserDataMap.put("UserPhoto", mUserPhoto);
-//                    mUserDataMap.put("UserBirth", mUserBirth);
-//                    mUserDataMap.put("UserHeight", mUserHeight);
-//                    mUserDataMap.put("UserWeight", mUserWeight);
-//                    mUserDataMap.put("UserGender", mUserGender);
-//                    mUserDataMap.put("UserStatus", "false");
-                    mUserData.setUserName(mUserName);
-                    mUserData.setUserPhoto(mUserPhoto);
-                    mUserData.setUserEmail(mUserEmail);
-                    mUserData.setUserBirth(mUserBirth);
-                    mUserData.setUserHeight(mUserHeight);
-                    mUserData.setUserWeight(mUserWeight);
-                    mUserData.setUserStatus(false);
+                    if (!mPresenter.isEmail(mUserEmail)) {
+                        Toast.makeText(mContext, "Please type the correct email !", Toast.LENGTH_SHORT).show();
+                    } else {
+                        mUserData.setUserName(mUserName);
+                        mUserData.setUserPhoto(mUserPhoto);
+                        mUserData.setUserEmail(mUserEmail);
+                        mUserData.setUserBirth(mUserBirth);
+                        mUserData.setUserHeight(mUserHeight);
+                        mUserData.setUserWeight(mUserWeight);
+                        mUserData.setUserStatus(false);
 
-                    getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).edit()
-                            .putString(Constants.USER_FIREBASE_NAME, mUserName)
-                            .putString(Constants.USER_FIREBASE_EMAIL, mUserEmail)
-                            .putString(Constants.USER_FIREBASE_PHOTO, mUserPhoto)
-                            .putString(Constants.USER_FIREBASE_BIRTH, mUserBirth)
-                            .putString(Constants.USER_FIREBASE_HEIGHT, mUserHeight)
-                            .putString(Constants.USER_FIREBASE_WEIGHT, mUserWeight)
-                            .putString(Constants.USER_FIREBASE_GENDER, mUserGender).apply();
+                        getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).edit()
+                                .putString(Constants.USER_FIREBASE_NAME, mUserName)
+                                .putString(Constants.USER_FIREBASE_EMAIL, mUserEmail)
+                                .putString(Constants.USER_FIREBASE_PHOTO, mUserPhoto)
+                                .putString(Constants.USER_FIREBASE_BIRTH, mUserBirth)
+                                .putString(Constants.USER_FIREBASE_HEIGHT, mUserHeight)
+                                .putString(Constants.USER_FIREBASE_WEIGHT, mUserWeight)
+                                .putString(Constants.USER_FIREBASE_GENDER, mUserGender).apply();
 
-                    mPresenter.setUserDataToFirebase(mUserData);
+                        mPresenter.setUserDataToFirebase(mUserData);
 
-                    Intent intent = new Intent();
-                    intent.setClass(UserDataPage.this, MapPage.class);
-                    startActivity(intent);
-                    UserDataPage.this.finish();
+                        Intent intent = new Intent();
+                        intent.setClass(UserDataPage.this, MapPage.class);
+                        startActivity(intent);
+                        UserDataPage.this.finish();
+                    }
                 } else {
                     Toast.makeText(mContext, "Please do not leave any blank field !", Toast.LENGTH_SHORT).show();
                 }

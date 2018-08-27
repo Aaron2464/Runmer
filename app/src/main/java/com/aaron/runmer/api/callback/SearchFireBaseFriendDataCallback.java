@@ -4,7 +4,7 @@ import com.aaron.runmer.objects.UserData;
 
 public interface SearchFireBaseFriendDataCallback {
 
-    public void onCompleted(Boolean bean, UserData foundUser);
+    public void onCompleted(boolean bean, UserData foundUser);
 
     public void onError(String errorMessage);
 }

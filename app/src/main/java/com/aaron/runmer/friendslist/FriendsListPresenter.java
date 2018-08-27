@@ -50,7 +50,7 @@ public class FriendsListPresenter implements FriendsListContract.Presenter {
                             RunmerParser.parseFirebaseShowAddedFriend(dataSnapshot.getKey());
                         } else if ("waiting".equals(dataSnapshot.child("friendRequest").getValue())) {
                             Log.d(Constants.TAG, "FriendRequest: " + dataSnapshot.child("friendRequest").getValue());
-                        } else if("true".equals(dataSnapshot.child("friendRequest").getValue())){
+                        } else if ("true".equals(dataSnapshot.child("friendRequest").getValue())) {
                             mFriendsListView.showFriendList(dataSnapshot.getValue(FriendData.class));
                             Log.d(Constants.TAG, "onChildAdded.FriendRequest: " + dataSnapshot.child("userName").getValue());
                         }
@@ -92,7 +92,7 @@ public class FriendsListPresenter implements FriendsListContract.Presenter {
         // keep checking users on fireBase and report it if there's one that is matched
         RunmerParser.parseFirebaseFriendData(friendEmail, new SearchFireBaseFriendDataCallback() {
             @Override
-            public void onCompleted(Boolean searchResult, UserData foundUser) {
+            public void onCompleted(boolean searchResult, UserData foundUser) {
                 if (searchResult == true) {
                     mFriendsListView.showFriendInformation(foundUser);
                 } else {

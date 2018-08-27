@@ -1,12 +1,21 @@
 package com.aaron.runmer.userdata;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -17,6 +26,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -28,14 +38,13 @@ import com.aaron.runmer.objects.UserData;
 import com.aaron.runmer.util.CircleTransform;
 import com.aaron.runmer.util.Constants;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
-import static android.media.MediaRecorder.VideoSource.CAMERA;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class UserDataPage extends BaseActivity implements UserDataContract.View, View.OnClickListener {
@@ -63,9 +72,18 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View,
     private UserData mUserData = new UserData();
     private DisplayMetrics mPhoto;
 
+    private LinearLayout mCameraLayout;
+    private LinearLayout mAlbumLayout;
+    private AlertDialog pictureDialog;
+
     private int mYear;
     private int mMonth;
     private int mDay;
+
+    private File mCameraFile;
+    private File mGalleryFile;
+    private Uri mCameraUri;
+    private Uri mGalleryUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,14 +159,75 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View,
 
     @Override
     public void onClick(View view) {
-        mEditTxtUserName.setText(userName);
-        mEditTxtUserEmail.setText(userEmail);
-    }
-
-    @Override
-    public void showUserBirth() {
-            @Override
-            public void onClick(View v) {
+        Intent intent;
+        pictureDialog = new AlertDialog.Builder(mContext).create();
+        switch (view.getId()) {
+            case R.id.imagebtn_user_gallery:
+                LayoutInflater inflater = LayoutInflater.from(mContext);
+                View dialogGallery = inflater.inflate(R.layout.dialog_gallery, null);
+                pictureDialog.setView(dialogGallery);
+                mAlbumLayout = dialogGallery.findViewById(R.id.layout_album);
+                mCameraLayout = dialogGallery.findViewById(R.id.layout_camera);
+                mAlbumLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, Constants.CODE_READ_EXTERNAL);
+                        }
+                        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                        intent.setType("image/*");
+                        if (intent.resolveActivity(getPackageManager()) != null) {
+                            File galleryPhotoFile = null;
+                            try {
+                                File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                                galleryPhotoFile = mPresenter.createImageFile(storageDir);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            if (galleryPhotoFile != null) {
+                                mCameraUri = FileProvider.getUriForFile(mContext,
+                                        "com.aaron.runmer.fileprovider",
+                                        galleryPhotoFile);
+                            }
+                            Log.e(Constants.TAG, "getPicFromAlbm: " + mCameraUri);
+                            startActivityForResult(intent, Constants.CODE_GALLERY_REQUEST);
+                        }
+                        pictureDialog.dismiss();
+                    }
+                });
+                mCameraLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        pictureDialog.dismiss();
+                        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                            requestPermissions(new String[]{Manifest.permission.CAMERA}, Constants.CODE_CAMERA_REQUEST);
+                        }
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        if (intent.resolveActivity(getPackageManager()) != null) {
+                            // Create the File where the photo should go
+                            mCameraFile = null;
+                            try {
+                                File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                                mCameraFile = mPresenter.createImageFile(storageDir);
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                                // Error occurred while creating the File
+                            }
+                            // Continue only if the File was successfully created
+                            if (mCameraFile != null) {
+                                mCameraUri = FileProvider.getUriForFile(mContext,
+                                        "com.aaron.runmer.fileprovider",
+                                        mCameraFile);
+                            }
+                        }
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, mCameraUri);
+                        intent.putExtra("ImageUri", mCameraUri);
+                        startActivityForResult(intent, Constants.CODE_CAMERA_REQUEST);
+                        pictureDialog.dismiss();
+                    }
+                });
+                pictureDialog.show();
+                break;
             case R.id.edittxt_birth:
                 final Calendar c = Calendar.getInstance();       // Get Current Date
                 mYear = c.get(Calendar.YEAR);
@@ -167,7 +246,11 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View,
                 break;
             case R.id.btn_ok:
                 mUserName = mEditTxtUserName.getText().toString().trim();
-            }
+                if (mCameraUri == null) {
+                    mUserPhoto = mAuth.getCurrentUser().getPhotoUrl() + "?type=large";
+                } else {
+                    mUserPhoto = mPresenter.catchUserPhoto();
+                }
                 mUserEmail = mEditTxtUserEmail.getText().toString().trim();
                 mUserBirth = mEditTxtUserBirth.getText().toString().trim();
                 mUserHeight = mEditTxtUserHeight.getText().toString().trim();
@@ -233,5 +316,102 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View,
     @Override
     public void setPresenter(UserDataContract.Presenter presenter) {
         mPresenter = checkNotNull(presenter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        switch (requestCode) {
+            case Constants.CODE_CAMERA_REQUEST:   //調用相機後返回
+                if (resultCode == RESULT_OK) {
+                    //用相機返回的照片去調用剪裁也需要對Uri進行處理
+                    Log.d(Constants.TAG, "CAMERA_REQUEST: " + mCameraUri);
+                    cropPhoto(mCameraUri, mCameraUri);
+                }
+                break;
+            case Constants.CODE_GALLERY_REQUEST:    //調用相冊後返回
+                if (resultCode == RESULT_OK) {
+                    mGalleryUri = intent.getData();
+                    Log.e(Constants.TAG, "GALLERY_REQUEST: " + mGalleryUri);
+                    String path = getRealPathFromUri(mGalleryUri);
+                    mGalleryFile = new File(path);
+                    Log.e(Constants.TAG, "GALLERY_REQUEST: " + mGalleryFile);
+                    cropPhoto(mCameraUri, FileProvider.getUriForFile(mContext, "com.aaron.runmer.fileprovider", mGalleryFile));
+                }
+                break;
+            case Constants.CODE_CROP_REQUEST:     //調用剪裁後返回
+                mPresenter.uploadAndReturnUrl(mCameraUri);          //上傳並回傳 url
+                Picasso.get().load(mCameraUri).placeholder(R.drawable.user_image).transform(new CircleTransform(mContext)).into(mImageUser);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void cropPhoto(Uri uri, Uri cropImageUri) {
+        try {
+            Intent intent1 = new Intent("com.android.camera.action.CROP");
+            intent1.setDataAndType(cropImageUri, "image/*");
+            intent1.putExtra("crop", "true");
+            intent1.putExtra("aspectX", 1);
+            intent1.putExtra("aspectY", 1);
+            intent1.putExtra("outputX", 300);
+            intent1.putExtra("outputY", 300);
+            intent1.putExtra("scale", true);
+            intent1.putExtra("return-data", false);
+            intent1.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+            List<ResolveInfo> resInfoList = mContext.getPackageManager().queryIntentActivities(intent1, PackageManager.MATCH_DEFAULT_ONLY);
+            Log.e(Constants.TAG, "cropPhoto: " + String.valueOf(resInfoList));
+            for (ResolveInfo resolveInfo : resInfoList) {
+                String packageName = resolveInfo.activityInfo.packageName;
+                Log.e(Constants.TAG, "cropPhoto: " + packageName);
+                mContext.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                //Call the method Context.grantUriPermission(package, Uri, mode_flags) for the content:// Uri, using the desired mode flags.
+            }
+            intent1.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            startActivityForResult(intent1, Constants.CODE_CROP_REQUEST);
+        } catch (ActivityNotFoundException ex) {
+            ex.printStackTrace();
+            Toast.makeText(this, "Current Device Has No Crop Support", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private String getRealPathFromUri(Uri uri) {
+        final String docId = DocumentsContract.getDocumentId(uri);
+        final String[] split = docId.split(":");
+        final String type = split[0];
+
+        Uri contentUri = null;
+        if ("image".equals(type)) {
+            contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        } else if ("video".equals(type)) {
+            contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+        } else if ("audio".equals(type)) {
+            contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        }
+
+        final String selection = "_id=?";
+        final String[] selectionArgs = new String[]{
+                split[1]
+        };
+
+        return getDataColumn(mContext, contentUri, selection, selectionArgs);
+    }
+
+    private static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
+        Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = {column};
+        try {
+            cursor = context.getContentResolver()
+                    .query(uri, projection, selection, selectionArgs, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(index);
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return null;
     }
 }

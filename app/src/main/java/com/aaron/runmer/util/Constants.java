@@ -5,7 +5,14 @@ public class Constants {
     public static final String TAG = "Runmer";
     public static final String TAG_DASHBOARD = "DASHBOARD";
 
-    public static final int REQUEST_LOCATION = 2;
+    public static final int CODE_GALLERY_REQUEST = 0xa0;
+    public static final int CODE_CAMERA_REQUEST = 0xa1;
+    public static final int CODE_RESULT_REQUEST = 0xa2;
+    public static final int CODE_CROP_REQUEST = 0xa3;
+    public static final int CODE_READ_EXTERNAL = 0xa4;
+    public static final int CODE_WRITE_EXTERNAL = 0xa5;
+    public static final int REQUEST_LOCATION = 0xa6;
+
     public static int UPDATE_INTERVAL = 1000;
     public static int FATEST_INTERVAL = 1000;
     public static int DISPLACEMENT = 10;

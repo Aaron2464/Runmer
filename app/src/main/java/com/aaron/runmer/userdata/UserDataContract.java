@@ -1,8 +1,13 @@
 package com.aaron.runmer.userdata;
 
+import android.net.Uri;
+
 import com.aaron.runmer.base.BasePresenter;
 import com.aaron.runmer.base.BaseView;
 import com.aaron.runmer.objects.UserData;
+
+import java.io.File;
+import java.io.IOException;
 
 public interface UserDataContract {
 
@@ -25,7 +30,11 @@ public interface UserDataContract {
 
         void setUserDataToFirebase(UserData userdata);
 
-        void changeUserImage();
+        File createImageFile(File storageDir) throws IOException;
+
+        void uploadAndReturnUrl(Uri cameraUri);
+
+        String catchUserPhoto();
 
         boolean isEmail(String userEmail);
     }

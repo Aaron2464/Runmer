@@ -66,6 +66,21 @@ public class UserDataPresenter implements UserDataContract.Presenter {
     }
 
     @Override
+    public void uploadAndReturnUrl(Uri cameraUri) {
+        RunmerParser.parseFirebaseStorage(cameraUri, new PicReturnUriCallback() {
+            @Override
+            public void onCompleted(Uri picReturnUri) {
+                mUserPhoto = picReturnUri.toString();
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+
+            }
+        });
+    }
+
+    @Override
     public String catchUserPhoto() {
         return mUserPhoto;
     }

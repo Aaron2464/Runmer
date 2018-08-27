@@ -38,7 +38,7 @@ import java.util.Map;
 import static android.media.MediaRecorder.VideoSource.CAMERA;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class UserDataPage extends BaseActivity implements UserDataContract.View {
+public class UserDataPage extends BaseActivity implements UserDataContract.View, View.OnClickListener {
 
     private EditText mEditTxtUserName;
     private EditText mEditTxtUserEmail;
@@ -83,50 +83,7 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
     }
 
     private void getUserDataAndIntentToMapPage() {
-        mBtnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mUserName = mEditTxtUserName.getText().toString().trim();
-                mUserPhoto = mAuth.getCurrentUser().getPhotoUrl() + "?type=large";
-                mUserEmail = mEditTxtUserEmail.getText().toString().trim();
-                mUserBirth = mEditTxtUserBirth.getText().toString().trim();
-                mUserHeight = mEditTxtUserHeight.getText().toString().trim();
-                mUserWeight = mEditTxtUserWeight.getText().toString().trim();
-
-                if (!"".equals(mUserName) && !mUserPhoto.equals("") && !mUserEmail.equals("")
-                        && !mUserBirth.equals("") && !mUserHeight.equals("") && !mUserWeight.equals("") && !mUserGender.equals("")) {
-                    if (!mPresenter.isEmail(mUserEmail)) {
-                        Toast.makeText(mContext, "Please type the correct email !", Toast.LENGTH_SHORT).show();
-                    } else {
-                        mUserData.setUserName(mUserName);
-                        mUserData.setUserPhoto(mUserPhoto);
-                        mUserData.setUserEmail(mUserEmail);
-                        mUserData.setUserBirth(mUserBirth);
-                        mUserData.setUserHeight(mUserHeight);
-                        mUserData.setUserWeight(mUserWeight);
-                        mUserData.setUserStatus(false);
-
-                        getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).edit()
-                                .putString(Constants.USER_FIREBASE_NAME, mUserName)
-                                .putString(Constants.USER_FIREBASE_EMAIL, mUserEmail)
-                                .putString(Constants.USER_FIREBASE_PHOTO, mUserPhoto)
-                                .putString(Constants.USER_FIREBASE_BIRTH, mUserBirth)
-                                .putString(Constants.USER_FIREBASE_HEIGHT, mUserHeight)
-                                .putString(Constants.USER_FIREBASE_WEIGHT, mUserWeight)
-                                .putString(Constants.USER_FIREBASE_GENDER, mUserGender).apply();
-
-                        mPresenter.setUserDataToFirebase(mUserData);
-
-                        Intent intent = new Intent();
-                        intent.setClass(UserDataPage.this, MapPage.class);
-                        startActivity(intent);
-                        UserDataPage.this.finish();
-                    }
-                } else {
-                    Toast.makeText(mContext, "Please do not leave any blank field !", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        mBtnOk.setOnClickListener(this);
     }
 
     private void init() {
@@ -143,38 +100,7 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
     }
 
     private void imagebtnclick() {
-        mImageBtnUserGarllery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder pictureDialog = new AlertDialog.Builder(mContext);
-                LayoutInflater inflater = LayoutInflater.from(mContext);
-                View dialogGallery = inflater.inflate(R.layout.dialog_gallery, null);
-                pictureDialog.setTitle("Select Action").setIcon(R.mipmap.ic_camera);
-                pictureDialog.setView(dialogGallery);
-                String[] pictureDialogItems = {
-                        "Select photo from gallery",
-                        "Capture photo from camera"};
-                pictureDialog.setItems(pictureDialogItems,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch (which) {
-                                    case 0:
-                                        Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                        startActivityForResult(galleryIntent, 0);
-                                        break;
-                                    case 1:
-                                        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                                        startActivityForResult(intent, CAMERA);
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                        });
-                pictureDialog.show();
-            }
-        });
+        mImageBtnUserGarllery.setOnClickListener(this);
     }
 
     private void rdobtnclick() {
@@ -214,17 +140,16 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
     }
 
     @Override
-    public void showUserNameAndEmail(String userName, String userEmail) {
+    public void onClick(View view) {
         mEditTxtUserName.setText(userName);
         mEditTxtUserEmail.setText(userEmail);
     }
 
     @Override
     public void showUserBirth() {
-        mEditTxtUserBirth.setInputType(InputType.TYPE_NULL);        //回頭修改時軟鍵盤無法收合(第一次)
-        mEditTxtUserBirth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+            case R.id.edittxt_birth:
                 final Calendar c = Calendar.getInstance();       // Get Current Date
                 mYear = c.get(Calendar.YEAR);
                 mMonth = c.get(Calendar.MONTH);
@@ -239,8 +164,64 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View 
                             }
                         }, 1985, mMonth, mDay);
                 datePickerDialog.show();
+                break;
+            case R.id.btn_ok:
+                mUserName = mEditTxtUserName.getText().toString().trim();
             }
-        });
+                mUserEmail = mEditTxtUserEmail.getText().toString().trim();
+                mUserBirth = mEditTxtUserBirth.getText().toString().trim();
+                mUserHeight = mEditTxtUserHeight.getText().toString().trim();
+                mUserWeight = mEditTxtUserWeight.getText().toString().trim();
+                Log.e(Constants.TAG, "UserPhoto1 : " + mUserPhoto);
+
+                if (!"".equals(mUserName) && !mUserPhoto.equals("") && !mUserEmail.equals("")
+                        && !mUserBirth.equals("") && !mUserHeight.equals("") && !mUserWeight.equals("") && !mUserGender.equals("")) {
+                    if (!mPresenter.isEmail(mUserEmail)) {
+                        Toast.makeText(mContext, "Please type the correct email !", Toast.LENGTH_SHORT).show();
+                    } else {
+                        mUserData.setUserName(mUserName);
+                        mUserData.setUserPhoto(mUserPhoto);
+                        mUserData.setUserEmail(mUserEmail);
+                        mUserData.setUserBirth(mUserBirth);
+                        mUserData.setUserHeight(mUserHeight);
+                        mUserData.setUserWeight(mUserWeight);
+                        mUserData.setUserStatus(false);
+
+                        getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).edit()
+                                .putString(Constants.USER_FIREBASE_NAME, mUserName)
+                                .putString(Constants.USER_FIREBASE_EMAIL, mUserEmail)
+                                .putString(Constants.USER_FIREBASE_PHOTO, mUserPhoto)
+                                .putString(Constants.USER_FIREBASE_BIRTH, mUserBirth)
+                                .putString(Constants.USER_FIREBASE_HEIGHT, mUserHeight)
+                                .putString(Constants.USER_FIREBASE_WEIGHT, mUserWeight)
+                                .putString(Constants.USER_FIREBASE_GENDER, mUserGender).apply();
+
+                        mPresenter.setUserDataToFirebase(mUserData);
+
+                        intent = new Intent();
+                        intent.setClass(UserDataPage.this, MapPage.class);
+                        startActivity(intent);
+                        UserDataPage.this.finish();
+                    }
+                } else {
+                    Toast.makeText(mContext, "Please do not leave any blank field !", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void showUserNameAndEmail(String userName, String userEmail) {
+        mEditTxtUserName.setText(userName);
+        mEditTxtUserEmail.setText(userEmail);
+    }
+
+    @Override
+    public void showUserBirth() {
+        mEditTxtUserBirth.setInputType(InputType.TYPE_NULL);        //回頭修改時軟鍵盤無法收合(第一次)
+        mEditTxtUserBirth.setOnClickListener(this);
     }
 
     @Override

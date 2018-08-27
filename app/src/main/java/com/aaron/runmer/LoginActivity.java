@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Base64;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.aaron.runmer.api.RunmerParser;
 import com.aaron.runmer.base.BaseActivity;
 import com.aaron.runmer.map.MapPage;
 import com.aaron.runmer.userdata.UserDataPage;
@@ -107,6 +109,7 @@ public class LoginActivity extends BaseActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(Constants.TAG, "signInWithCredential:success");
+                            RunmerParser.parseFirebaseUploadUserPhoto(Uri.parse(mAuth.getCurrentUser().getPhotoUrl() + "?type=large"));
                             Intent intent = new Intent(LoginActivity.this, UserDataPage.class);
                             startActivity(intent);
                         } else {

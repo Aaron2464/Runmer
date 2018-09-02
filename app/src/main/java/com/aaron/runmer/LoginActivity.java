@@ -112,6 +112,7 @@ public class LoginActivity extends BaseActivity {
                             RunmerParser.parseFirebaseUploadUserPhoto(Uri.parse(mAuth.getCurrentUser().getPhotoUrl() + "?type=large"));
                             Intent intent = new Intent(LoginActivity.this, UserDataPage.class);
                             startActivity(intent);
+                            LoginActivity.this.finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(Constants.TAG, "signInWithCredential:failure", task.getException());

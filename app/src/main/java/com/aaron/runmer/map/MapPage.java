@@ -57,11 +57,13 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
@@ -516,6 +518,10 @@ public class MapPage extends BaseActivity implements MapContract.View,
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
+        boolean success = googleMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.style_json)));
+        if (!success) {
+            Log.e(Constants.TAG, "Style parsing failed.");
+        }
     }
 
     @Override

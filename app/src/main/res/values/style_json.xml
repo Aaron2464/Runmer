@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="style_json">
+      [
+        {
+          \"elementType\": \"geometry.fill\",
+          \"stylers\": [
+            {
+              \"visibility\": \"simplified\"
+            }
+          ]
+        },
+        {
+          \"elementType\": \"labels\",
+          \"stylers\": [
+            {
+              \"visibility\": \"off\"
+            }
+          ]
+        },
+        {
+          \"featureType\": \"administrative\",
+          \"elementType\": \"geometry\",
+          \"stylers\": [
+            {
+              \"visibility\": \"off\"
+            }
+          ]
+        },
+        {
+          \"featureType\": \"administrative.land_parcel\",
+          \"stylers\": [
+            {
+              \"visibility\": \"off\"
+            }
+          ]
+        },
+        {
+          \"featureType\": \"administrative.neighborhood\",
+          \"stylers\": [
+            {
+              \"visibility\": \"off\"
+            }
+          ]
+        },
+        {
+          \"featureType\": \"landscape\",
+          \"stylers\": [
+            {
+              \"color\": \"#e2e2e2\"
+            },
+            {
+              \"visibility\": \"off\"
+            }
+          ]
+        },
+        {
+          \"featureType\": \"landscape.natural\",
+          \"elementType\": \"geometry\",
+          \"stylers\": [
+            {
+              \"visibility\": \"simplified\"
+            }
+          ]
+        },
+        {
+          \"featureType\": \"poi\",
+          \"stylers\": [
+            {
+              \"visibility\": \"off\"
+            }
+          ]
+        },
+        {
+          \"featureType\": \"poi.park\",
+          \"elementType\": \"geometry\",
+          \"stylers\": [
+            {
+              \"visibility\": \"off\"
+            }
+          ]
+        },
+        {
+          \"featureType\": \"road\",
+          \"stylers\": [
+            {
+              \"color\": \"#ffffff\"
+            },
+            {
+              \"weight\": 3.5
+            }
+           ]
+        },
+        {
+          \"featureType\": \"road\",
+          \"elementType\": \"labels.icon\",
+          \"stylers\": [
+            {
+              \"visibility\": \"off\"
+            }
+          ]
+        },
+        {
+          \"featureType\": \"road.highway\",
+          \"stylers\": [
+            {
+              \"color\": \"#ffffff\"
+            }
+          ]
+        },
+        {
+          \"featureType\": \"transit\",
+          \"stylers\": [
+            {
+              \"visibility\": \"off\"
+            }
+          ]
+        },
+        {
+          \"featureType\": \"water\",
+          \"stylers\": [
+            {
+              \"visibility\": \"off\"
+            }
+          ]
+        }
+      ]
+    </string>
+</resources>

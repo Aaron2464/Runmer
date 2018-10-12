@@ -1,6 +1,7 @@
 package com.aaron.runmer.userdata;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
@@ -37,6 +38,7 @@ import com.aaron.runmer.map.MapPage;
 import com.aaron.runmer.objects.UserData;
 import com.aaron.runmer.util.CircleTransform;
 import com.aaron.runmer.util.Constants;
+import com.aaron.runmer.viewpagermain.ViewPagerActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
@@ -84,6 +86,10 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View,
     private File mGalleryFile;
     private Uri mCameraUri;
     private Uri mGalleryUri;
+
+    @SuppressLint("SdCardPath")
+    File file = new File(
+            "/data/data/com.aaron.runmer/shared_prefs/Users.xml");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -257,41 +263,58 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View,
                 mUserWeight = mEditTxtUserWeight.getText().toString().trim();
                 Log.e(Constants.TAG, "UserPhoto1 : " + mUserPhoto);
 
-                if (!"".equals(mUserName) && !mUserPhoto.equals("") && !mUserEmail.equals("")
-                        && !mUserBirth.equals("") && !mUserHeight.equals("") && !mUserWeight.equals("") && !mUserGender.equals("")) {
-                    if (!mPresenter.isEmail(mUserEmail)) {
-                        Toast.makeText(mContext, "Please type the correct email !", Toast.LENGTH_SHORT).show();
+                if (!isPreference()) {
+                    if (!"".equals(mUserName) && !mUserPhoto.equals("") && !mUserEmail.equals("")
+                            && !mUserBirth.equals("") && !mUserHeight.equals("") && !mUserWeight.equals("") && !mUserGender.equals("")) {
+                        if (!mPresenter.isEmail(mUserEmail)) {
+                            Toast.makeText(mContext, "Please type the correct email !", Toast.LENGTH_SHORT).show();
+                        } else {
+                            mUserData.setUserName(mUserName);
+                            mUserData.setUserPhoto(mUserPhoto);
+                            mUserData.setUserEmail(mUserEmail);
+                            mUserData.setUserBirth(mUserBirth);
+                            mUserData.setUserHeight(mUserHeight);
+                            mUserData.setUserWeight(mUserWeight);
+                            mUserData.setUserStatus(false);
+
+                            getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).edit()
+                                    .putString(Constants.USER_FIREBASE_NAME, mUserName)
+                                    .putString(Constants.USER_FIREBASE_EMAIL, mUserEmail)
+                                    .putString(Constants.USER_FIREBASE_PHOTO, mUserPhoto)
+                                    .putString(Constants.USER_FIREBASE_BIRTH, mUserBirth)
+                                    .putString(Constants.USER_FIREBASE_HEIGHT, mUserHeight)
+                                    .putString(Constants.USER_FIREBASE_WEIGHT, mUserWeight)
+                                    .putString(Constants.USER_FIREBASE_GENDER, mUserGender).apply();
+
+                            mPresenter.setUserDataToFirebase(mUserData);
+                            intent = new Intent();
+                            intent.setClass(UserDataPage.this, MapPage.class);
+                            startActivity(intent);
+                            UserDataPage.this.finish();
+                        }
                     } else {
-                        mUserData.setUserName(mUserName);
-                        mUserData.setUserPhoto(mUserPhoto);
-                        mUserData.setUserEmail(mUserEmail);
-                        mUserData.setUserBirth(mUserBirth);
-                        mUserData.setUserHeight(mUserHeight);
-                        mUserData.setUserWeight(mUserWeight);
-                        mUserData.setUserStatus(false);
-
-                        getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).edit()
-                                .putString(Constants.USER_FIREBASE_NAME, mUserName)
-                                .putString(Constants.USER_FIREBASE_EMAIL, mUserEmail)
-                                .putString(Constants.USER_FIREBASE_PHOTO, mUserPhoto)
-                                .putString(Constants.USER_FIREBASE_BIRTH, mUserBirth)
-                                .putString(Constants.USER_FIREBASE_HEIGHT, mUserHeight)
-                                .putString(Constants.USER_FIREBASE_WEIGHT, mUserWeight)
-                                .putString(Constants.USER_FIREBASE_GENDER, mUserGender).apply();
-
-                        mPresenter.setUserDataToFirebase(mUserData);
-
-                        intent = new Intent();
-                        intent.setClass(UserDataPage.this, MapPage.class);
-                        startActivity(intent);
-                        UserDataPage.this.finish();
+                        Toast.makeText(mContext, "Please do not leave any blank field !", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(mContext, "Please do not leave any blank field !", Toast.LENGTH_SHORT).show();
+                    intent = new Intent();
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.setClass(UserDataPage.this, ViewPagerActivity.class);
+                    startActivity(intent);
+                    UserDataPage.this.finish();
                 }
                 break;
             default:
                 break;
+        }
+    }
+
+    private boolean isPreference() {
+        if (file.exists()) {
+            Log.d(Constants.TAG, "SharedPreferences Name_of_your_preference : exist");
+            return true;
+        } else {
+            Log.d(Constants.TAG, "Setup default preferences");
+            return false;
         }
     }
 

@@ -1,5 +1,6 @@
 package com.aaron.runmer.userprofile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,8 +16,10 @@ import android.widget.TextView;
 
 import com.aaron.runmer.R;
 import com.aaron.runmer.dashboardpackage.RunnerDashBoard;
+import com.aaron.runmer.userdata.UserDataPage;
 import com.aaron.runmer.util.CircleTransform;
 import com.aaron.runmer.util.Constants;
+import com.aaron.runmer.viewpagermain.ViewPagerActivity;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
@@ -25,7 +28,7 @@ import java.util.HashMap;
 import static android.content.Context.MODE_PRIVATE;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class UserProfilePage extends Fragment implements UserProfileContract.View {
+public class UserProfilePage extends Fragment implements UserProfileContract.View, View.OnClickListener {
 
     private ImageView mImageViewUserProfileAvatar;
     private ImageButton mImageBtnUserProfileChange;
@@ -84,6 +87,7 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
         mTxtDistaanceTotal = view.findViewById(R.id.txt_distancetotal);
         mTxtSpeedFast = view.findViewById(R.id.txt_speedfast);
 
+        mImageBtnUserProfileChange.setOnClickListener(this);
         String userName = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_NAME, "");
         String userPhoto = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_PHOTO, "");
         String userBirth = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_BIRTH, "");
@@ -182,5 +186,20 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
     @Override
     public void setPresenter(UserProfileContract.Presenter presenter) {
         mPresenter = checkNotNull(presenter);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.imagebtn_userprofile_changeimage:
+                Intent intent = new Intent();
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.setClass(getContext(), UserDataPage.class);
+                startActivity(intent);
+                getActivity().finish();
+                break;
+            default:
+                break;
+        }
     }
 }

@@ -32,13 +32,11 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data
-                    android:scheme="http"
-                    android:host="www.runmer.com" />
+                    android:host="www.runmer.com"
+                    android:scheme="http" />
             </intent-filter>
         </activity>
 
@@ -48,17 +46,17 @@
 
         <activity
             android:name=".userdata.UserDataPage"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:windowSoftInputMode="adjustPan">
             <!-- To avoid the keyboard covered the EditTextView -->
         </activity>
         <activity
             android:name=".map.MapPage"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="fullSensor" />
 
         <activity
             android:name="com.aaron.runmer.viewpagermain.ViewPagerActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="fullSensor" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -85,5 +83,4 @@
             </meta-data>
         </provider>
     </application>
-
 </manifest>

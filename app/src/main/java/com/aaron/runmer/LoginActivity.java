@@ -31,6 +31,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -45,11 +46,12 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
         AppEventsLogger.activateApp(getApplication());
         LoginManager.getInstance().logInWithReadPermissions((Activity)mContext, Arrays.asList("public_profile", "email"));
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
-         if (accessToken != null && !accessToken.isExpired()) {
-            mAuth = FirebaseAuth.getInstance();
+         if (accessToken == null || accessToken.isExpired() || user == null) {
             // Initialize Facebook Login button
             mCallbackManager = CallbackManager.Factory.create();
             Button loginButton = findViewById(R.id.login_button);

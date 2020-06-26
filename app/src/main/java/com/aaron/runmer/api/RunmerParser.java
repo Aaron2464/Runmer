@@ -1,16 +1,23 @@
 package com.aaron.runmer.api;
 
+import android.net.Uri;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.aaron.runmer.api.callback.CountEventsCreatedCallback;
 import com.aaron.runmer.api.callback.CountEventsJoinedCallback;
 import com.aaron.runmer.api.callback.InvitehFireBaseUserDataCallback;
+import com.aaron.runmer.api.callback.PicReturnUriCallback;
 import com.aaron.runmer.api.callback.SearchFireBaseFriendDataCallback;
 import com.aaron.runmer.api.callback.SetEventPeopleJoinCallback;
 import com.aaron.runmer.objects.EventData;
 import com.aaron.runmer.objects.FriendData;
 import com.aaron.runmer.objects.UserData;
 import com.aaron.runmer.util.Constants;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,12 +25,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.util.Objects;
 
 public class RunmerParser {
 
     public static final FirebaseAuth mCurrentUserUid = FirebaseAuth.getInstance();
     public static final DatabaseReference dataBaseRef = FirebaseDatabase.getInstance().getReference();
     public static final String currentUserUid = mCurrentUserUid.getCurrentUser().getUid();
+    public static StorageReference mStorageRef = null;
 
     /**
      * search friend data
@@ -238,5 +251,37 @@ public class RunmerParser {
 
             }
         });
+    }
+
+    public static void parseFirebaseStorage(Uri cameraUri, final PicReturnUriCallback picReturnUriCallback) {
+        mStorageRef = FirebaseStorage.getInstance().getReference().child("images/" + cameraUri.getLastPathSegment());
+        Task<Uri> urlTask = mStorageRef.putFile(cameraUri)
+                .continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    @Override
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if (!task.isSuccessful()) {
+                            throw Objects.requireNonNull(task.getException());
+                        }
+                        // Continue with the task to get the download URL
+                        Log.d(Constants.TAG, "getDownloadUrl :" + mStorageRef.getDownloadUrl());
+                        return mStorageRef.getDownloadUrl();
+                    }
+                })
+                .addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if (task.isSuccessful()) {
+                            Uri downloadUri = task.getResult();
+                            Log.e(Constants.TAG, "TASK: " + downloadUri);
+                            picReturnUriCallback.onCompleted(downloadUri);
+                            dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid).child(Constants.USER_FIREBASE_PHOTO).setValue(downloadUri.toString());
+                        }
+                    }
+                });
+    }
+
+    public static void parseFirebaseUploadUserPhoto(Uri userPhoto) {
+        dataBaseRef.child(Constants.USER_FIREBASE).child(currentUserUid)
+                .child(Constants.USER_FIREBASE_PHOTO).setValue(userPhoto.toString());
     }
 }

@@ -3,10 +3,12 @@ package com.aaron.runmer.util;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class LinearItemDecoration extends RecyclerView.ItemDecoration {
     /**
@@ -28,7 +30,7 @@ public class LinearItemDecoration extends RecyclerView.ItemDecoration {
     }
 
     @Override
-    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+    public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
         // parent.getAdapter().getItemCount() : 取得Adapter裡全部Item的數量
         // parent.getChildCount() : 取的目前顯在螢幕上的Item數量
@@ -60,7 +62,7 @@ public class LinearItemDecoration extends RecyclerView.ItemDecoration {
      * @param state
      */
     @Override
-    public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+    public void onDraw(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         super.onDraw(c, parent, state);
         // 判斷是否為LinearLayoutManager
         if (parent.getLayoutManager() instanceof LinearLayoutManager) {
@@ -103,6 +105,5 @@ public class LinearItemDecoration extends RecyclerView.ItemDecoration {
         }
     }
 }
-
 
 //https://rayzhangweb.wordpress.com/2017/05/29/android-簡單為recycleview添加分隔線吧/

@@ -1,0 +1,21 @@
+@startuml
+(*)  --> "LoginPage(Activity)"
+If "first login \n or \n didn't fill with profile" then
+--> [Yes] "UserDataPage(Activity)"
+--> "MapPage(Activity)"
+else
+--> [No] "MapPage(Activity)"
+If "click avatar"
+--> "ViewPager(Activity)"
+"ViewPager(Activity)" --> [check user profile]"UserProfilePage(Fragment)"
+--> " ViewPager(Activity) "
+"ViewPager(Activity)" --> [check running event]"RunningEventPage(Fragment)"
+--> " ViewPager(Activity) "
+"RunningEventPage(Fragment)" --> [modify user profile]"UserDataPage(Activity)"
+"ViewPager(Activity)" --> [add/deny friend]"FriendsListPage(Fragment)"
+--> " ViewPager(Activity) "
+If "click backpress" then
+--> "MapPage(Activity)"
+Endif
+-->(*)
+@enduml

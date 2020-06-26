@@ -1,7 +1,6 @@
 package com.aaron.runmer.runningevent;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.aaron.runmer.R;
 import com.aaron.runmer.objects.EventData;
@@ -72,7 +73,7 @@ public class RunningEventAdapter extends RecyclerView.Adapter<RunningEventAdapte
         private TextView mTxtPeopleSum;
         private ImageButton mBtnJoinEvent;
 
-        public ViewHolder(View itemView) {
+        private ViewHolder(View itemView) {
             super(itemView);
             mImageEventFriendAvatar = itemView.findViewById(R.id.image_event_friendavatar);
             mTxtEventTitle = itemView.findViewById(R.id.txt_event_title);

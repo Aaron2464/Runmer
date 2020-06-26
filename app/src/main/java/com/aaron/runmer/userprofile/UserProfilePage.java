@@ -2,9 +2,6 @@ package com.aaron.runmer.userprofile;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +11,15 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.aaron.runmer.R;
 import com.aaron.runmer.dashboardpackage.RunnerDashBoard;
 import com.aaron.runmer.userdata.UserDataPage;
 import com.aaron.runmer.util.CircleTransform;
 import com.aaron.runmer.util.Constants;
-import com.aaron.runmer.viewpagermain.ViewPagerActivity;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
@@ -109,6 +109,15 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
         mPresenter.setCalories(distance, userWeight);
     }
 
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        mImageViewUserProfileAvatar = getView().findViewById(R.id.imageUser_mapView);
+//        String photo = getContext().getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_PHOTO, "");
+//        Log.d(Constants.TAG, "PHOTO: " + photo);
+//        Picasso.get().load(photo).placeholder(R.drawable.user_image).transform(new CircleTransform(getContext())).into(mImageViewUserProfileAvatar);
+//    }
+
     @Override
     public void showUserStatus(HashMap<String, String> mhashmap) {
         Picasso.get().load(mhashmap.get(Constants.USER_FIREBASE_PHOTO)).placeholder(R.drawable.runningicon).transform(new CircleTransform(getContext())).into(mImageViewUserProfileAvatar);
@@ -125,13 +134,13 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
         if (maxdistance < 10000) {
             mBarUserProfileExp.setProgress(maxdistance);
             mTxtUserProfileCurrentExp.setText(String.valueOf(maxdistance));
-        } else if (maxdistance >= 10000 && maxdistance < 25000) {
+        } else if (maxdistance < 25000) {
             mTxtUserProfileLevel.setText(String.valueOf(2));
             mBarUserProfileExp.setMax(15000);
             mBarUserProfileExp.setProgress(maxdistance - 10000);
             mTxtUserProfileCurrentExp.setText(String.valueOf(maxdistance));
             mTxtUserProfileTotalExp.setText(String.valueOf(25000));
-        } else if (maxdistance >= 25000 && maxdistance < 45000) {
+        } else if (maxdistance < 45000) {
             mTxtUserProfileLevel.setText(String.valueOf(3));
             mBarUserProfileExp.setMax(20000);
             mBarUserProfileExp.setProgress(maxdistance - 25000);
@@ -174,10 +183,10 @@ public class UserProfilePage extends Fragment implements UserProfileContract.Vie
     public void showCalories(double burnCalories) {
         if ((int) burnCalories <= 9999.99) {
             DecimalFormat df = new DecimalFormat("##.00");
-            mTxtCal.setText(String.valueOf(df.format(burnCalories)));
+            mTxtCal.setText(df.format(burnCalories));
         } else if (99999 >= (int) burnCalories && (int) burnCalories > 9999.99) {
             DecimalFormat df = new DecimalFormat("##.0");
-            mTxtCal.setText(String.valueOf(df.format(burnCalories)));
+            mTxtCal.setText(df.format(burnCalories));
         } else {
             mTxtCal.setText(String.valueOf((int) burnCalories));
         }

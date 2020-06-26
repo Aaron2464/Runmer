@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,12 +21,6 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -40,6 +35,12 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.aaron.runmer.R;
 import com.aaron.runmer.api.GpsServices;
@@ -57,7 +58,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -66,6 +66,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -119,11 +120,14 @@ public class MapPage extends BaseActivity implements MapContract.View,
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_map);
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.fragment_map);
-        mapFragment.getMapAsync(this);
-        mMarkerMap = new HashMap<String, Marker>();
-        mUriMap = new HashMap<String, String>();
+        //FIXME
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_map);
+        if (mapFragment != null) {
+            mapFragment.onCreate(savedInstanceState);
+            mapFragment.getMapAsync(this);
+        }
+        mMarkerMap = new HashMap<>();
+        mUriMap = new HashMap<>();
         mPresenter = new MapPresenter(this);
         mStartTime = SystemClock.elapsedRealtime();
         init();
@@ -159,9 +163,9 @@ public class MapPage extends BaseActivity implements MapContract.View,
                         .putInt(Constants.USER_MAPPAGE_AVGSPEED, (int) averageTemp).apply();
                 mRunnerDashBoardAvgSpeed.setVelocity((int) averageTemp);
                 mPresenter.setUserExp((int) distanceTemp);
-                Log.d(Constants.TAG, "distanceTemp: " + String.valueOf(distanceTemp));
-                Log.d(Constants.TAG, "averageTemp: " + String.valueOf(averageTemp));
-                Log.d(Constants.TAG, "maxSpeedTemp: " + String.valueOf(maxSpeedTemp));
+                Log.d(Constants.TAG, "distanceTemp: " + distanceTemp);
+                Log.d(Constants.TAG, "averageTemp: " + averageTemp);
+                Log.d(Constants.TAG, "maxSpeedTemp: " + maxSpeedTemp);
             }
         };
     }
@@ -185,7 +189,7 @@ public class MapPage extends BaseActivity implements MapContract.View,
         int distance = mContext.getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_DISTANCE, 0);
         int maxSpeed = mContext.getSharedPreferences(Constants.USER_MAPPAGE_SPEED, MODE_PRIVATE).getInt(Constants.USER_MAPPAGE_MAXSPEED, 0);
         Log.d(Constants.TAG, "MaxDistance: " + distance);
-        data.addDistance((double) distance);
+        data.addDistance(distance);
         data.setCurSpeed(maxSpeed);
         setupMyLocation();
         selectUserStatus();
@@ -205,9 +209,9 @@ public class MapPage extends BaseActivity implements MapContract.View,
         mBtnSendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String cheermessage = mEditTxtCommentMessage.getText().toString();
-                if (!cheermessage.equals("")) {
-                    mPresenter.sendMessage(cheermessage);
+                String cheerMessage = mEditTxtCommentMessage.getText().toString();
+                if (!cheerMessage.equals("")) {
+                    mPresenter.sendMessage(cheerMessage);
                 } else {
                     mPresenter.noMessage();
                 }
@@ -257,11 +261,10 @@ public class MapPage extends BaseActivity implements MapContract.View,
                     startLocationUpdate();
                     mPresenter.setUserStatus(isChecked);
                     Log.d(Constants.TAG, "User Statua: " + isChecked);
-//                    Toast.makeText(mContext,"x8 x8 x8 x8 ",Toast.LENGTH_LONG).show();
                 } else {
                     stopLocationUpdate();
                     mPresenter.setUserStatus(isChecked);
-                    Log.d(Constants.TAG, "User Statua: " + isChecked);
+                    Log.d(Constants.TAG, "User Status: " + isChecked);
                 }
             }
         });
@@ -334,40 +337,39 @@ public class MapPage extends BaseActivity implements MapContract.View,
      */
     @SuppressLint("MissingPermission")
     public void showGoogleMapUi(double lat, double lng) {
-        LatLng userlocation = new LatLng(lat, lng);
-        Log.d(Constants.TAG, "CurrentLocation: " + userlocation);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userlocation, 18));
+        LatLng userLocation = new LatLng(lat, lng);
+        Log.d(Constants.TAG, "CurrentLocation: " + userLocation);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 18));
         mMap.setOnMyLocationButtonClickListener(this);
 //        mMap.setMyLocationEnabled(true);        //show my location blue dot
         mMarker = mMap.addMarker(new MarkerOptions()
-                .position(userlocation)
+                .position(userLocation)
                 .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_flight)));
         mMarker.getRotation();
         mMap.addCircle(new CircleOptions()
-                .center(userlocation)
+                .center(userLocation)
                 .radius(30)
                 .strokeColor(Color.BLACK)
                 .strokeWidth(10.0f));
 
 //        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userlocation, 13));
-//        mMap.getUiSettings().setZoomControlsEnabled(true);\
+//        mMap.getUiSettings().setZoomControlsEnabled(true);
     }
 
     /**
      * 讓方圓300公尺的朋友能顯示在地圖上，點擊marker時可以看到好友頭像
      *
      * @param key
-     * @param mlocation
+     * @param location
      * @param friendAvatar
      */
     @Override
-    public void showGeoFriends(String key, GeoLocation mlocation, String friendAvatar) {
-
-        Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(mlocation.latitude, mlocation.longitude)));
+    public void showGeoFriends(String key, GeoLocation location, String friendAvatar) {
+        Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(location.latitude, location.longitude)));
         Log.d(Constants.TAG, "MMarker: " + marker.getId());
         mMarkerMap.put(key, marker);
         Log.d(Constants.TAG, "MKEY: " + key);
-        Log.d(Constants.TAG, "MUri: " + friendAvatar.toString());
+        Log.d(Constants.TAG, "MUri: " + friendAvatar);
         mUriMap.put(marker.getId(), friendAvatar);
         mMap.setInfoWindowAdapter(new UserinfoWindow(mContext, mUriMap));
     }
@@ -382,8 +384,6 @@ public class MapPage extends BaseActivity implements MapContract.View,
         Marker marker = mMarkerMap.get(key);
         if (marker != null) {
             marker.remove();
-            mMarkerMap.remove(key);
-            mMarkerMap.clear();            //目前還不知道有什麼影響，特此註解以供驗證
         }
     }
 
@@ -578,6 +578,12 @@ public class MapPage extends BaseActivity implements MapContract.View,
     @Override
     protected void onResume() {
         super.onResume();
+
+        mImageUser = findViewById(R.id.imageUser_mapView);
+        String photo = getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_PHOTO, "");
+        Log.d(Constants.TAG, "PHOTO: " + photo);
+        Picasso.get().load(photo).placeholder(R.drawable.user_image).transform(new CircleTransform(mContext)).into(mImageUser);
+
         if (data == null) {
             data = new SpeedData(onGpsServiceUpdate);
         } else {
@@ -603,7 +609,6 @@ public class MapPage extends BaseActivity implements MapContract.View,
         }
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
             return;
         }
 //        mLocationManager.addGpsStatusListener((GpsStatus.Listener) this);

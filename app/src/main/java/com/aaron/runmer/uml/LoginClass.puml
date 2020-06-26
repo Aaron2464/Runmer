@@ -1,0 +1,37 @@
+@startuml
+
+class LoginActivity
+
+LoginActivity "isLoggedIn()" .right.|> MapPage : [  Yes  ]
+LoginActivity ..|> FacebookApi : [  No  ]
+FacebookApi --|> UserDataPage
+
+
+class LoginActivity extends BaseActivity {
+    - FirebaseAuth mAuth;
+    - Button loginButton;
+    boolean isLoggedIn = AccessToken.getCurrentAccessToken() == null;
+    CallbackManager mCallbackManager;
+}
+
+class BaseActivity {
+    protected Context mContext;
+    setStatusBar();
+}
+
+@enduml
+
+'note right: 這是顯示在右邊的備註
+'note left: 這是顯示在右邊的備註
+
+'--> 向下
+'->  向右
+'..>
+'--|>
+'..|>
+':
+'-
+'#
+'~
+'+
+'#99FF99

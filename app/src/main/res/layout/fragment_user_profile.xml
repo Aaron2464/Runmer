@@ -4,18 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout_userprofile_userstatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
             <ImageView
                 android:id="@+id/imageview_userprofile_userimage"
                 android:layout_width="75dp"
@@ -25,7 +23,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="?android:attr/fingerprintAuthDrawable" />
-
             <ImageButton
                 android:id="@+id/imagebtn_userprofile_changeimage"
                 android:layout_width="25dp"
@@ -35,7 +32,6 @@
                 android:background="@drawable/edit"
                 app:layout_constraintStart_toStartOf="@+id/imageview_userprofile_userimage"
                 app:layout_constraintTop_toTopOf="@+id/imageview_userprofile_userimage" />
-
             <TextView
                 android:id="@+id/txt_userprofile_userlevel"
                 android:layout_width="0dp"
@@ -47,7 +43,6 @@
                 android:textSize="25dp"
                 app:layout_constraintStart_toEndOf="@+id/imageview_userprofile_userimage"
                 app:layout_constraintTop_toTopOf="parent" />
-
             <TextView
                 android:id="@+id/txt_userprofile_userlevelnum"
                 android:layout_width="wrap_content"
@@ -57,7 +52,6 @@
                 android:textSize="25dp"
                 app:layout_constraintStart_toEndOf="@+id/txt_userprofile_userlevel"
                 app:layout_constraintTop_toTopOf="@+id/txt_userprofile_userlevel" />
-
             <TextView
                 android:id="@+id/txt_userprofile_username"
                 android:layout_width="wrap_content"
@@ -68,7 +62,6 @@
                 android:textSize="25dp"
                 app:layout_constraintStart_toEndOf="@+id/txt_userprofile_userlevelnum"
                 app:layout_constraintTop_toTopOf="@+id/txt_userprofile_userlevelnum" />
-
             <ProgressBar
                 android:id="@+id/progbar_userprofile_exp"
                 style="?android:attr/progressBarStyleHorizontal"
@@ -79,7 +72,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/txt_userprofile_userlevel"
                 app:layout_constraintTop_toBottomOf="@+id/txt_userprofile_userlevel" />
-
             <TextView
                 android:id="@+id/txt_userprofile_currentexp"
                 android:layout_width="wrap_content"
@@ -89,7 +81,6 @@
                 app:layout_constraintEnd_toStartOf="@+id/txt_userprofile_slash"
                 app:layout_constraintStart_toStartOf="@+id/progbar_userprofile_exp"
                 app:layout_constraintTop_toBottomOf="@+id/progbar_userprofile_exp" />
-
             <TextView
                 android:id="@+id/txt_userprofile_slash"
                 android:layout_width="wrap_content"
@@ -100,7 +91,6 @@
                 app:layout_constraintEnd_toStartOf="@+id/txt_userprofile_totalexp"
                 app:layout_constraintStart_toEndOf="@+id/txt_userprofile_currentexp"
                 app:layout_constraintTop_toTopOf="@+id/txt_userprofile_currentexp" />
-
             <TextView
                 android:id="@+id/txt_userprofile_totalexp"
                 android:layout_width="0dp"
@@ -110,17 +100,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/txt_userprofile_slash"
                 app:layout_constraintTop_toTopOf="@+id/txt_userprofile_currentexp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </android.support.constraint.ConstraintLayout>
-
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout_userprofile_badge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout_userprofile_userstatus">
-
             <ImageView
                 android:id="@+id/image_userprofile_distance"
                 android:layout_width="40dp"
@@ -134,7 +122,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/trophy" />
-
             <ImageView
                 android:id="@+id/image_userprofile_bigevent"
                 android:layout_width="40dp"
@@ -145,7 +132,6 @@
                 app:layout_constraintStart_toEndOf="@+id/image_userprofile_distance"
                 app:layout_constraintTop_toTopOf="@+id/image_userprofile_distance"
                 app:srcCompat="@drawable/trophy" />
-
             <ImageView
                 android:id="@+id/image_userprofile_dailycheck"
                 android:layout_width="40dp"
@@ -156,7 +142,6 @@
                 app:layout_constraintStart_toEndOf="@+id/image_userprofile_bigevent"
                 app:layout_constraintTop_toTopOf="@+id/image_userprofile_bigevent"
                 app:srcCompat="@drawable/trophy" />
-
             <ImageView
                 android:id="@+id/image_userprofile_runningtrophy"
                 android:layout_width="40dp"
@@ -167,7 +152,6 @@
                 app:layout_constraintStart_toEndOf="@+id/image_userprofile_dailycheck"
                 app:layout_constraintTop_toTopOf="@+id/image_userprofile_dailycheck"
                 app:srcCompat="@drawable/trophy" />
-
             <ImageView
                 android:id="@+id/image_userprofile_milestrophy"
                 android:layout_width="40dp"
@@ -178,10 +162,9 @@
                 app:layout_constraintStart_toEndOf="@+id/image_userprofile_runningtrophy"
                 app:layout_constraintTop_toTopOf="@+id/image_userprofile_runningtrophy"
                 app:srcCompat="@drawable/trophy" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </android.support.constraint.ConstraintLayout>
-
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout3"
             android:layout_width="0dp"
             android:layout_height="150dp"
@@ -190,7 +173,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout_userprofile_badge">
-
             <com.aaron.runmer.dashboardpackage.RunnerDashBoard
                 android:id="@+id/dashboard_speed_fast"
                 android:layout_width="115dp"
@@ -199,7 +181,6 @@
                 app:layout_constraintEnd_toStartOf="@+id/dashboard_willpower"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/constraintLayout3" />
-
             <TextView
                 android:id="@+id/txt_speed_max"
                 android:layout_width="wrap_content"
@@ -212,7 +193,6 @@
                 app:layout_constraintBottom_toBottomOf="@+id/dashboard_speed_fast"
                 app:layout_constraintEnd_toEndOf="@+id/dashboard_speed_fast"
                 app:layout_constraintStart_toStartOf="@+id/dashboard_speed_fast" />
-
             <com.aaron.runmer.dashboardpackage.RunnerDashBoard
                 android:id="@+id/dashboard_willpower"
                 android:layout_width="115dp"
@@ -220,7 +200,6 @@
                 app:layout_constraintEnd_toStartOf="@+id/dashboard_speed_avg"
                 app:layout_constraintStart_toEndOf="@+id/dashboard_speed_fast"
                 app:layout_constraintTop_toTopOf="@+id/dashboard_speed_fast" />
-
             <TextView
                 android:id="@+id/txt_willpower"
                 android:layout_width="wrap_content"
@@ -233,7 +212,6 @@
                 app:layout_constraintBottom_toBottomOf="@+id/dashboard_willpower"
                 app:layout_constraintEnd_toEndOf="@+id/dashboard_willpower"
                 app:layout_constraintStart_toStartOf="@+id/dashboard_willpower" />
-
             <com.aaron.runmer.dashboardpackage.RunnerDashBoard
                 android:id="@+id/dashboard_speed_avg"
                 android:layout_width="115dp"
@@ -242,7 +220,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/dashboard_willpower"
                 app:layout_constraintTop_toTopOf="@+id/dashboard_willpower" />
-
             <TextView
                 android:id="@+id/txt_speed_avg"
                 android:layout_width="wrap_content"
@@ -255,18 +232,14 @@
                 app:layout_constraintBottom_toBottomOf="@+id/dashboard_speed_avg"
                 app:layout_constraintEnd_toEndOf="@+id/dashboard_speed_avg"
                 app:layout_constraintStart_toStartOf="@+id/dashboard_speed_avg" />
-
-
-        </android.support.constraint.ConstraintLayout>
-
-        <android.support.constraint.ConstraintLayout
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="264dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/constraintLayout3">
-
             <TextView
                 android:id="@+id/txt_age_title"
                 android:layout_width="wrap_content"
@@ -278,7 +251,6 @@
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
             <TextView
                 android:id="@+id/txt_birth_title"
                 android:layout_width="wrap_content"
@@ -289,7 +261,6 @@
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="@+id/txt_age_title"
                 app:layout_constraintTop_toBottomOf="@+id/txt_age_title" />
-
             <TextView
                 android:id="@+id/txt_createdevents_title"
                 android:layout_width="wrap_content"
@@ -300,7 +271,6 @@
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="@+id/txt_birth_title"
                 app:layout_constraintTop_toBottomOf="@+id/txt_birth_title" />
-
             <TextView
                 android:id="@+id/txt_weight_title"
                 android:layout_width="wrap_content"
@@ -311,7 +281,6 @@
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="@+id/txt_createdevents_title"
                 app:layout_constraintTop_toBottomOf="@+id/txt_createdevents_title" />
-
             <TextView
                 android:id="@+id/txt_avgspeed_title"
                 android:layout_width="wrap_content"
@@ -322,7 +291,6 @@
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="@+id/txt_weight_title"
                 app:layout_constraintTop_toBottomOf="@+id/txt_weight_title" />
-
             <TextView
                 android:id="@+id/txt_totaldistance_title"
                 android:layout_width="wrap_content"
@@ -333,7 +301,6 @@
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="@+id/txt_avgspeed_title"
                 app:layout_constraintTop_toBottomOf="@+id/txt_avgspeed_title" />
-
             <TextView
                 android:id="@+id/txt_speedfast_title"
                 android:layout_width="wrap_content"
@@ -344,7 +311,6 @@
                 android:textSize="20dp"
                 app:layout_constraintStart_toStartOf="@+id/txt_totaldistance_title"
                 app:layout_constraintTop_toBottomOf="@+id/txt_totaldistance_title" />
-
 
             <TextView
                 android:id="@+id/txt_age"
@@ -357,7 +323,6 @@
                 android:textSize="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
             <LinearLayout
                 android:id="@+id/linear_calories"
                 android:layout_width="wrap_content"
@@ -365,7 +330,6 @@
                 android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="@+id/txt_age"
                 app:layout_constraintTop_toBottomOf="@+id/txt_age">
-
                 <TextView
                     android:id="@+id/txt_calories"
                     android:layout_width="wrap_content"
@@ -373,7 +337,6 @@
                     android:fontFamily="@font/faster_one"
                     android:text="1254.2"
                     android:textSize="20dp" />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -390,7 +353,6 @@
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="@+id/linear_calories"
                 app:layout_constraintTop_toBottomOf="@+id/linear_calories">
-
                 <TextView
                     android:id="@+id/txt_eventcreated"
                     android:layout_width="wrap_content"
@@ -398,7 +360,6 @@
                     android:fontFamily="@font/faster_one"
                     android:text="1"
                     android:textSize="20dp" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -409,7 +370,6 @@
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="@+id/linear_eventcreated"
                 app:layout_constraintTop_toBottomOf="@+id/linear_eventcreated">
-
                 <TextView
                     android:id="@+id/txt_eventjoined"
                     android:layout_width="wrap_content"
@@ -418,7 +378,6 @@
                     android:text="2"
                     android:textSize="20dp" />
             </LinearLayout>
-
             <LinearLayout
                 android:id="@+id/linear_avgspeed"
                 android:layout_width="wrap_content"
@@ -427,7 +386,6 @@
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="@+id/linear_eventjoined"
                 app:layout_constraintTop_toBottomOf="@+id/linear_eventjoined">
-
                 <TextView
                     android:id="@+id/txt_speedavg"
                     android:layout_width="wrap_content"
@@ -435,7 +393,6 @@
                     android:fontFamily="@font/faster_one"
                     android:text="8"
                     android:textSize="20dp" />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -452,7 +409,6 @@
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="@+id/linear_avgspeed"
                 app:layout_constraintTop_toBottomOf="@+id/linear_avgspeed">
-
                 <TextView
                     android:id="@+id/txt_distancetotal"
                     android:layout_width="wrap_content"
@@ -460,7 +416,6 @@
                     android:fontFamily="@font/faster_one"
                     android:text="0.1"
                     android:textSize="20dp" />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -477,7 +432,6 @@
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="@+id/linear_distancetotal"
                 app:layout_constraintTop_toBottomOf="@+id/linear_distancetotal">
-
                 <TextView
                     android:id="@+id/txt_speedfast"
                     android:layout_width="wrap_content"
@@ -485,7 +439,6 @@
                     android:fontFamily="@font/faster_one"
                     android:text="10"
                     android:textSize="20dp" />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -493,6 +446,6 @@
                     android:text="km/h"
                     android:textSize="15dp" />
             </LinearLayout>
-        </android.support.constraint.ConstraintLayout>
-    </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

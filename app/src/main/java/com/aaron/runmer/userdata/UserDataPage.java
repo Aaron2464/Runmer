@@ -15,8 +15,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.FileProvider;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -115,12 +115,29 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View,
         findView();
         mPresenter = new UserDataPresenter(this);
         mPresenter.start();
-        mPresenter.setUserNameAndEmail();
-        mPresenter.setUserPhoto();
-        mPresenter.setUserBirth();
 
         rdobtnclick();
         imagebtnclick();
+
+        if (isPreference()) {
+            String name = getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_NAME, "");
+            String email = getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_EMAIL, "");
+            String birth = getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_BIRTH, "");
+            String photo = getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_PHOTO, "");
+            String height = getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_HEIGHT, "");
+            String weight = getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_WEIGHT, "");
+            String gender = getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).getString(Constants.USER_FIREBASE_GENDER, "");
+            mPresenter.setUserNameAndEmail(name, email);
+            mPresenter.setUserBirth(birth);
+            mPresenter.setUserPhoto(photo);
+            mPresenter.setUserHeight(height);
+            mPresenter.setUserWeight(weight);
+            mPresenter.setUserGender(gender);
+        }else {
+            mPresenter.setUserNameAndEmail();
+            mPresenter.setUserPhoto();
+            mPresenter.setUserBirth();
+        }
     }
 
     private void imagebtnclick() {
@@ -296,11 +313,36 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View,
                         Toast.makeText(mContext, "Please do not leave any blank field !", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    intent = new Intent();
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.setClass(UserDataPage.this, ViewPagerActivity.class);
-                    startActivity(intent);
-                    UserDataPage.this.finish();
+                    if (!"".equals(mUserName) && !"".equals(mUserPhoto) && !"".equals(mUserEmail)
+                            && !"".equals(mUserBirth) && !"".equals(mUserHeight) && !"".equals(mUserWeight) && !"".equals(mUserGender)) {
+                        if (!mPresenter.isEmail(mUserEmail)) {
+                            Toast.makeText(mContext, "Please type the correct email !", Toast.LENGTH_SHORT).show();
+                        } else {
+                            mUserData.setUserName(mUserName);
+                            mUserData.setUserPhoto(mUserPhoto);
+                            mUserData.setUserEmail(mUserEmail);
+                            mUserData.setUserBirth(mUserBirth);
+                            mUserData.setUserHeight(mUserHeight);
+                            mUserData.setUserWeight(mUserWeight);
+                            mUserData.setUserStatus(false);
+
+                            getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).edit()
+                                    .putString(Constants.USER_FIREBASE_NAME, mUserName)
+                                    .putString(Constants.USER_FIREBASE_EMAIL, mUserEmail)
+                                    .putString(Constants.USER_FIREBASE_PHOTO, mUserPhoto)
+                                    .putString(Constants.USER_FIREBASE_BIRTH, mUserBirth)
+                                    .putString(Constants.USER_FIREBASE_HEIGHT, mUserHeight)
+                                    .putString(Constants.USER_FIREBASE_WEIGHT, mUserWeight)
+                                    .putString(Constants.USER_FIREBASE_GENDER, mUserGender).apply();
+
+                            mPresenter.setUserDataToFirebase(mUserData);
+                            intent = new Intent();
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.setClass(UserDataPage.this, ViewPagerActivity.class);
+                            startActivity(intent);
+                            UserDataPage.this.finish();
+                        }
+                    }
                 }
                 break;
             default:
@@ -309,7 +351,7 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View,
     }
 
     private boolean isPreference() {
-        if (file.exists()) {
+        if (getPreferences(MODE_PRIVATE).contains(Constants.USER_FIREBASE_EMAIL)) {
             Log.d(Constants.TAG, "SharedPreferences Name_of_your_preference : exist");
             return true;
         } else {
@@ -331,9 +373,37 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View,
     }
 
     @Override
+    public void showUserBirth(String birth) {
+        mEditTxtUserBirth.setText(birth);
+    }
+
+    @Override
     public void showUserPhoto(String userimage) {
         Log.d(Constants.TAG, "UserImage :" + userimage);
+        getSharedPreferences(Constants.USER_FIREBASE, MODE_PRIVATE).edit()
+                .putString(Constants.USER_FIREBASE_PHOTO, userimage).apply();
         Picasso.get().load(userimage).placeholder(R.drawable.user_image).transform(new CircleTransform(mContext)).into(mImageUser);
+    }
+
+    @Override
+    public void showUserHeight(String height) {
+        mEditTxtUserHeight.setText(height);
+    }
+
+    @Override
+    public void showUserWeight(String weight) {
+        mEditTxtUserWeight.setText(weight);
+    }
+
+    @Override
+    public void showUserGender(String gender) {
+        if("Male".equals(gender)){
+            mRdoBtnMale.setChecked(true);
+            mRdoBtnFemale.setChecked(false);
+        }else if ("Female".equals(gender)){
+            mRdoBtnMale.setChecked(false);
+            mRdoBtnFemale.setChecked(true);
+        }
     }
 
     @Override
@@ -414,7 +484,7 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View,
         }
 
         final String selection = "_id=?";
-        final String[] selectionArgs = new String[]{
+        final String[] selectionArgs = new String[]{        //FIXME java.lang.RuntimeException: Failure delivering result ResultInfo
                 split[1]
         };
 

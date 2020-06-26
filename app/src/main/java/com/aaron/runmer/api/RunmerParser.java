@@ -1,8 +1,9 @@
 package com.aaron.runmer.api;
 
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.aaron.runmer.api.callback.CountEventsCreatedCallback;
 import com.aaron.runmer.api.callback.CountEventsJoinedCallback;

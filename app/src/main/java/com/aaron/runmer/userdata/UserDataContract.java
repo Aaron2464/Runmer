@@ -17,7 +17,15 @@ public interface UserDataContract {
 
         void showUserBirth();
 
-        void showUserPhoto(String userimage);
+        void showUserBirth(String birth);
+
+        void showUserPhoto(String userImage);
+
+        void showUserHeight(String height);
+
+        void showUserWeight(String weight);
+
+        void showUserGender(String gender);
     }
 
     interface Presenter extends BasePresenter {
@@ -27,6 +35,18 @@ public interface UserDataContract {
         void setUserBirth();
 
         void setUserPhoto();
+
+        void setUserNameAndEmail(String name, String email);
+
+        void setUserBirth(String birth);
+
+        void setUserPhoto(String photo);
+
+        void setUserHeight(String height);
+
+        void setUserWeight(String weight);
+
+        void setUserGender(String gender);
 
         void setUserDataToFirebase(UserData userdata);
 

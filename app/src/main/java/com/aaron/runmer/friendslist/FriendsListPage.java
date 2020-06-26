@@ -3,14 +3,6 @@ package com.aaron.runmer.friendslist;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,11 +14,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.aaron.runmer.R;
 import com.aaron.runmer.objects.FriendData;
 import com.aaron.runmer.objects.UserData;
 import com.aaron.runmer.util.CircleTransform;
 import com.aaron.runmer.util.Constants;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -129,37 +130,12 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
     }
 
     public void showFriendListFabDialog() {
-        LayoutInflater dialogInflater = LayoutInflater.from(getContext());
-        View dialogview = dialogInflater.inflate(R.layout.dialog_friend_invite, null);
-        mEditTxtFriendEmail = dialogview.findViewById(R.id.edittxt_friend_invite_email);
-        mBtnSearchFriend = dialogview.findViewById(R.id.btn_search_friend);
-        mTxtInviteFriendEmail = dialogview.findViewById(R.id.txt_invite_friendemail);
-        mDialogLayout = dialogview.findViewById(R.id.add_friend_detail);
-        mImageInviteFriendAvatar = dialogview.findViewById(R.id.image_invite_friendavatar);
-        mTxtInviteFriendName = dialogview.findViewById(R.id.txt_invite_friendname);
-        mTxtInviteFriendLevel = dialogview.findViewById(R.id.txt_invite_friendlevel);
-        mDialogLayout.setVisibility(View.GONE);
-        mBtnSearchFriend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String friendEmail = mEditTxtFriendEmail.getText().toString();
-                if (friendEmail != null) {
-                    mEditTxtFriendEmail.setText("");
-                    mPresenter.searchFriend(friendEmail);
-                } else {
-                    Toast.makeText(getContext(), "找朋友要輸入正確EMAIL喔", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-        alertDialogBuilder.setView(dialogview);
         alertDialogBuilder
                 .setCancelable(true)
                 .setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Log.d(Constants.TAG, "mTxtInviteFriendEmail :" + mTxtInviteFriendEmail.getText().toString());
-                        if (mTxtInviteFriendEmail.getText().toString().equals("")) {        //TODO TextView.getTtext 沒辦法空值? getTtext 就算為空，值也會被定為""?
+                        if ("".equals(mTxtInviteFriendEmail.getText().toString())) {
                             showNonFriend();
                         } else {
                             mPresenter.sendFriendInvitation(mTxtInviteFriendEmail.getText().toString());
@@ -173,7 +149,6 @@ public class FriendsListPage extends Fragment implements FriendsListContract.Vie
                                 dialog.cancel();
                             }
                         });
-        Log.d(Constants.TAG, "dialog");
         alertDialogBuilder.show();
     }
 

@@ -2,14 +2,14 @@ package com.aaron.runmer.viewpagermain;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.aaron.runmer.R;
 import com.aaron.runmer.base.BaseActivity;
@@ -18,6 +18,7 @@ import com.aaron.runmer.map.MapPage;
 import com.aaron.runmer.runningevent.RunningEventPage;
 import com.aaron.runmer.userprofile.UserProfilePage;
 import com.aaron.runmer.util.Constants;
+import com.google.android.material.tabs.TabLayout;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

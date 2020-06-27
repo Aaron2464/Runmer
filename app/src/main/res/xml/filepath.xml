@@ -2,9 +2,8 @@
 <paths>
     <external-path
         name="my_images"
-        path="Android/data/ com.aaron.runmer/files/Pictures" />
+        path="Android/data/com.aaron.runmer/files/Pictures" />
     <root-path
         name="Pictures"
         path="" />
 </paths>
-

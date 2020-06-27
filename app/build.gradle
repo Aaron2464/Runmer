@@ -8,27 +8,18 @@ android {
         applicationId "com.aaron.runmer"
         minSdkVersion 24
         targetSdkVersion 29
-        versionCode 18082301
-        versionName "1.2.1"
+        versionCode 20062601
+        versionName "2.0.1"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-//        multiDexEnabled true  //fix Unable to merge dex
+        lintOptions {
+            checkReleaseBuilds false
+            abortOnError false
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-    configurations.all {
-        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-            def requested = details.requested
-            if (requested.group == 'com.android.support') {
-                if (!requested.name.startsWith("multidex")) {
-                    details.useVersion '27.1.0'
-                    details.useVersion '27.0.2'
-//                    details.useVersion '26.1.0'     //支援其他第三方套件的版本號
-                }
-            }
         }
     }
 }
@@ -58,9 +49,9 @@ dependencies {
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.2.0'                                //版本問題26以下
-    androidTestImplementation 'com.google.code.findbugs:jsr305:3.0.2'                         //版本問題26以下
-    androidTestImplementation 'androidx.test:rules:1.2.0'                            //版本問題26以下
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.2.0'
+    androidTestImplementation 'com.google.code.findbugs:jsr305:3.0.2'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.annotation:annotation:1.1.0'

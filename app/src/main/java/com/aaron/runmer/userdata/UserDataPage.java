@@ -15,8 +15,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.FileProvider;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -31,6 +29,9 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 
 import com.aaron.runmer.R;
 import com.aaron.runmer.base.BaseActivity;
@@ -133,7 +134,7 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View,
             mPresenter.setUserHeight(height);
             mPresenter.setUserWeight(weight);
             mPresenter.setUserGender(gender);
-        }else {
+        } else {
             mPresenter.setUserNameAndEmail();
             mPresenter.setUserPhoto();
             mPresenter.setUserBirth();
@@ -196,57 +197,58 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View,
                     public void onClick(View v) {
                         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, Constants.CODE_READ_EXTERNAL);
-                        }
-                        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                        intent.setType("image/*");
-                        if (intent.resolveActivity(getPackageManager()) != null) {
-                            File galleryPhotoFile = null;
-                            try {
-                                File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-                                galleryPhotoFile = mPresenter.createImageFile(storageDir);
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                        } else {
+                            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                            intent.setType("image/*");
+                            if (intent.resolveActivity(getPackageManager()) != null) {
+                                File galleryPhotoFile = null;
+                                try {
+                                    File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                                    galleryPhotoFile = mPresenter.createImageFile(storageDir);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                if (galleryPhotoFile != null) {
+                                    mCameraUri = FileProvider.getUriForFile(mContext,
+                                            "com.aaron.runmer.fileprovider",
+                                            galleryPhotoFile);
+                                }
+                                Log.e(Constants.TAG, "getPicFromAlbm: " + mCameraUri);
+                                startActivityForResult(intent, Constants.CODE_GALLERY_REQUEST);
                             }
-                            if (galleryPhotoFile != null) {
-                                mCameraUri = FileProvider.getUriForFile(mContext,
-                                        "com.aaron.runmer.fileprovider",
-                                        galleryPhotoFile);
-                            }
-                            Log.e(Constants.TAG, "getPicFromAlbm: " + mCameraUri);
-                            startActivityForResult(intent, Constants.CODE_GALLERY_REQUEST);
+                            pictureDialog.dismiss();
                         }
-                        pictureDialog.dismiss();
                     }
                 });
                 mCameraLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        pictureDialog.dismiss();
                         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                             requestPermissions(new String[]{Manifest.permission.CAMERA}, Constants.CODE_CAMERA_REQUEST);
-                        }
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        if (intent.resolveActivity(getPackageManager()) != null) {
-                            // Create the File where the photo should go
-                            mCameraFile = null;
-                            try {
-                                File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-                                mCameraFile = mPresenter.createImageFile(storageDir);
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                                // Error occurred while creating the File
+                        } else {
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            if (intent.resolveActivity(getPackageManager()) != null) {
+                                // Create the File where the photo should go
+                                mCameraFile = null;
+                                try {
+                                    File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                                    mCameraFile = mPresenter.createImageFile(storageDir);
+                                } catch (IOException ex) {
+                                    ex.printStackTrace();
+                                    // Error occurred while creating the File
+                                }
+                                // Continue only if the File was successfully created
+                                if (mCameraFile != null) {
+                                    mCameraUri = FileProvider.getUriForFile(mContext,
+                                            "com.aaron.runmer.fileprovider",
+                                            mCameraFile);
+                                }
                             }
-                            // Continue only if the File was successfully created
-                            if (mCameraFile != null) {
-                                mCameraUri = FileProvider.getUriForFile(mContext,
-                                        "com.aaron.runmer.fileprovider",
-                                        mCameraFile);
-                            }
+                            intent.putExtra(MediaStore.EXTRA_OUTPUT, mCameraUri);
+                            intent.putExtra("ImageUri", mCameraUri);
+                            startActivityForResult(intent, Constants.CODE_CAMERA_REQUEST);
+                            pictureDialog.dismiss();
                         }
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, mCameraUri);
-                        intent.putExtra("ImageUri", mCameraUri);
-                        startActivityForResult(intent, Constants.CODE_CAMERA_REQUEST);
-                        pictureDialog.dismiss();
                     }
                 });
                 pictureDialog.show();
@@ -258,7 +260,7 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View,
                 mDay = c.get(Calendar.DAY_OF_MONTH);
 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(mContext,
-                        AlertDialog.THEME_HOLO_LIGHT,
+                        android.R.style.Theme_Material_Light_Dialog_Alert,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -397,10 +399,10 @@ public class UserDataPage extends BaseActivity implements UserDataContract.View,
 
     @Override
     public void showUserGender(String gender) {
-        if("Male".equals(gender)){
+        if ("Male".equals(gender)) {
             mRdoBtnMale.setChecked(true);
             mRdoBtnFemale.setChecked(false);
-        }else if ("Female".equals(gender)){
+        } else if ("Female".equals(gender)) {
             mRdoBtnMale.setChecked(false);
             mRdoBtnFemale.setChecked(true);
         }

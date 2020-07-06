@@ -8,8 +8,8 @@ android {
         applicationId "com.aaron.runmer"
         minSdkVersion 24
         targetSdkVersion 29
-        versionCode 20062601
-        versionName "2.0.1"
+        versionCode 20062603
+        versionName "2.0.3"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         lintOptions {
             checkReleaseBuilds false

@@ -2,9 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.aaron.runmer">
 
-    <uses-feature
-        android:name="android.hardware.camera2"
-        android:required="true" />
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- turn on the internet permissiom -->
     <uses-permission android:name="android.permission.CAMERA" />
@@ -20,11 +17,14 @@
         android:allowBackup="false"
         android:icon="@drawable/runningicon"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@drawable/runningcircleicon"
         android:supportsRtl="true"
-        android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity">
+
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="unspecified">
             <intent-filter>
                 <action
                     android:name="android.intent.action.MAIN"
@@ -49,17 +49,17 @@
 
         <activity
             android:name=".userdata.UserDataPage"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="unspecified"
             android:windowSoftInputMode="adjustPan">
             <!-- To avoid the keyboard covered the EditTextView -->
         </activity>
         <activity
             android:name=".map.MapPage"
-            android:screenOrientation="fullSensor" />
+            android:screenOrientation="unspecified" />
 
         <activity
             android:name="com.aaron.runmer.viewpagermain.ViewPagerActivity"
-            android:screenOrientation="fullSensor" />
+            android:screenOrientation="unspecified" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

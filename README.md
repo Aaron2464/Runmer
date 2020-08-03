@@ -6,7 +6,7 @@
 **Runmer is a jogging app using in city. whole bunch of app is designed by myself.** <br />
 **The purpose is to allow users of this app to roam in city，using GeoFire to check where friends are.，** <br />
 
-[<img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/get_it_on_google_play.png" width="150" height="50">](https://play.google.com/store/apps/details?id=com.aaron.runmer)
+[<img src="https://github.com/aaron2464/Runmer/blob/develop/screenshot/get_it_on_google_play.png" width="150" height="50">](https://play.google.com/store/apps/details?id=com.aaron.runmer)
 
  ## Featrue
   * Login Page
@@ -34,8 +34,8 @@
     * Decline friends <br />
 
  ## Screenshot
- <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/cover.jpg" width="180" height="320"> &emsp;&emsp; <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/map_page.jpg" width="180" height="320"> &emsp;&emsp; <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/user_detail.jpg" width="180" height="320"> &emsp;&emsp; <br /> <br />
- <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/running_events.jpg" width="180" height="320"> &emsp;&emsp; <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/create_event.jpg" width="180" height="320"> &emsp;&emsp; <img src="https://github.com/tim2464/Runmer/blob/develop/screenshot/add_friends.jpg" width="180" height="320"> 
+ <img src="https://github.com/aaron2464/Runmer/blob/develop/screenshot/cover.jpg" width="180" height="320"> &emsp;&emsp; <img src="https://github.com/aaron2464/Runmer/blob/develop/screenshot/map_page.jpg" width="180" height="320"> &emsp;&emsp; <img src="https://github.com/aaron2464/Runmer/blob/develop/screenshot/user_detail.jpg" width="180" height="320"> &emsp;&emsp; <br /> <br />
+ <img src="https://github.com/aaron2464/Runmer/blob/develop/screenshot/running_events.jpg" width="180" height="320"> &emsp;&emsp; <img src="https://github.com/aaron2464/Runmer/blob/develop/screenshot/create_event.jpg" width="180" height="320"> &emsp;&emsp; <img src="https://github.com/aaron2464/Runmer/blob/develop/screenshot/add_friends.jpg" width="180" height="320"> 
 
  ## Library
  
